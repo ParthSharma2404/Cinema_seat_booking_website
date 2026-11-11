@@ -55,13 +55,17 @@ describe('Cinema Hall Ticket Booking System - Acceptance Tests (SRS Suite)', () 
     }
     staffUserId = staff.id;
 
-    // 2. Locate or create a test show and seats
+    // 2. Locate or create a FUTURE test show and seats (must be in the future for booking validation)
     let show = await prisma.show.findFirst({
+      where: {
+        startTime: { gt: new Date() },
+      },
       include: {
         screen: {
           include: { seats: true },
         },
       },
+      orderBy: { startTime: 'asc' },
     });
 
     if (!show) {

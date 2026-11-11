@@ -31,7 +31,7 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
 
   return (
     <div className="w-full flex flex-col items-center select-none py-2">
-      {/* 1. Minimalist Top Legend (Matching Reference Design) */}
+      {/* 1. Minimalist Top Legend */}
       <div className="flex items-center justify-center gap-7 sm:gap-10 mb-8 pb-5 border-b border-slate-100 w-full max-w-md">
         {/* Available */}
         <div className="flex flex-col items-center gap-1.5 group cursor-default">
@@ -47,7 +47,7 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
 
         {/* Selected */}
         <div className="flex flex-col items-center gap-1.5 group cursor-default">
-          <div className="w-6 h-5 rounded-[6px] bg-violet-600 border border-violet-500 shadow-glow-violet animate-pulse" />
+          <div className="w-6 h-5 rounded-[6px] bg-violet-600 border border-violet-500 shadow-glow-violet" />
           <span className="text-[11px] font-semibold text-violet-700">Selected</span>
         </div>
 
@@ -58,23 +58,29 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
         </div>
       </div>
 
-      {/* 2. Curved Cinema Screen with ANIMATED Projector Light Rays */}
-      <div className="w-full max-w-lg mb-6 flex flex-col items-center relative">
+      {/* 2. Top-Down Curved Screen with FREE-SHAPE HORIZONTALLY SWEEPING LIGHT AURA */}
+      <div className="w-full max-w-lg mb-6 flex flex-col items-center relative overflow-visible">
+        {/* Projector Lens Hotspot gliding along the curved screen */}
+        <div className="screen-lens-hotspot" />
+
         {/* The Screen Arch */}
         <div className="cinema-screen-arch-premium flex items-center justify-center">
-          <div className="w-3/5 h-[1.5px] bg-gradient-to-r from-transparent via-violet-400 to-transparent -mt-1 opacity-70" />
+          <div className="w-2/3 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent -mt-1 opacity-90" />
         </div>
 
-        {/* Animated Projector Light Rays Container */}
-        <div className="projector-beam-container -mt-1">
-          {/* Pulsing Luminous Color Cone */}
-          <div className="projector-beam-light" />
-          {/* Moving Projector Dust / Ray Streaks */}
-          <div className="projector-ray-streaks" />
+        {/* Organic Light Field (Sweeps Left <-> Right as seen from the top of the hall) */}
+        <div className="auditorium-ambient-field -mt-1">
+          {/* Sweeping Aurora Layer 1 (Electric Violet / Magenta) */}
+          <div className="ambient-aurora-layer1" />
+          {/* Sweeping Aurora Layer 2 (Cyan / Deep Violet) */}
+          <div className="ambient-aurora-layer2" />
+          {/* Horizontal Caustic Highlight Beam */}
+          <div className="screen-caustic-beam" />
           
-          {/* Screen Label inside the Beam */}
-          <div className="relative z-10 mt-6 px-3.5 py-1 rounded-full bg-white/70 backdrop-blur-md border border-slate-200/60 shadow-xs">
-            <span className="text-[10px] tracking-[0.28em] uppercase font-bold text-slate-600 font-mono">
+          {/* Floating Minimalist Hall Badge */}
+          <div className="relative z-10 mt-6 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-xs flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-600 animate-ping" />
+            <span className="text-[10px] tracking-[0.25em] uppercase font-bold text-slate-700 font-mono">
               VIP HALL • SCREEN
             </span>
           </div>

@@ -91,8 +91,6 @@ async function main() {
   console.log('Created Theatre and Screens.');
 
   // 4. Generate Seats for Screen 1 (50 seats: Rows A-E, 10 seats each)
-  // Row A-B: Silver (1.0x), Row C-D: Gold (1.3x), Row E: VIP Recliner (1.8x)
-  const screen1Seats = [];
   const rows1 = [
     { row: 'A', cat: 'SILVER', mult: 1.0 },
     { row: 'B', cat: 'SILVER', mult: 1.0 },
@@ -103,18 +101,16 @@ async function main() {
 
   for (const r of rows1) {
     for (let num = 1; num <= 10; num++) {
-      screen1Seats.push({
-        screenId: screen1.id,
-        rowName: r.row,
-        seatNumber: num,
-        category: r.cat,
-        priceMultiplier: r.mult,
+      await prisma.seat.create({
+        data: {
+          screenId: screen1.id,
+          rowName: r.row,
+          seatNumber: num,
+          category: r.cat,
+          priceMultiplier: r.mult,
+        },
       });
     }
-  }
-
-  for (const s of screen1Seats) {
-    await prisma.seat.create({ data: s });
   }
 
   // Generate Seats for Screen 2 (40 seats: Rows A-D, 10 seats each)
@@ -141,7 +137,7 @@ async function main() {
 
   console.log('Generated 90 Seats across 2 Screens with Silver, Gold, and Recliner tiers.');
 
-  // 5. Create Movies
+  // 5. Create Movies with verified cinematic high-res posters
   const movieDune = await prisma.movie.create({
     data: {
       title: 'Dune: Part Two',
@@ -150,7 +146,7 @@ async function main() {
       durationMins: 166,
       language: 'English',
       genre: 'Sci-Fi / Adventure',
-      posterUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80',
+      posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80',
       rating: 'PG-13',
       releaseDate: new Date('2026-03-01'),
     },
@@ -164,7 +160,7 @@ async function main() {
       durationMins: 180,
       language: 'English',
       genre: 'Biography / Drama / History',
-      posterUrl: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=800&auto=format&fit=crop&q=80',
+      posterUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80',
       rating: 'R',
       releaseDate: new Date('2026-02-15'),
     },
@@ -178,7 +174,7 @@ async function main() {
       durationMins: 169,
       language: 'English',
       genre: 'Sci-Fi / Adventure',
-      posterUrl: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=800&auto=format&fit=crop&q=80',
+      posterUrl: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=800&auto=format&fit=crop&q=80',
       rating: 'PG-13',
       releaseDate: new Date('2026-01-10'),
     },
@@ -192,7 +188,7 @@ async function main() {
       durationMins: 148,
       language: 'English',
       genre: 'Action / Sci-Fi',
-      posterUrl: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&auto=format&fit=crop&q=80',
+      posterUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&auto=format&fit=crop&q=80',
       rating: 'PG-13',
       releaseDate: new Date('2026-02-01'),
     },
@@ -273,6 +269,40 @@ async function main() {
     },
   });
 
+  // Show 5: Inception in Screen 2 tomorrow at 7:30 PM
+  const show5Start = new Date(tomorrow);
+  show5Start.setHours(19, 30, 0, 0);
+  const show5End = new Date(tomorrow);
+  show5End.setHours(22, 10, 0, 0);
+
+  const show5 = await prisma.show.create({
+    data: {
+      movieId: movieInception.id,
+      screenId: screen2.id,
+      startTime: show5Start,
+      endTime: show5End,
+      basePrice: 320,
+      format: '4K DOLBY',
+    },
+  });
+
+  // Show 6: Dune Part Two in Screen 1 tomorrow at 8:00 PM
+  const show6Start = new Date(tomorrow);
+  show6Start.setHours(20, 0, 0, 0);
+  const show6End = new Date(tomorrow);
+  show6End.setHours(22, 50, 0, 0);
+
+  await prisma.show.create({
+    data: {
+      movieId: movieDune.id,
+      screenId: screen1.id,
+      startTime: show6Start,
+      endTime: show6End,
+      basePrice: 350,
+      format: 'IMAX',
+    },
+  });
+
   console.log('Created Shows.');
 
   // 7. Seed Sample Bookings & Digital Tickets
@@ -286,7 +316,7 @@ async function main() {
         bookingReference: 'BK-DEMO01',
         userId: customer1.id,
         showId: show1.id,
-        totalAmount: 910, // 2 x (350 * 1.3)
+        totalAmount: 910,
         status: 'CONFIRMED',
         bookingSeats: {
           create: [
@@ -297,7 +327,6 @@ async function main() {
       },
     });
 
-    // Create Ticket with QR Token for acceptance demo
     await prisma.ticket.create({
       data: {
         bookingId: booking1.id,
@@ -333,7 +362,7 @@ async function main() {
         refundStatus: 'COMPLETED',
         refundAmount: 350,
         bookingSeats: {
-          create: [{ seatId: seatA1.id, price: 350, activeShowSeatKey: null }], // null frees the seat
+          create: [{ seatId: seatA1.id, price: 350, activeShowSeatKey: null }],
         },
       },
     });
@@ -347,8 +376,7 @@ async function main() {
     });
   }
 
-  console.log('Seeded Initial Bookings, Tickets, and Cancelled Booking.');
-  console.log('Database successfully seeded!');
+  console.log('Database successfully re-seeded with verified cinematic posters!');
 }
 
 main()
@@ -359,4 +387,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

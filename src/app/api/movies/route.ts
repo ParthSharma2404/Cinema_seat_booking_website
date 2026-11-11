@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       include: {
         shows: {
           where: {
-            startTime: { gt: new Date() },
+            startTime: { gte: new Date(Date.now() - 6 * 60 * 60 * 1000) },
           },
           orderBy: { startTime: 'asc' },
           include: {
