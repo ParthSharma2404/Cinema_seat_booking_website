@@ -19,8 +19,18 @@ import {
   Play,
   Armchair,
   Clapperboard,
+  ScanLine,
+  BarChart3,
+  UserCheck,
 } from 'lucide-react';
 import { formatTime, formatCurrency } from '@/lib/utils';
+
+const MOVIE_BACKDROPS: Record<string, string> = {
+  'Interstellar': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&auto=format&fit=crop&q=85',
+  'Dune: Part Two': 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1920&auto=format&fit=crop&q=85',
+  'Oppenheimer': 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1920&auto=format&fit=crop&q=85',
+  'Inception': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&auto=format&fit=crop&q=85',
+};
 
 interface Movie {
   id: string;
@@ -50,6 +60,16 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ id: string; email: string; fullName: string; role: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) setCurrentUser(data.user);
+      })
+      .catch(() => {});
+  }, []);
 
   const fetchMovies = async () => {
     try {
@@ -97,6 +117,9 @@ export default function HomePage() {
   };
 
   const activeMovie = movies.length > 0 ? movies[activeHeroIndex] : null;
+  const backdropUrl = activeMovie
+    ? MOVIE_BACKDROPS[activeMovie.title] || activeMovie.posterUrl
+    : '';
 
   // Filter movies into categories matching the Lionsgate style spread
   const sciFiMovies = movies.filter((m) =>
@@ -107,7 +130,75 @@ export default function HomePage() {
   );
 
   return (
-    <div className="space-y-16 pb-20 w-full select-none">
+    <div className="space-y-12 pb-20 w-full select-none">
+      {/* ========================================================
+          0. ROLE-BASED ACTIVE PERSONA BAR (STAFF / ADMIN / CUSTOMER)
+          Eliminates the "nothing happens" confusion: clearly surfaces the active role
+          ======================================================== */}
+      {currentUser && currentUser.role === 'STAFF' && (
+        <div className="w-full p-4 rounded-3xl bg-amber-500/15 border border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl backdrop-blur-xl">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold shrink-0 border border-amber-500/30">
+              <ScanLine className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono uppercase font-black text-amber-400 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40">
+                  STAFF GATEHOUSE PERSONA ACTIVE
+                </span>
+                <span className="text-xs text-amber-200/90 font-medium">Logged in as {currentUser.fullName}</span>
+              </div>
+              <p className="text-xs text-slate-300 mt-1">
+                You are authenticated as Gate Staff. Your primary workstation is the Gate QR Scanner for attendee check-in.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/admin/scan"
+            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all shrink-0"
+          >
+            <span>Launch Gate Turnstile Scanner</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
+
+      {currentUser && currentUser.role === 'ADMIN' && (
+        <div className="w-full p-4 rounded-3xl bg-violet-600/15 border border-violet-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl backdrop-blur-xl">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-violet-600/20 text-violet-400 flex items-center justify-center font-bold shrink-0 border border-violet-500/30">
+              <BarChart3 className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono uppercase font-black text-violet-400 px-2.5 py-0.5 rounded-full bg-violet-600/20 border border-violet-500/40">
+                  CINEMA ADMINISTRATOR ACTIVE
+                </span>
+                <span className="text-xs text-violet-200/90 font-medium">Logged in as {currentUser.fullName}</span>
+              </div>
+              <p className="text-xs text-slate-300 mt-1">
+                Full executive access: Hall occupancy reconciliation proof (Test 5), financial revenue, and immutable audit logs.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Link
+              href="/admin"
+              className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-violet-600/25 transition-all"
+            >
+              <span>Reconciliation Hub</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/admin/audit-logs"
+              className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all border border-white/10"
+            >
+              <span>Audit Trail</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* ========================================================
           1. LIONSGATE-STYLE WIDE HERO BANNER SPREAD
           Center: Majestic movie visual
@@ -120,19 +211,22 @@ export default function HomePage() {
         </div>
       ) : activeMovie ? (
         <div
-          className="relative w-full rounded-[36px] overflow-hidden border border-white/[0.08] bg-[#090a12] min-h-[580px] lg:min-h-[640px] flex flex-col justify-between p-6 sm:p-10 lg:p-14 shadow-2xl transition-all duration-700"
+          className="relative w-full rounded-[36px] overflow-hidden border border-white/15 bg-[#090b14] min-h-[580px] lg:min-h-[640px] flex flex-col justify-between p-6 sm:p-10 lg:p-14 shadow-2xl transition-all duration-700"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Dynamic Ambient Background Art */}
+          {/* High-Definition Widescreen Cinema Backdrop (Crisp Artwork) */}
           <div
-            className="absolute inset-0 bg-cover bg-center scale-110 filter blur-2xl opacity-25 transition-all duration-1000"
-            style={{ backgroundImage: `url(${activeMovie.posterUrl})` }}
+            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out opacity-75 scale-105"
+            style={{ backgroundImage: `url(${backdropUrl})` }}
           />
 
-          {/* Deep Theatrical Gradient Vignettes */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#08090e] via-[#08090e]/80 to-[#08090e] z-0" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#08090e]/80 via-transparent to-[#08090e] z-0" />
+          {/* Luxury Studio Gradient Feathering (Vivid Artwork + Razor Sharp Text Legibility) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#090b14] via-[#090b14]/55 to-[#090b14]/90 z-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#090b14] via-transparent to-[#090b14]/75 z-0 pointer-events-none" />
+
+          {/* Luminous Center Spotlight Halo (Three-Dimensional Pop) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] bg-violet-600/35 rounded-full blur-3xl pointer-events-none z-0" />
 
           {/* Top Subtle Studio Navigation Bar */}
           <div className="relative z-10 flex items-center justify-between pb-6 border-b border-white/[0.07]">
@@ -301,11 +395,102 @@ export default function HomePage() {
       ) : null}
 
       {/* ========================================================
-          2. CURATED CATEGORY ROW 1: SCI-FI & EPIC SAGAS (LIONSGATE LAYOUT)
+          2. CURATED CATEGORY ROW 1: DRAMA & AWARDS (EDITORIAL HIGH-CONTRAST WHITE CONTAINER)
+          Emulates the Lionsgate reference image's crisp editorial white container
+          Left: Bold black category headline & tagline
+          Right: Horizontal row of movie cards with clean typography
+          ======================================================== */}
+      <section className="p-8 sm:p-10 rounded-[32px] bg-white text-slate-900 border border-slate-200/90 shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Category Left Header */}
+          <div className="lg:col-span-3 space-y-4">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-violet-700 font-bold block mb-1">
+                CURATED AUDITORIUM RELEASES
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight uppercase">
+                Drama & Awards
+              </h2>
+              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                Compelling, evocative, and critically acclaimed masterworks presented in pristine Dolby Atmos acoustic clarity.
+              </p>
+            </div>
+
+            <Link
+              href="/"
+              onClick={() => setSelectedGenre('Drama')}
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-violet-700 hover:text-violet-900 uppercase tracking-wider group pt-2"
+            >
+              <span>Browse All Drama</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+
+          {/* Category Right Movie Cards Row */}
+          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {dramaMovies.map((movie) => (
+              <div
+                key={movie.id}
+                className="group flex flex-col rounded-3xl overflow-hidden bg-slate-50 border border-slate-200/80 hover:border-violet-500/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[10px] font-mono font-bold text-white">
+                    {movie.rating}
+                  </div>
+                  <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[10px] font-mono text-slate-200 flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-slate-300" />
+                    {movie.durationMins}m
+                  </div>
+                </div>
+
+                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-violet-700 font-bold">
+                      {movie.genre}
+                    </span>
+                    <h3 className="text-sm font-bold text-slate-900 group-hover:text-violet-700 transition-colors line-clamp-1">
+                      {movie.title}
+                    </h3>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
+                    {movie.shows && movie.shows.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        <span className="px-2 py-1 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-mono font-bold">
+                          {formatTime(movie.shows[0].startTime)}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-[10px] text-slate-400 font-mono">Check Times</span>
+                    )}
+
+                    <Link
+                      href={movie.shows && movie.shows.length > 0 ? `/shows/${movie.shows[0].id}` : `/movies/${movie.id}`}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-violet-700 text-white font-bold text-xs flex items-center gap-1 shadow-md transition-all"
+                    >
+                      <span>Book</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          3. CURATED CATEGORY ROW 2: SCI-FI & EPIC SAGAS (DARK STUDIO CONTAINER)
           Left: Bold category headline & tagline
           Right: Horizontal row of movie cards
           ======================================================== */}
-      <section className="p-8 sm:p-10 rounded-[32px] bg-[#0c0e18] border border-white/[0.08]">
+      <section className="p-8 sm:p-10 rounded-[32px] bg-[#0e111d] border border-white/10 shadow-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Category Left Header */}
           <div className="lg:col-span-3 space-y-4">
@@ -336,7 +521,7 @@ export default function HomePage() {
             {sciFiMovies.map((movie) => (
               <div
                 key={movie.id}
-                className="group flex flex-col rounded-3xl overflow-hidden bg-[#08090e] border border-white/10 hover:border-violet-500/40 transition-all duration-300 shadow-xl hover:-translate-y-1"
+                className="group flex flex-col rounded-3xl overflow-hidden bg-[#090a14] border border-white/10 hover:border-violet-500/40 transition-all duration-300 shadow-xl hover:-translate-y-1"
               >
                 <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -383,110 +568,15 @@ export default function HomePage() {
                     )}
 
                     <Link
-                      href={`/movies/${movie.id}`}
+                      href={movie.shows && movie.shows.length > 0 ? `/shows/${movie.shows[0].id}` : `/movies/${movie.id}`}
                       className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold transition-all"
                     >
-                      Overview
+                      Book
                     </Link>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          3. CURATED CATEGORY ROW 2: DRAMA & HISTORICAL EPICS (ALTERNATING LIONSGATE LAYOUT)
-          Left: Movie cards
-          Right: Bold category headline & tagline
-          ======================================================== */}
-      <section className="p-8 sm:p-10 rounded-[32px] bg-[#0c0e18] border border-white/[0.08]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Category Left Movie Cards Row */}
-          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 order-2 lg:order-1">
-            {dramaMovies.map((movie) => (
-              <div
-                key={movie.id}
-                className="group flex flex-col rounded-3xl overflow-hidden bg-[#08090e] border border-white/10 hover:border-violet-500/40 transition-all duration-300 shadow-xl hover:-translate-y-1"
-              >
-                <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={movie.posterUrl}
-                    alt={movie.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono font-bold text-white">
-                    {movie.rating}
-                  </div>
-                  <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-slate-400" />
-                    {movie.durationMins}m
-                  </div>
-                </div>
-
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                  <div>
-                    <span className="text-[10px] font-mono uppercase text-violet-400 font-bold">
-                      {movie.genre}
-                    </span>
-                    <h3 className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors line-clamp-1">
-                      {movie.title}
-                    </h3>
-                  </div>
-
-                  <div className="pt-2 border-t border-white/10 flex items-center justify-between">
-                    {movie.shows && movie.shows.length > 0 ? (
-                      <div className="flex flex-wrap gap-1">
-                        {movie.shows.slice(0, 2).map((s) => (
-                          <Link
-                            key={s.id}
-                            href={`/shows/${s.id}`}
-                            className="text-[10px] px-2 py-1 rounded-lg bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white font-mono transition-colors"
-                          >
-                            {formatTime(s.startTime)}
-                          </Link>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-[10px] text-slate-500 font-mono">No shows</span>
-                    )}
-
-                    <Link
-                      href={`/movies/${movie.id}`}
-                      className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold transition-all"
-                    >
-                      Overview
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Category Right Header */}
-          <div className="lg:col-span-3 space-y-4 order-1 lg:order-2">
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-fuchsia-400 font-bold block mb-1">
-                ACADEMY AWARD SPOTLIGHT
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
-                Biography & Drama
-              </h2>
-              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                Historic masterworks, intense character studies, and legendary performances in 70mm large format.
-              </p>
-            </div>
-
-            <Link
-              href="/"
-              onClick={() => setSelectedGenre('Biography')}
-              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-fuchsia-400 hover:text-fuchsia-300 uppercase tracking-wider group pt-2"
-            >
-              <span>Browse All Drama</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-            </Link>
           </div>
         </div>
       </section>

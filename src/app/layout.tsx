@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#08090e] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-violet-600 selection:text-white overflow-x-hidden">
+      <body className="bg-[#090b14] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-violet-600 selection:text-white overflow-x-hidden">
         <Sidebar />
         <div className="flex-1 md:pl-[104px] flex flex-col min-h-screen w-full">
           <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-4">

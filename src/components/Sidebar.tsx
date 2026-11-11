@@ -77,7 +77,15 @@ export function Sidebar() {
       });
       if (res.ok) {
         await fetchSession();
-        setTimeout(() => setQuickSwitchMsg(''), 2000);
+        // Immediately navigate to the persona's designated workstation
+        if (roleName === 'Staff') {
+          router.push('/admin/scan');
+        } else if (roleName === 'Admin') {
+          router.push('/admin');
+        } else {
+          router.push('/');
+        }
+        setTimeout(() => setQuickSwitchMsg(''), 2500);
       }
     } catch {
       setQuickSwitchMsg('');
@@ -179,43 +187,61 @@ export function Sidebar() {
           {/* Micro Persona Switcher Dock */}
           <div className="flex flex-col items-center gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/10">
             {/* Customer Pill */}
-            <button
-              onClick={() => handleQuickLogin('customer@cinema.com', 'password123', 'Customer')}
-              title="Fast-Track: Login as Customer (Alex)"
-              className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
-                user?.role === 'CUSTOMER'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-blue-300 hover:bg-white/5'
-              }`}
-            >
-              U
-            </button>
+            <div className="relative group/pill">
+              <button
+                onClick={() => handleQuickLogin('customer@cinema.com', 'password123', 'Customer')}
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
+                  user?.role === 'CUSTOMER'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/40 scale-105'
+                    : 'text-slate-400 hover:text-blue-300 hover:bg-white/5'
+                }`}
+              >
+                U
+              </button>
+              <div className="absolute left-12 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-[#141624] border border-white/10 text-white text-xs font-semibold whitespace-nowrap opacity-0 pointer-events-none group-hover/pill:opacity-100 transition-opacity shadow-2xl z-50">
+                <span className="text-blue-400 font-bold block">Customer Persona</span>
+                <span className="text-[11px] text-slate-300">Browse movies, select seats & book passes</span>
+                <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#141624] border-l border-b border-white/10 rotate-45" />
+              </div>
+            </div>
 
             {/* Staff Pill */}
-            <button
-              onClick={() => handleQuickLogin('staff@cinema.com', 'staff123', 'Staff')}
-              title="Fast-Track: Login as Gate Staff (Sam)"
-              className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
-                user?.role === 'STAFF'
-                  ? 'bg-amber-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-amber-300 hover:bg-white/5'
-              }`}
-            >
-              S
-            </button>
+            <div className="relative group/pill">
+              <button
+                onClick={() => handleQuickLogin('staff@cinema.com', 'staff123', 'Staff')}
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
+                  user?.role === 'STAFF'
+                    ? 'bg-amber-600 text-white shadow-md shadow-amber-600/40 scale-105'
+                    : 'text-slate-400 hover:text-amber-300 hover:bg-white/5'
+                }`}
+              >
+                S
+              </button>
+              <div className="absolute left-12 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-[#141624] border border-white/10 text-white text-xs font-semibold whitespace-nowrap opacity-0 pointer-events-none group-hover/pill:opacity-100 transition-opacity shadow-2xl z-50">
+                <span className="text-amber-400 font-bold block">Staff Persona</span>
+                <span className="text-[11px] text-slate-300">Gate QR turnstile scanner & ticket check-in</span>
+                <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#141624] border-l border-b border-white/10 rotate-45" />
+              </div>
+            </div>
 
             {/* Admin Pill */}
-            <button
-              onClick={() => handleQuickLogin('admin@cinema.com', 'admin123', 'Admin')}
-              title="Fast-Track: Login as Administrator (Sarah)"
-              className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
-                user?.role === 'ADMIN'
-                  ? 'bg-violet-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-violet-300 hover:bg-white/5'
-              }`}
-            >
-              A
-            </button>
+            <div className="relative group/pill">
+              <button
+                onClick={() => handleQuickLogin('admin@cinema.com', 'admin123', 'Admin')}
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
+                  user?.role === 'ADMIN'
+                    ? 'bg-violet-600 text-white shadow-md shadow-violet-600/40 scale-105'
+                    : 'text-slate-400 hover:text-violet-300 hover:bg-white/5'
+                }`}
+              >
+                A
+              </button>
+              <div className="absolute left-12 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-[#141624] border border-white/10 text-white text-xs font-semibold whitespace-nowrap opacity-0 pointer-events-none group-hover/pill:opacity-100 transition-opacity shadow-2xl z-50">
+                <span className="text-violet-400 font-bold block">Administrator Persona</span>
+                <span className="text-[11px] text-slate-300">Financial reports & occupancy reconciliation</span>
+                <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#141624] border-l border-b border-white/10 rotate-45" />
+              </div>
+            </div>
           </div>
 
           {/* User Profile Avatar with Popover Logout */}
