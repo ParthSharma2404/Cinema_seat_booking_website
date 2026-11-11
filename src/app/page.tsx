@@ -2,7 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, Film, Calendar, Clock, Star, Sparkles, UserCheck, ShieldAlert, ArrowRight } from 'lucide-react';
+import {
+  Search,
+  Film,
+  Calendar,
+  Clock,
+  Sparkles,
+  UserCheck,
+  ShieldAlert,
+  ArrowRight,
+  Tv,
+  ChevronRight,
+} from 'lucide-react';
 import { formatTime } from '@/lib/utils';
 
 interface Movie {
@@ -82,12 +93,12 @@ export default function HomePage() {
   const genres = ['All', 'Sci-Fi', 'Action', 'Biography', 'Drama'];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-12">
       {/* Reviewer Quick Access Panel (Clean Minimalist Pill Toolbar) */}
-      <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-soft">
+      <div className="p-4 rounded-3xl bg-white border border-slate-200/90 shadow-soft">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-violet-50 text-violet-600 border border-violet-100">
+            <div className="p-2.5 rounded-2xl bg-violet-50 text-violet-700 border border-violet-100">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -129,18 +140,24 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* Hero Banner (Clean, Minimalist, Airy) */}
-      <div className="relative rounded-3xl overflow-hidden border border-slate-200/90 bg-white p-8 sm:p-12 shadow-soft">
+      {/* Hero Banner with Subtle Ambient Gradient Aura */}
+      <div className="relative rounded-3xl overflow-hidden border border-slate-200/90 bg-white p-8 sm:p-14 shadow-soft">
+        {/* Soft Ambient Mesh Glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-violet-200/30 via-pink-100/20 to-transparent rounded-full filter blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-80 h-80 bg-gradient-to-tr from-cyan-100/30 via-violet-100/20 to-transparent rounded-full filter blur-3xl pointer-events-none" />
+
         <div className="relative z-10 max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 border border-violet-100 text-violet-700 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-xs font-bold font-mono">
             <Film className="w-3.5 h-3.5 text-violet-600" />
-            NOW SHOWING IN VIP HALLS & IMAX
+            VIP CINEMA AUDITORIUMS
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            Select Your Seats with <span className="text-violet-600">Real-Time Locks</span>
+
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+            Select Your Seats with <span className="text-violet-600">Live Concurrency Locks</span>
           </h1>
+
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Experience minimalist cinema booking with temporary seat locks, anti-double-booking protection, and single-use digital QR turnstile passes.
+            Minimalist cinema booking platform featuring temporary seat holds, anti-double-booking protection, and single-use digital QR turnstile passes.
           </p>
 
           {/* Search bar */}
@@ -157,7 +174,7 @@ export default function HomePage() {
             </div>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm transition-colors shadow-sm"
+              className="px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow-sm"
             >
               Search
             </button>
@@ -175,7 +192,7 @@ export default function HomePage() {
               onClick={() => setSelectedGenre(g === 'All' ? '' : g)}
               className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-colors whitespace-nowrap shadow-xs ${
                 isActive
-                  ? 'bg-slate-900 text-white border-slate-900'
+                  ? 'bg-slate-900 text-white border-slate-900 font-semibold'
                   : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
               }`}
             >
@@ -186,23 +203,23 @@ export default function HomePage() {
       </div>
 
       {/* Movies Grid */}
-      <section className="space-y-4">
+      <section className="space-y-5">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
             <Film className="w-5 h-5 text-violet-600" />
-            Featured Screenings
+            Current Screenings
           </h2>
-          <span className="text-xs text-slate-400 font-mono">{movies.length} movies scheduled</span>
+          <span className="text-xs text-slate-400 font-mono">{movies.length} titles playing</span>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-96 rounded-2xl bg-white border border-slate-200 animate-pulse shadow-soft" />
+              <div key={i} className="h-96 rounded-3xl bg-white border border-slate-200 animate-pulse shadow-soft" />
             ))}
           </div>
         ) : movies.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 shadow-soft">
+          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 shadow-soft">
             <Film className="w-12 h-12 text-slate-300 mx-auto mb-3" />
             <h3 className="text-base font-semibold text-slate-700">No movies found</h3>
             <p className="text-xs text-slate-400 mt-1">Try adjusting your search or genre filters.</p>
@@ -212,7 +229,7 @@ export default function HomePage() {
             {movies.map((movie) => (
               <div
                 key={movie.id}
-                className="group flex flex-col rounded-3xl overflow-hidden bg-white border border-slate-200/90 hover:border-slate-300 transition-all duration-300 shadow-soft hover:shadow-float"
+                className="group flex flex-col rounded-3xl overflow-hidden bg-white border border-slate-200/90 hover:border-slate-300 transition-all duration-300 shadow-soft hover:shadow-float hover:-translate-y-0.5"
               >
                 {/* Poster Image */}
                 <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-100">
@@ -222,20 +239,19 @@ export default function HomePage() {
                     alt={movie.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-[11px] font-bold text-slate-900 flex items-center gap-1 shadow-xs">
-                    <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-[10px] font-mono font-bold text-slate-900 shadow-xs">
                     {movie.rating}
                   </div>
-                  <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-[11px] font-mono text-slate-700 flex items-center gap-1 shadow-xs">
+                  <div className="absolute bottom-3 left-3 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-[10px] font-mono text-slate-700 flex items-center gap-1 shadow-xs">
                     <Clock className="w-3 h-3 text-slate-500" />
                     {movie.durationMins}m
                   </div>
                 </div>
 
                 {/* Movie Details */}
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div>
-                    <span className="text-[10px] font-semibold text-violet-600 uppercase tracking-wider font-mono">
+                    <span className="text-[10px] font-bold text-violet-700 uppercase tracking-wider font-mono">
                       {movie.genre}
                     </span>
                     <h3 className="text-base font-bold text-slate-900 group-hover:text-violet-600 transition-colors line-clamp-1 mt-0.5">
@@ -248,8 +264,8 @@ export default function HomePage() {
 
                   {/* Showtimes Pill List */}
                   <div className="pt-2 border-t border-slate-100">
-                    <span className="text-[10px] text-slate-400 uppercase font-mono block mb-1.5">
-                      Available Showtimes
+                    <span className="text-[10px] text-slate-400 uppercase font-mono block mb-1.5 font-semibold">
+                      Today&apos;s Showtimes
                     </span>
                     {movie.shows && movie.shows.length > 0 ? (
                       <div className="flex flex-wrap gap-1.5">
@@ -274,10 +290,10 @@ export default function HomePage() {
                   {/* Action Link */}
                   <Link
                     href={`/movies/${movie.id}`}
-                    className="w-full mt-2 py-2 px-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border border-slate-200 shadow-xs"
+                    className="w-full mt-2 py-2.5 px-4 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border border-slate-200 shadow-xs"
                   >
-                    View Details & Seats
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>View Movie & Showtimes</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
