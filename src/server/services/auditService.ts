@@ -30,3 +30,4 @@ export async function logAuditEvent(params: AuditLogParams) {
     // Non-blocking: audit failure should not break user journey unless critical
   }
 }
+

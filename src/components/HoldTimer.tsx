@@ -40,22 +40,22 @@ export function HoldTimer({ expiresAt, onExpire, className }: HoldTimerProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-mono font-medium transition-all shadow-sm',
+        'flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-mono font-medium transition-all shadow-sm',
         isExpired
-          ? 'bg-rose-950/60 border-rose-800 text-rose-300'
+          ? 'bg-rose-50 border-rose-200 text-rose-700'
           : isExpiringSoon
-          ? 'bg-amber-950/70 border-amber-600 text-amber-300 animate-pulse'
-          : 'bg-slate-900/80 border-slate-700 text-slate-200',
+          ? 'bg-amber-50 border-amber-300 text-amber-800 animate-pulse'
+          : 'bg-white border-slate-200 text-slate-700 shadow-sm',
         className
       )}
     >
       {isExpiringSoon || isExpired ? (
-        <AlertTriangle className="w-4 h-4 text-amber-400" />
+        <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
       ) : (
-        <Timer className="w-4 h-4 text-cinema-accent" />
+        <Timer className="w-3.5 h-3.5 text-violet-600" />
       )}
       <span>
-        {isExpired ? 'Hold Expired' : `Seats Held: ${formattedTime}`}
+        {isExpired ? 'Hold Expired' : `Locked: ${formattedTime}`}
       </span>
     </div>
   );

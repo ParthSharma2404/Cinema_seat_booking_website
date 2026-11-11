@@ -50,3 +50,4 @@ export function QRCodeDisplay({ text, size = 180, className = '' }: QRCodeDispla
     </div>
   );
 }
+

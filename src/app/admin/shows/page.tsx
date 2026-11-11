@@ -113,18 +113,18 @@ export default function AdminShowsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Calendar className="w-6 h-6 text-red-500" />
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <Calendar className="w-6 h-6 text-violet-600" />
             Schedules & Showtime Management
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Configure showtimes, set tier base pricing, and prevent screen scheduling collisions
           </p>
         </div>
 
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-md shadow-red-950"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors shadow-xs"
         >
           <Plus className="w-4 h-4" />
           Schedule New Show
@@ -132,72 +132,72 @@ export default function AdminShowsPage() {
       </div>
 
       {feedback && (
-        <div className="p-3.5 rounded-xl bg-emerald-950/80 border border-emerald-700 text-emerald-200 text-xs flex items-center justify-between">
+        <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>{feedback}</span>
           </div>
-          <button onClick={() => setFeedback(null)} className="text-emerald-400 font-bold">
+          <button onClick={() => setFeedback(null)} className="text-emerald-600 font-bold">
             ✕
           </button>
         </div>
       )}
 
       {errorMsg && (
-        <div className="p-3.5 rounded-xl bg-rose-950/80 border border-rose-700 text-rose-200 text-xs flex items-center justify-between">
+        <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-400" />
+            <AlertCircle className="w-4 h-4 text-rose-600" />
             <span>{errorMsg}</span>
           </div>
-          <button onClick={() => setErrorMsg(null)} className="text-rose-400 font-bold">
+          <button onClick={() => setErrorMsg(null)} className="text-rose-600 font-bold">
             ✕
           </button>
         </div>
       )}
 
       {loading ? (
-        <div className="py-16 flex justify-center">
-          <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+        <div className="py-24 flex justify-center">
+          <div className="w-8 h-8 border-3 border-violet-600 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 overflow-hidden shadow-xl">
+        <div className="rounded-3xl border border-slate-200/90 bg-white overflow-hidden shadow-soft">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+              <thead className="bg-slate-50 text-slate-500 uppercase font-mono text-[10px] border-b border-slate-200">
                 <tr>
-                  <th className="py-3 px-4">Movie</th>
-                  <th className="py-3 px-4">Screen & Theatre</th>
-                  <th className="py-3 px-4">Show Date & Time</th>
-                  <th className="py-3 px-4">Format</th>
-                  <th className="py-3 px-4">Base Pricing</th>
-                  <th className="py-3 px-4">Action</th>
+                  <th className="py-3.5 px-4 font-semibold">Movie</th>
+                  <th className="py-3.5 px-4 font-semibold">Screen & Theatre</th>
+                  <th className="py-3.5 px-4 font-semibold">Show Date & Time</th>
+                  <th className="py-3.5 px-4 font-semibold">Format</th>
+                  <th className="py-3.5 px-4 font-semibold">Base Pricing</th>
+                  <th className="py-3.5 px-4 font-semibold">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-slate-300">
+              <tbody className="divide-y divide-slate-100 text-slate-700">
                 {shows.map((s) => (
-                  <tr key={s.id} className="hover:bg-slate-800/40">
-                    <td className="py-3.5 px-4 font-bold text-white">
+                  <tr key={s.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-slate-900">
                       {s.movie.title}
                     </td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 text-slate-600">
                       {s.screen.theatre.name} — {s.screen.name}
                     </td>
-                    <td className="py-3.5 px-4 font-mono">
+                    <td className="py-3.5 px-4 font-mono text-slate-600">
                       {formatDateTime(s.startTime)}
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 rounded bg-red-950 text-red-400 text-[10px] font-bold border border-red-800 font-mono">
+                      <span className="px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 text-[10px] font-bold border border-violet-200 font-mono">
                         {s.format}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                    <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
                       {formatCurrency(s.basePrice)}
                     </td>
                     <td className="py-3.5 px-4">
                       <a
                         href={`/shows/${s.id}`}
                         target="_blank"
-                        className="text-xs text-red-400 hover:text-red-300 underline"
+                        className="text-xs text-violet-600 hover:text-violet-700 font-semibold"
                       >
                         Open Seat Map →
                       </a>
@@ -212,19 +212,19 @@ export default function AdminShowsPage() {
 
       {/* Schedule Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="max-w-md w-full rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-4 shadow-2xl">
-            <h3 className="text-base font-bold text-white">Schedule New Show</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="max-w-md w-full rounded-3xl border border-slate-200 bg-white p-6 space-y-4 shadow-float">
+            <h3 className="text-base font-bold text-slate-900">Schedule New Show</h3>
 
             <form onSubmit={handleCreateShow} className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Select Movie
                 </label>
                 <select
                   value={movieId}
                   onChange={(e) => setMovieId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white"
+                  className="w-full px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-violet-600 focus:bg-white"
                 >
                   {movies.map((m) => (
                     <option key={m.id} value={m.id}>
@@ -235,13 +235,13 @@ export default function AdminShowsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Select Screen
                 </label>
                 <select
                   value={screenId}
                   onChange={(e) => setScreenId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white"
+                  className="w-full px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-violet-600 focus:bg-white"
                 >
                   {screens.map((scr) => (
                     <option key={scr.id} value={scr.id}>
@@ -253,7 +253,7 @@ export default function AdminShowsPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Start Time
                   </label>
                   <input
@@ -261,11 +261,11 @@ export default function AdminShowsPage() {
                     required
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white"
+                    className="w-full px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-violet-600 focus:bg-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     End Time
                   </label>
                   <input
@@ -273,14 +273,14 @@ export default function AdminShowsPage() {
                     required
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white"
+                    className="w-full px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-violet-600 focus:bg-white"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Base Price (INR)
                   </label>
                   <input
@@ -288,15 +288,15 @@ export default function AdminShowsPage() {
                     required
                     value={basePrice}
                     onChange={(e) => setBasePrice(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-mono"
+                    className="w-full px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-900 font-mono focus:outline-none focus:border-violet-600 focus:bg-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Format</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Format</label>
                   <select
                     value={format}
                     onChange={(e) => setFormat(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white"
+                    className="w-full px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-violet-600 focus:bg-white"
                   >
                     <option value="IMAX">IMAX</option>
                     <option value="2D">2D</option>
@@ -309,14 +309,14 @@ export default function AdminShowsPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-700 text-xs text-slate-300 hover:bg-slate-800"
+                  className="px-4 py-2 rounded-full border border-slate-200 text-xs text-slate-600 hover:bg-slate-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold text-white shadow-md shadow-red-950"
+                  className="px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white shadow-xs"
                 >
                   {isSubmitting ? 'Scheduling...' : 'Save Schedule'}
                 </button>

@@ -248,3 +248,4 @@ export class SeatHoldService {
     return { releasedCount: result.count };
   }
 }
+

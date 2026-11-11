@@ -66,3 +66,4 @@ export const createShowSchema = z.object({
   basePrice: z.number().positive('Base price must be positive'),
   format: z.enum(['2D', '3D', 'IMAX']).default('2D'),
 });
+

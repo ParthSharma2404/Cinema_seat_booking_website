@@ -69,20 +69,20 @@ export default function GateScannerPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <ScanLine className="w-6 h-6 text-red-500" />
+        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <ScanLine className="w-6 h-6 text-violet-600" />
           Turnstile & Gate Entry QR Scanner
         </h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-xs text-slate-500 mt-1">
           Acceptance Test 4 demonstration: Verifies ticket validity and enforces strict single-use entry
         </p>
       </div>
 
       {/* Main Scanner Box */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 sm:p-8 backdrop-blur-md shadow-2xl space-y-6">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-soft space-y-6">
         {/* Quick Test Token Presets */}
-        <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 font-mono">
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-2 font-mono">
             Evaluator Quick Test Tokens (Click to scan)
           </span>
           <div className="flex flex-wrap gap-2">
@@ -92,7 +92,7 @@ export default function GateScannerPage() {
                 setTokenInput('TCK-DEMO-VAL1');
                 handleValidate('TCK-DEMO-VAL1');
               }}
-              className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-emerald-300 font-mono transition-colors"
+              className="px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs text-emerald-800 font-mono transition-colors shadow-xs"
             >
               Test Pre-Seeded Valid Ticket (TCK-DEMO-VAL1)
             </button>
@@ -102,7 +102,7 @@ export default function GateScannerPage() {
                 setTokenInput('TCK-DEMO-CANCELLED');
                 handleValidate('TCK-DEMO-CANCELLED');
               }}
-              className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-rose-300 font-mono transition-colors"
+              className="px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs text-rose-800 font-mono transition-colors shadow-xs"
             >
               Test Cancelled Ticket (TCK-DEMO-CANCELLED)
             </button>
@@ -112,7 +112,7 @@ export default function GateScannerPage() {
                 setTokenInput('TCK-NONEXISTENT-99');
                 handleValidate('TCK-NONEXISTENT-99');
               }}
-              className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-400 font-mono transition-colors"
+              className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-600 font-mono transition-colors shadow-xs"
             >
               Test Fake Token (TCK-NONEXISTENT)
             </button>
@@ -122,21 +122,21 @@ export default function GateScannerPage() {
         {/* Form Input */}
         <form onSubmit={handleFormSubmit} className="flex gap-3">
           <div className="relative flex-1">
-            <QrCode className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+            <QrCode className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               required
               value={tokenInput}
               onChange={(e) => setTokenInput(e.target.value)}
               placeholder="Scan or enter QR Validation Token (e.g. TCK-DEMO-VAL1 or BK-DEMO01)..."
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-mono text-white placeholder-slate-500 focus:outline-none focus:border-red-500"
+              className="w-full pl-10 pr-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-sm font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-lg shadow-red-950"
+            className="px-6 py-3 rounded-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
           >
             {loading ? 'Verifying...' : 'Validate Entry'}
           </button>
@@ -147,30 +147,30 @@ export default function GateScannerPage() {
           <div
             className={`p-6 rounded-2xl border text-sm transition-all duration-300 ${
               result.valid
-                ? 'bg-emerald-950/70 border-emerald-600 text-emerald-200'
+                ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
                 : result.status === 'ALREADY_REDEEMED'
-                ? 'bg-rose-950/80 border-rose-600 text-rose-200'
-                : 'bg-amber-950/80 border-amber-600 text-amber-200'
+                ? 'bg-rose-50 border-rose-300 text-rose-900'
+                : 'bg-amber-50 border-amber-300 text-amber-900'
             }`}
           >
             <div className="flex items-start gap-4">
               {result.valid ? (
-                <div className="p-2 rounded-xl bg-emerald-600 text-white">
-                  <CheckCircle2 className="w-8 h-8" />
+                <div className="p-2.5 rounded-2xl bg-emerald-600 text-white">
+                  <CheckCircle2 className="w-7 h-7" />
                 </div>
               ) : result.status === 'ALREADY_REDEEMED' ? (
-                <div className="p-2 rounded-xl bg-rose-600 text-white">
-                  <XCircle className="w-8 h-8" />
+                <div className="p-2.5 rounded-2xl bg-rose-600 text-white">
+                  <XCircle className="w-7 h-7" />
                 </div>
               ) : (
-                <div className="p-2 rounded-xl bg-amber-600 text-white">
-                  <AlertTriangle className="w-8 h-8" />
+                <div className="p-2.5 rounded-2xl bg-amber-600 text-white">
+                  <AlertTriangle className="w-7 h-7" />
                 </div>
               )}
 
               <div className="space-y-2 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs uppercase px-2 py-0.5 rounded font-bold bg-black/40">
+                  <span className="font-mono text-xs uppercase px-2.5 py-0.5 rounded-full font-bold bg-white/80 border border-black/10">
                     {result.status}
                   </span>
                   <span className="text-base font-extrabold">{result.message}</span>
@@ -178,15 +178,15 @@ export default function GateScannerPage() {
 
                 {/* Extended Details when found */}
                 {result.booking && (
-                  <div className="pt-3 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="pt-3 border-t border-black/10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                     <div>
-                      <span className="opacity-75 block text-[10px] uppercase font-mono">
+                      <span className="opacity-70 block text-[10px] uppercase font-mono">
                         Attendee
                       </span>
                       <span className="font-bold">{result.booking.user?.fullName}</span>
                     </div>
                     <div>
-                      <span className="opacity-75 block text-[10px] uppercase font-mono">
+                      <span className="opacity-70 block text-[10px] uppercase font-mono">
                         Movie & Screen
                       </span>
                       <span className="font-bold">
@@ -195,7 +195,7 @@ export default function GateScannerPage() {
                       </span>
                     </div>
                     <div>
-                      <span className="opacity-75 block text-[10px] uppercase font-mono">
+                      <span className="opacity-70 block text-[10px] uppercase font-mono">
                         Seats Validated
                       </span>
                       <span className="font-mono font-bold">
@@ -213,14 +213,14 @@ export default function GateScannerPage() {
       </div>
 
       {/* Session Scan Log */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 backdrop-blur-md">
-        <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-          <History className="w-4 h-4 text-red-500" />
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-soft">
+        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5 font-mono">
+          <History className="w-4 h-4 text-violet-600" />
           Recent Turnstile Scans (Session Log)
         </h3>
 
         {scanHistory.length === 0 ? (
-          <p className="text-xs text-slate-500 py-3 text-center italic">
+          <p className="text-xs text-slate-400 py-3 text-center italic">
             No tickets scanned yet during this session.
           </p>
         ) : (
@@ -228,18 +228,18 @@ export default function GateScannerPage() {
             {scanHistory.map((h, idx) => (
               <div
                 key={idx}
-                className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs flex items-center justify-between gap-4"
+                className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-slate-500 text-[11px]">{h.timestamp}</span>
-                  <span className="font-mono text-white font-semibold">{h.token}</span>
-                  <span className="text-slate-400">({h.attendee})</span>
+                  <span className="font-mono text-slate-400 text-[11px]">{h.timestamp}</span>
+                  <span className="font-mono text-slate-900 font-bold">{h.token}</span>
+                  <span className="text-slate-500">({h.attendee})</span>
                 </div>
                 <span
-                  className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded ${
+                  className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                     h.valid
-                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                      : 'bg-rose-950 text-rose-300 border border-rose-800'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-rose-100 text-rose-800'
                   }`}
                 >
                   {h.status}

@@ -49,19 +49,19 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.02)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-rose-700 flex items-center justify-center shadow-lg shadow-red-900/30 group-hover:scale-105 transition-transform">
-            <Film className="w-5 h-5 text-white" />
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
+            <Film className="w-4 h-4 text-violet-300" />
           </div>
-          <div>
-            <span className="text-xl font-bold tracking-tight text-white group-hover:text-red-400 transition-colors">
-              CINE<span className="text-red-500">BOOK</span>
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-bold tracking-tight text-slate-900">
+              CINE<span className="text-violet-600">BOOK</span>
             </span>
-            <span className="hidden sm:inline-block text-[10px] ml-2 px-1.5 py-0.5 rounded bg-red-950 text-red-400 border border-red-800 font-mono">
-              ALGIONS LABS
+            <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 font-mono font-medium">
+              MINIMAL
             </span>
           </div>
         </Link>
@@ -70,41 +70,41 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-6">
           <Link
             href="/"
-            className={`text-sm font-medium transition-colors hover:text-white ${
-              pathname === '/' ? 'text-red-500 font-semibold' : 'text-slate-400'
+            className={`text-sm font-medium transition-colors hover:text-slate-900 ${
+              pathname === '/' ? 'text-violet-600 font-semibold' : 'text-slate-500'
             }`}
           >
-            Movies & Shows
+            Movies
           </Link>
           <Link
             href="/my-bookings"
-            className={`text-sm font-medium transition-colors hover:text-white flex items-center gap-1.5 ${
-              pathname.startsWith('/my-bookings') ? 'text-red-500 font-semibold' : 'text-slate-400'
+            className={`text-sm font-medium transition-colors hover:text-slate-900 flex items-center gap-1.5 ${
+              pathname.startsWith('/my-bookings') ? 'text-violet-600 font-semibold' : 'text-slate-500'
             }`}
           >
             <Ticket className="w-4 h-4" />
-            My Bookings
+            My Passes
           </Link>
           <Link
             href="/api/docs"
             target="_blank"
-            className="text-sm font-medium text-slate-400 hover:text-white flex items-center gap-1.5"
+            className="text-sm font-medium text-slate-500 hover:text-slate-900 flex items-center gap-1.5"
           >
-            <FileCode className="w-4 h-4 text-emerald-400" />
+            <FileCode className="w-4 h-4 text-emerald-600" />
             API Docs
           </Link>
 
           {(user?.role === 'ADMIN' || user?.role === 'STAFF') && (
             <Link
               href="/admin"
-              className={`text-sm font-medium transition-colors flex items-center gap-1.5 px-3 py-1 rounded-md border ${
+              className={`text-sm font-medium transition-colors flex items-center gap-1.5 px-3 py-1 rounded-full border ${
                 pathname.startsWith('/admin')
-                  ? 'bg-red-950/60 border-red-700 text-red-300 font-semibold'
-                  : 'border-slate-800 text-amber-400 hover:bg-slate-900'
+                  ? 'bg-violet-50 border-violet-200 text-violet-700 font-semibold'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-50'
               }`}
             >
-              <ShieldCheck className="w-4 h-4" />
-              Staff / Admin Portal
+              <ShieldCheck className="w-4 h-4 text-violet-600" />
+              Staff Portal
             </Link>
           )}
         </nav>
@@ -112,18 +112,18 @@ export function Navbar() {
         {/* Right side auth */}
         <div className="flex items-center gap-3">
           {loading ? (
-            <div className="w-20 h-8 bg-slate-800 rounded animate-pulse" />
+            <div className="w-20 h-8 bg-slate-100 rounded-full animate-pulse" />
           ) : user ? (
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex flex-col text-right">
-                <span className="text-xs font-semibold text-slate-200">{user.fullName}</span>
+                <span className="text-xs font-semibold text-slate-900">{user.fullName}</span>
                 <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">
                   {user.role}
                 </span>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-400 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-red-900/50 bg-slate-900/60 transition-colors"
+                className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-rose-600 px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-rose-50 hover:border-rose-200 transition-colors shadow-sm"
                 title="Log out"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -134,14 +134,14 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="flex items-center gap-1.5 text-xs font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm"
               >
-                <LogIn className="w-3.5 h-3.5" />
+                <LogIn className="w-3.5 h-3.5 text-slate-500" />
                 Login
               </Link>
               <Link
                 href="/register"
-                className="flex items-center gap-1.5 text-xs font-medium bg-red-600 hover:bg-red-700 text-white px-3.5 py-1.5 rounded-lg shadow-sm shadow-red-950 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white px-4 py-1.5 rounded-full shadow-sm transition-colors"
               >
                 <User className="w-3.5 h-3.5" />
                 Register

@@ -100,3 +100,4 @@ For the 3–5 minute video demonstration required by Algions AI Labs:
 4. **2:30 - 3:30 (Gate Entry Check-in):** Switch to Staff role via Fast-Track. Open `/admin/scan`. Scan or paste the ticket token. Show green "ENTRY GRANTED". Scan again immediately to demonstrate red "ENTRY DENIED: ALREADY REDEEMED".
 5. **3:30 - 4:15 (Cancellation & Refund):** Go to *My Bookings*. Cancel a booking. Show immediate seat release and status update to `CANCELLED (Refund: COMPLETED)`.
 6. **4:15 - 5:00 (Admin Analytics & Audit):** Open `/admin`. Show the 100% Reconciled table, show revenue, and audit trail of all previous actions.
+

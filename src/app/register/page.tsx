@@ -41,19 +41,19 @@ export default function RegisterPage() {
 
   return (
     <div className="max-w-md mx-auto py-12 px-4">
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl backdrop-blur-md">
+      <div className="rounded-3xl border border-slate-200/90 bg-white p-8 shadow-soft">
         <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-red-600/20 text-red-500 border border-red-800/60 items-center justify-center mb-3">
-            <Film className="w-6 h-6" />
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-slate-900 text-white items-center justify-center mb-3 shadow-sm">
+            <Film className="w-5 h-5 text-violet-300" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Create an Account</h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Join CineBook to reserve seats, hold tickets, and receive QR entry passes
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Create an Account</h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Join CineBook to reserve seats and access turnstile passes
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-xl bg-rose-950/70 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+          <div className="mb-6 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -61,45 +61,45 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Full Name
             </label>
             <div className="relative">
-              <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Alex Rivera"
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-xs"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="alex@example.com"
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-xs"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="password"
                 required
@@ -107,23 +107,23 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="At least 6 characters"
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-xs"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Role
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setRole('CUSTOMER')}
-                className={`py-2 px-3 rounded-xl border text-xs font-medium transition-colors ${
+                className={`py-2 px-3 rounded-full border text-xs font-medium transition-colors ${
                   role === 'CUSTOMER'
-                    ? 'bg-red-600/20 border-red-500 text-red-300'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-300'
+                    ? 'bg-slate-900 border-slate-900 text-white font-semibold'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Customer
@@ -131,13 +131,13 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setRole('STAFF')}
-                className={`py-2 px-3 rounded-xl border text-xs font-medium transition-colors ${
+                className={`py-2 px-3 rounded-full border text-xs font-medium transition-colors ${
                   role === 'STAFF'
-                    ? 'bg-amber-600/20 border-amber-500 text-amber-300'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-300'
+                    ? 'bg-violet-600 border-violet-600 text-white font-semibold'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Staff (Gate Operator)
+                Gate Staff
               </button>
             </div>
           </div>
@@ -145,16 +145,16 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-medium text-sm transition-colors shadow-lg shadow-red-950 flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 rounded-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-semibold text-xs tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2"
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-3.5 h-3.5" />
             {loading ? 'Creating Account...' : 'Register'}
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-xs text-slate-500 mt-6">
           Already have an account?{' '}
-          <Link href="/login" className="text-red-400 hover:text-red-300 font-medium">
+          <Link href="/login" className="text-violet-600 hover:text-violet-700 font-semibold">
             Sign In
           </Link>
         </p>

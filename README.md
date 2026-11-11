@@ -284,3 +284,4 @@ The REST API is documented via **OpenAPI 3.0** with an interactive Swagger UI:
 
 - **Database:** Defaults to SQLite for frictionless local review. To switch to PostgreSQL in production, update `datasource db { provider = "postgresql" }` in `prisma/schema.prisma` and set `DATABASE_URL`.
 - **Payment Gateway:** Intentionally simulated to comply with assignment guidelines prohibiting live payment credentials or external paid API services.
+
