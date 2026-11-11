@@ -16,8 +16,11 @@ import {
   ShieldCheck,
   Flame,
   Tv,
+  Play,
+  Armchair,
+  Clapperboard,
 } from 'lucide-react';
-import { formatTime } from '@/lib/utils';
+import { formatTime, formatCurrency } from '@/lib/utils';
 
 interface Movie {
   id: string;
@@ -44,7 +47,6 @@ export default function HomePage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [search, setSearch] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
-  const [selectedFormat, setSelectedFormat] = useState('ALL');
   const [loading, setLoading] = useState(true);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -77,7 +79,7 @@ export default function HomePage() {
     if (movies.length === 0 || isPaused) return;
     const interval = setInterval(() => {
       setActiveHeroIndex((prev) => (prev + 1) % movies.length);
-    }, 6000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [movies.length, isPaused]);
 
@@ -94,193 +96,200 @@ export default function HomePage() {
     setActiveHeroIndex((prev) => (prev + 1) % movies.length);
   };
 
-  const genres = ['All', 'Sci-Fi', 'Action', 'Biography', 'Drama'];
-  const formats = ['ALL', 'IMAX', '4K DOLBY', '2D'];
-
   const activeMovie = movies.length > 0 ? movies[activeHeroIndex] : null;
 
-  const displayedMovies = movies.filter((m) => {
-    if (selectedFormat === 'ALL') return true;
-    return m.shows.some((s) => s.format.toUpperCase().includes(selectedFormat));
-  });
+  // Filter movies into categories matching the Lionsgate style spread
+  const sciFiMovies = movies.filter((m) =>
+    m.genre.toLowerCase().includes('sci-fi') || m.genre.toLowerCase().includes('adventure')
+  );
+  const dramaMovies = movies.filter((m) =>
+    m.genre.toLowerCase().includes('biography') || m.genre.toLowerCase().includes('drama') || m.genre.toLowerCase().includes('action')
+  );
 
   return (
-    <div className="space-y-10 pb-16 w-full">
-      {/* 1. GRAND DYNAMIC CINEMATIC HERO SCREEN WITH OVERLAPPING CAROUSEL */}
+    <div className="space-y-16 pb-20 w-full select-none">
+      {/* ========================================================
+          1. LIONSGATE-STYLE WIDE HERO BANNER SPREAD
+          Center: Majestic movie visual
+          Left: Grand cinema specs & numerical statistics
+          Right: Bold typography, synopsis, mini preview action card, & slide controls
+          ======================================================== */}
       {loading ? (
-        <div className="w-full h-[520px] rounded-3xl bg-white/[0.03] border border-white/10 animate-pulse flex items-center justify-center">
+        <div className="w-full h-[600px] rounded-[36px] bg-[#0c0e18] border border-white/10 animate-pulse flex items-center justify-center">
           <Film className="w-10 h-10 text-slate-700 animate-spin" />
         </div>
       ) : activeMovie ? (
         <div
-          className="relative w-full rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0c0e18] min-h-[500px] lg:min-h-[560px] flex flex-col justify-between p-6 sm:p-10 lg:p-12 shadow-2xl transition-all duration-700"
+          className="relative w-full rounded-[36px] overflow-hidden border border-white/[0.08] bg-[#090a12] min-h-[580px] lg:min-h-[640px] flex flex-col justify-between p-6 sm:p-10 lg:p-14 shadow-2xl transition-all duration-700"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Dynamic Blurred Ambient Background Poster */}
+          {/* Dynamic Ambient Background Art */}
           <div
-            className="absolute inset-0 bg-cover bg-center filter blur-3xl scale-125 opacity-30 transition-all duration-1000"
+            className="absolute inset-0 bg-cover bg-center scale-110 filter blur-2xl opacity-25 transition-all duration-1000"
             style={{ backgroundImage: `url(${activeMovie.posterUrl})` }}
           />
 
-          {/* Cinematic Vignette Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#08090e] via-[#08090e]/90 to-[#08090e]/30 z-0" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#08090e] via-transparent to-[#08090e]/50 z-0" />
+          {/* Deep Theatrical Gradient Vignettes */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#08090e] via-[#08090e]/80 to-[#08090e] z-0" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#08090e]/80 via-transparent to-[#08090e] z-0" />
 
-          {/* Hero Content: 2-Column Split */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
-            {/* LEFT COLUMN: Active Movie Presentation */}
-            <div className="lg:col-span-7 space-y-5">
-              {/* Badges & Tags */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3 py-1 rounded-full bg-violet-600/30 border border-violet-500/40 text-violet-300 text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
-                  <Flame className="w-3 h-3 text-amber-400" />
-                  Premiere Spotlight
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-white text-[10px] font-mono font-bold">
-                  {activeMovie.rating}
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-slate-300 text-[10px] font-mono flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-slate-400" />
-                  {activeMovie.durationMins}m
-                </span>
-                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-widest">
-                  {activeMovie.language} • {activeMovie.genre}
-                </span>
+          {/* Top Subtle Studio Navigation Bar */}
+          <div className="relative z-10 flex items-center justify-between pb-6 border-b border-white/[0.07]">
+            <div className="flex items-center gap-6 text-[11px] font-mono tracking-widest uppercase">
+              <span className="text-white font-black flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-violet-400 animate-ping" />
+                CINEBOOK STUDIOS
+              </span>
+              <span className="hidden sm:inline text-slate-400">IMAX 70MM LASER</span>
+              <span className="hidden sm:inline text-slate-400">DOLBY ATMOS</span>
+              <span className="hidden sm:inline text-slate-400">VIP LEATHER RECLINERS</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono uppercase text-slate-400">
+                AUDITORIUM SELECTION
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-violet-600/30 text-violet-300 font-mono text-[10px] font-bold border border-violet-500/40">
+                HALL 1
+              </span>
+            </div>
+          </div>
+
+          {/* CENTER HERO SPREAD: Left Stats | Center Art | Right Title & Action */}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6 flex-1">
+            {/* LEFT COLUMN: Large Numerical Stats & Architecture Metrics */}
+            <div className="lg:col-span-3 space-y-6 hidden lg:block">
+              {/* Stat 1 */}
+              <div>
+                <div className="text-4xl xl:text-5xl font-black text-white tracking-tight font-mono">
+                  4K
+                </div>
+                <div className="text-xs text-slate-400 uppercase tracking-widest font-mono mt-1 font-semibold">
+                  Laser Ultra-HD Resolution
+                </div>
               </div>
 
-              {/* Title */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1] drop-shadow-lg">
-                {activeMovie.title}
-              </h1>
+              <div className="w-12 h-[1px] bg-white/20" />
 
-              {/* Synopsis */}
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl line-clamp-3 font-normal">
-                {activeMovie.description}
-              </p>
-
-              {/* Available Showtimes Pill Strip */}
-              {activeMovie.shows && activeMovie.shows.length > 0 && (
-                <div className="space-y-2 pt-1">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">
-                    Quick Select Showtime:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {activeMovie.shows.slice(0, 3).map((show) => (
-                      <Link
-                        key={show.id}
-                        href={`/shows/${show.id}`}
-                        className="py-1.5 px-3.5 rounded-xl bg-white/10 hover:bg-violet-600 border border-white/15 hover:border-violet-500 transition-all text-xs font-mono text-white flex items-center gap-2 group/btn shadow-md hover:scale-105"
-                      >
-                        <span className="font-bold">{formatTime(show.startTime)}</span>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-black/40 text-violet-300 font-sans font-semibold">
-                          {show.format}
-                        </span>
-                        <span className="text-[10px] text-slate-300">
-                          ₹{show.basePrice.toFixed(0)}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
+              {/* Stat 2 */}
+              <div>
+                <div className="text-4xl xl:text-5xl font-black text-white tracking-tight font-mono">
+                  64
                 </div>
-              )}
+                <div className="text-xs text-slate-400 uppercase tracking-widest font-mono mt-1 font-semibold">
+                  Dolby Atmos Acoustic Grid
+                </div>
+              </div>
 
-              {/* Primary Call to Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-3">
-                {activeMovie.shows && activeMovie.shows.length > 0 ? (
-                  <Link
-                    href={`/shows/${activeMovie.shows[0].id}`}
-                    className="py-3 px-6 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-violet-600/30 transition-all hover:scale-[1.02]"
-                  >
-                    <span>Book Tickets Now</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/movies/${activeMovie.id}`}
-                    className="py-3 px-6 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-violet-600/30 transition-all"
-                  >
-                    <span>View Movie Overview</span>
-                  </Link>
-                )}
-                <Link
-                  href={`/movies/${activeMovie.id}`}
-                  className="py-3 px-5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white text-xs font-semibold border border-white/10 transition-colors"
-                >
-                  Movie Details
-                </Link>
+              <div className="w-12 h-[1px] bg-white/20" />
+
+              {/* Stat 3 */}
+              <div>
+                <div className="text-4xl xl:text-5xl font-black text-emerald-400 tracking-tight font-mono">
+                  100%
+                </div>
+                <div className="text-xs text-slate-400 uppercase tracking-widest font-mono mt-1 font-semibold">
+                  Zero Double-Booking Guarantee
+                </div>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Overlapping Movie Posters Carousel */}
-            <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-center space-y-4">
-              <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto py-4 px-2 w-full max-w-full justify-start lg:justify-end">
-                {movies.map((movie, idx) => {
-                  const isCurrent = idx === activeHeroIndex;
-                  return (
-                    <button
-                      key={movie.id}
-                      onClick={() => setActiveHeroIndex(idx)}
-                      className={`relative shrink-0 rounded-2xl overflow-hidden transition-all duration-300 text-left group ${
-                        isCurrent
-                          ? 'w-40 sm:w-48 h-56 sm:h-72 ring-2 ring-violet-500 shadow-2xl shadow-violet-600/40 scale-105 z-20'
-                          : 'w-28 sm:w-32 h-40 sm:h-52 opacity-60 hover:opacity-100 hover:scale-100 z-10'
-                      }`}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={movie.posterUrl}
-                        alt={movie.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                      <div className="absolute bottom-2.5 left-2.5 right-2.5">
-                        <span className="text-[11px] font-bold text-white line-clamp-1 block leading-tight">
-                          {movie.title}
-                        </span>
-                        {isCurrent ? (
-                          <span className="text-[9px] text-violet-300 font-mono font-bold block mt-0.5">
-                            Active Spotlight
-                          </span>
-                        ) : (
-                          <span className="text-[9px] text-slate-400 font-mono block mt-0.5">
-                            {movie.genre.split('/')[0]}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+            {/* CENTER COLUMN: Hero Portrait Artwork */}
+            <div className="lg:col-span-4 flex justify-center items-center">
+              <div className="relative w-56 sm:w-64 lg:w-72 aspect-[2/3] rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] border border-white/10 group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeMovie.posterUrl}
+                  alt={activeMovie.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                  <div className="flex items-center justify-between w-full text-[10px] font-mono">
+                    <span className="px-2 py-0.5 rounded bg-black/60 text-white font-bold border border-white/20">
+                      {activeMovie.rating}
+                    </span>
+                    <span className="text-slate-300">
+                      {activeMovie.durationMins} MINS
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: Bold Studio Typography, Description, & Mini Action Card */}
+            <div className="lg:col-span-5 space-y-6">
+              <div>
+                <span className="text-[11px] font-mono tracking-[0.25em] uppercase text-violet-400 font-bold block mb-1">
+                  PREMIERE SPOTLIGHT • {activeMovie.genre}
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase leading-[1.05]">
+                  {activeMovie.title}
+                </h1>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-3 line-clamp-3 font-normal max-w-lg">
+                  {activeMovie.description}
+                </p>
               </div>
 
-              {/* Carousel Controls */}
-              <div className="flex items-center justify-between w-full max-w-xs pt-1">
-                <div className="flex items-center gap-1.5">
-                  {movies.map((_, dotIdx) => (
-                    <button
-                      key={dotIdx}
-                      onClick={() => setActiveHeroIndex(dotIdx)}
-                      className={`h-1.5 rounded-full transition-all ${
-                        dotIdx === activeHeroIndex
-                          ? 'w-6 bg-violet-500 shadow-glow-violet'
-                          : 'w-1.5 bg-white/20 hover:bg-white/50'
-                      }`}
+              {/* Mini Preview / Action Card (Matching the Lionsgate Watch/Book widget) */}
+              {activeMovie.shows && activeMovie.shows.length > 0 && (
+                <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-between gap-4 max-w-md shadow-xl hover:border-violet-500/40 transition-all">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-12 h-12 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center shrink-0">
+                      <Clapperboard className="w-6 h-6 text-violet-400" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-mono uppercase text-slate-400 block font-semibold">
+                        Next Screening • {activeMovie.shows[0].format}
+                      </span>
+                      <p className="text-xs font-bold text-white truncate">
+                        {formatTime(activeMovie.shows[0].startTime)} • {activeMovie.shows[0].screen.name}
+                      </p>
+                      <span className="text-[10px] font-mono text-violet-300">
+                        From {formatCurrency(activeMovie.shows[0].basePrice)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/shows/${activeMovie.shows[0].id}`}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg shadow-violet-600/30 transition-transform active:scale-95"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Book Seats</span>
+                  </Link>
+                </div>
+              )}
+
+              {/* Bottom Carousel Controls (Prev / Next & Numeric Progress: 01 / 04) */}
+              <div className="flex items-center justify-between pt-2 max-w-md border-t border-white/[0.08]">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-bold text-white tracking-widest">
+                    0{activeHeroIndex + 1}
+                  </span>
+                  <div className="w-16 h-1 rounded-full bg-white/10 overflow-hidden">
+                    <div
+                      className="h-full bg-violet-500 transition-all duration-500"
+                      style={{ width: `${((activeHeroIndex + 1) / movies.length) * 100}%` }}
                     />
-                  ))}
+                  </div>
+                  <span className="font-mono text-xs text-slate-500 tracking-widest">
+                    0{movies.length}
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handlePrevHero}
-                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10"
-                    title="Previous Movie"
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10"
+                    title="Previous Film"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleNextHero}
-                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10"
-                    title="Next Movie"
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10"
+                    title="Next Film"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -291,112 +300,44 @@ export default function HomePage() {
         </div>
       ) : null}
 
-      {/* 2. DISCOVERY & FILTERING BAR */}
-      <section className="space-y-4">
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-3xl bg-[#0c0e18] border border-white/[0.08]">
-          {/* Genre Filters */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-            {genres.map((g) => {
-              const active = (g === 'All' && !selectedGenre) || selectedGenre === g;
-              return (
-                <button
-                  key={g}
-                  onClick={() => setSelectedGenre(g === 'All' ? '' : g)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                    active
-                      ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md shadow-violet-600/30 font-bold'
-                      : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  {g}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search Bar */}
-          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 w-full md:w-80">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search titles, cast, genres..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-violet-600 text-white text-xs font-semibold transition-colors shrink-0"
-            >
-              Search
-            </button>
-          </form>
-        </div>
-
-        {/* Format Selector Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto">
-          <span className="text-[11px] font-mono text-slate-400 uppercase font-bold mr-1">
-            Format:
-          </span>
-          {formats.map((fmt) => (
-            <button
-              key={fmt}
-              onClick={() => setSelectedFormat(fmt)}
-              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
-                selectedFormat === fmt
-                  ? 'bg-violet-600/30 text-violet-300 font-bold border border-violet-500/40 shadow-sm'
-                  : 'bg-white/5 text-slate-400 hover:text-white border border-transparent'
-              }`}
-            >
-              {fmt}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. NOW SHOWING CATALOG */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400">
-              <Film className="w-4 h-4" />
-            </div>
+      {/* ========================================================
+          2. CURATED CATEGORY ROW 1: SCI-FI & EPIC SAGAS (LIONSGATE LAYOUT)
+          Left: Bold category headline & tagline
+          Right: Horizontal row of movie cards
+          ======================================================== */}
+      <section className="p-8 sm:p-10 rounded-[32px] bg-[#0c0e18] border border-white/[0.08]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Category Left Header */}
+          <div className="lg:col-span-3 space-y-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                Now Showing in Theatres
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-violet-400 font-bold block mb-1">
+                CURATED AUDITORIUM RELEASES
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
+                Sci-Fi & Epic Sagas
               </h2>
-              <p className="text-xs text-slate-400">
-                Live seat availability with microsecond concurrency holds
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                Transcendent worlds, deep space exploration, and mind-bending architectural realities in IMAX Laser.
               </p>
             </div>
-          </div>
-          <span className="text-xs font-mono text-slate-400">
-            {displayedMovies.length} Titles Available
-          </span>
-        </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-96 rounded-3xl bg-white/5 animate-pulse" />
-            ))}
+            <Link
+              href="/"
+              onClick={() => setSelectedGenre('Sci-Fi')}
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-violet-400 hover:text-violet-300 uppercase tracking-wider group pt-2"
+            >
+              <span>Browse All Sci-Fi</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
-        ) : displayedMovies.length === 0 ? (
-          <div className="text-center py-16 rounded-3xl bg-[#0c0e18] border border-white/[0.08]">
-            <Film className="w-10 h-10 text-slate-600 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-slate-300">No movies found</p>
-            <p className="text-xs text-slate-500 mt-1">Try resetting your search or format filters.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {displayedMovies.map((movie) => (
+
+          {/* Category Right Movie Cards Row */}
+          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {sciFiMovies.map((movie) => (
               <div
                 key={movie.id}
-                className="group flex flex-col rounded-3xl overflow-hidden bg-[#0c0e18] border border-white/[0.08] hover:border-violet-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-600/20 hover:-translate-y-1"
+                className="group flex flex-col rounded-3xl overflow-hidden bg-[#08090e] border border-white/10 hover:border-violet-500/40 transition-all duration-300 shadow-xl hover:-translate-y-1"
               >
-                {/* Poster Artwork with Floating Badges */}
                 <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -404,78 +345,163 @@ export default function HomePage() {
                     alt={movie.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono font-bold text-white shadow-xs">
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono font-bold text-white">
                     {movie.rating}
                   </div>
-                  <div className="absolute bottom-3 left-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1 shadow-xs">
+                  <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1">
                     <Clock className="w-3 h-3 text-slate-400" />
                     {movie.durationMins}m
                   </div>
                 </div>
 
-                {/* Details & Showtimes */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-violet-400 font-bold tracking-wider">
+                    <span className="text-[10px] font-mono uppercase text-violet-400 font-bold">
                       {movie.genre}
                     </span>
-                    <h3 className="text-base font-bold text-white group-hover:text-violet-400 transition-colors line-clamp-1 mt-0.5">
+                    <h3 className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors line-clamp-1">
                       {movie.title}
                     </h3>
-                    <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
-                      {movie.description}
-                    </p>
                   </div>
 
-                  {/* Showtimes Pill List */}
-                  <div className="pt-2 border-t border-white/[0.08] space-y-1.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 block font-bold">
-                      Today&apos;s Shows:
-                    </span>
+                  {/* Showtimes & Direct Action */}
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between">
                     {movie.shows && movie.shows.length > 0 ? (
-                      <div className="flex flex-wrap gap-1.5">
-                        {movie.shows.slice(0, 3).map((show) => (
+                      <div className="flex flex-wrap gap-1">
+                        {movie.shows.slice(0, 2).map((s) => (
                           <Link
-                            key={show.id}
-                            href={`/shows/${show.id}`}
-                            className="text-xs px-2.5 py-1 rounded-xl bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white border border-white/10 hover:border-violet-500 font-mono transition-colors flex items-center gap-1.5"
+                            key={s.id}
+                            href={`/shows/${s.id}`}
+                            className="text-[10px] px-2 py-1 rounded-lg bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white font-mono transition-colors"
                           >
-                            <span>{formatTime(show.startTime)}</span>
-                            <span className="text-[9px] px-1 rounded bg-black/40 text-violet-300 font-sans font-bold">
-                              {show.format}
-                            </span>
+                            {formatTime(s.startTime)}
                           </Link>
                         ))}
                       </div>
                     ) : (
-                      <span className="text-xs text-slate-500 italic">No upcoming shows</span>
+                      <span className="text-[10px] text-slate-500 font-mono">No shows</span>
                     )}
-                  </div>
 
-                  {/* Action Link */}
-                  <Link
-                    href={`/movies/${movie.id}`}
-                    className="w-full mt-2 py-2.5 px-4 rounded-xl bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/10 hover:border-violet-500"
-                  >
-                    <span>Movie & Hall Info</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                    <Link
+                      href={`/movies/${movie.id}`}
+                      className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold transition-all"
+                    >
+                      Overview
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        )}
+        </div>
       </section>
 
-      {/* 4. CINEMA ARCHITECTURE PILLARS */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+      {/* ========================================================
+          3. CURATED CATEGORY ROW 2: DRAMA & HISTORICAL EPICS (ALTERNATING LIONSGATE LAYOUT)
+          Left: Movie cards
+          Right: Bold category headline & tagline
+          ======================================================== */}
+      <section className="p-8 sm:p-10 rounded-[32px] bg-[#0c0e18] border border-white/[0.08]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Category Left Movie Cards Row */}
+          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 order-2 lg:order-1">
+            {dramaMovies.map((movie) => (
+              <div
+                key={movie.id}
+                className="group flex flex-col rounded-3xl overflow-hidden bg-[#08090e] border border-white/10 hover:border-violet-500/40 transition-all duration-300 shadow-xl hover:-translate-y-1"
+              >
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono font-bold text-white">
+                    {movie.rating}
+                  </div>
+                  <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-slate-400" />
+                    {movie.durationMins}m
+                  </div>
+                </div>
+
+                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-violet-400 font-bold">
+                      {movie.genre}
+                    </span>
+                    <h3 className="text-sm font-bold text-white group-hover:text-violet-400 transition-colors line-clamp-1">
+                      {movie.title}
+                    </h3>
+                  </div>
+
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+                    {movie.shows && movie.shows.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {movie.shows.slice(0, 2).map((s) => (
+                          <Link
+                            key={s.id}
+                            href={`/shows/${s.id}`}
+                            className="text-[10px] px-2 py-1 rounded-lg bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white font-mono transition-colors"
+                          >
+                            {formatTime(s.startTime)}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-[10px] text-slate-500 font-mono">No shows</span>
+                    )}
+
+                    <Link
+                      href={`/movies/${movie.id}`}
+                      className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold transition-all"
+                    >
+                      Overview
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Category Right Header */}
+          <div className="lg:col-span-3 space-y-4 order-1 lg:order-2">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-fuchsia-400 font-bold block mb-1">
+                ACADEMY AWARD SPOTLIGHT
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
+                Biography & Drama
+              </h2>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                Historic masterworks, intense character studies, and legendary performances in 70mm large format.
+              </p>
+            </div>
+
+            <Link
+              href="/"
+              onClick={() => setSelectedGenre('Biography')}
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-fuchsia-400 hover:text-fuchsia-300 uppercase tracking-wider group pt-2"
+            >
+              <span>Browse All Drama</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          4. ARCHITECTURE & CONCURRENCY ASSURANCES
+          ======================================================== */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 rounded-3xl bg-[#0c0e18] border border-white/[0.08] space-y-2">
           <div className="w-8 h-8 rounded-xl bg-violet-600/20 text-violet-400 flex items-center justify-center">
             <Lock className="w-4 h-4" />
           </div>
           <h4 className="text-sm font-bold text-white">Zero Double-Booking</h4>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Database composite unique constraint guarantees no duplicate ticket issuance under high traffic.
+            Database composite unique constraint guarantees zero seat collisions under peak traffic.
           </p>
         </div>
 
