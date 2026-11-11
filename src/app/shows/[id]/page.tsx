@@ -300,7 +300,7 @@ export default function ShowBookingPage({
       )}
 
       {/* Dark Cinema Seat Canvas */}
-      <div className="rounded-3xl bg-[#0e101a] border border-white/10 p-5 sm:p-10 shadow-2xl">
+      <div className="rounded-3xl bg-[#0e101a] border border-white/10 p-5 sm:p-10 shadow-2xl overflow-hidden relative">
         <SeatMap
           seats={seats}
           selectedSeatIds={selectedSeatIds}

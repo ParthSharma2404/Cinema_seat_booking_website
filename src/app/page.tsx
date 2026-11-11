@@ -198,7 +198,7 @@ export default function HomePage() {
           <div className="pt-3 flex flex-wrap items-center gap-4">
             {/* Primary Action Button (Amber / Gold like reference image) */}
             <Link
-              href={targetShowId ? `/shows/${targetShowId}` : `/movies/${activeMovie.id}`}
+              href={targetShowId ? `/movies/${activeMovie.id}?showId=${targetShowId}` : `/movies/${activeMovie.id}`}
               className="px-7 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-400/20 transition-all hover:scale-105 active:scale-95"
             >
               <Ticket className="w-4 h-4 fill-current" />

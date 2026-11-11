@@ -39,167 +39,163 @@ body {
 }
 
 /* ========================================================
-   CINEMATIC TOP-DOWN AUDITORIUM LIGHT SWEEP (DARK THEME)
-   Simulates looking down into a dark VIP cinema auditorium
-   as vibrant movie projector rays sweep left <-> right across the hall
+   CINEMATIC CURVED SCREEN & DISPLAY PROJECTION (CONTAINED)
+   Simulates looking at an active curved IMAX / VIP cinema screen
+   with movie scene playback, lens flares, and projector beam.
+   STRICTLY contained with ZERO light bleed outside the card.
    ======================================================== */
 
-@keyframes hall-light-sweep-primary {
+@keyframes cinema-film-scenes {
   0% {
-    transform: translateX(-32%) skewX(-8deg) scaleX(1.12);
-    opacity: 0.82;
+    background-position: 0% 50%;
+    filter: brightness(1) contrast(1.08);
+  }
+  25% {
+    background-position: 50% 80%;
+    filter: brightness(1.2) contrast(1.15) hue-rotate(15deg);
   }
   50% {
-    transform: translateX(6%) skewX(2deg) scaleX(1.25);
-    opacity: 1;
+    background-position: 100% 50%;
+    filter: brightness(0.95) contrast(1.04) hue-rotate(-10deg);
+  }
+  75% {
+    background-position: 50% 20%;
+    filter: brightness(1.15) contrast(1.12) hue-rotate(10deg);
   }
   100% {
-    transform: translateX(32%) skewX(8deg) scaleX(1.12);
-    opacity: 0.82;
+    background-position: 0% 50%;
+    filter: brightness(1) contrast(1.08);
   }
 }
 
-@keyframes hall-light-sweep-secondary {
+@keyframes projector-shutter-flicker {
+  0%, 100% { opacity: 0.96; }
+  18% { opacity: 0.99; }
+  20% { opacity: 0.91; }
+  45% { opacity: 0.98; }
+  68% { opacity: 0.93; }
+  70% { opacity: 1; }
+  85% { opacity: 0.94; }
+}
+
+@keyframes screen-curved-flare {
   0% {
-    transform: translateX(28%) skewX(6deg) scaleX(1.18);
-    opacity: 0.72;
+    transform: translateX(-120px);
+    opacity: 0.6;
   }
   50% {
-    transform: translateX(-8%) skewX(-4deg) scaleX(1.1);
-    opacity: 0.96;
+    transform: translateX(120px);
+    opacity: 0.9;
   }
   100% {
-    transform: translateX(-28%) skewX(-6deg) scaleX(1.18);
-    opacity: 0.72;
+    transform: translateX(-120px);
+    opacity: 0.6;
   }
 }
 
-@keyframes screen-hotspot-sweep {
-  0% {
-    box-shadow: -35px -8px 45px rgba(139, 92, 246, 0.75), 0 -4px 22px rgba(6, 182, 212, 0.55);
-  }
-  50% {
-    box-shadow: 0px -18px 55px rgba(236, 72, 153, 0.85), 0 -6px 28px rgba(139, 92, 246, 0.65);
-  }
-  100% {
-    box-shadow: 35px -8px 45px rgba(6, 182, 212, 0.75), 0 -4px 22px rgba(236, 72, 153, 0.55);
-  }
-}
-
-@keyframes screen-lens-flare {
-  0% {
-    transform: translateX(-180px);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translateX(0px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(180px);
-    opacity: 0.5;
-  }
-}
-
-/* Curved Cinema Screen Arch */
-.cinema-screen-arch-premium {
+/* Master Contained Screen Housing */
+.cinema-screen-housing {
   position: relative;
   width: 100%;
-  max-width: 580px;
-  height: 24px;
-  border-top: 4px solid #ffffff;
-  border-radius: 50% 50% 0 0 / 24px 24px 0 0;
-  animation: screen-hotspot-sweep 5.5s ease-in-out infinite alternate;
-  z-index: 20;
-}
-
-/* Top-Down Ambient Light Field Container */
-.auditorium-ambient-field {
-  position: relative;
-  width: 100%;
-  max-width: 640px;
-  height: 160px;
+  max-width: 520px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: visible;
+  overflow: hidden; /* Guaranteed no spill */
+  border-radius: 20px 20px 0 0;
   pointer-events: none;
 }
 
-/* Organic Free-Form Luminous Aurora Layer 1 */
-.ambient-aurora-layer1 {
-  position: absolute;
-  top: -8px;
-  width: 120%;
-  height: 155px;
-  border-radius: 40% 60% 70% 30% / 35% 35% 65% 65%;
-  background: radial-gradient(
-    ellipse 65% 55% at 50% 5%,
-    rgba(147, 51, 234, 0.75) 0%,
-    rgba(236, 72, 153, 0.55) 35%,
-    rgba(6, 182, 212, 0.35) 65%,
-    transparent 88%
-  );
-  filter: blur(22px);
-  will-change: transform, opacity;
-  animation: hall-light-sweep-primary 5.5s ease-in-out infinite alternate;
-  z-index: 5;
+/* Curved Screen Edge Arch */
+.cinema-screen-arch {
+  position: relative;
+  width: 100%;
+  height: 32px;
+  border-top: 3.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50% 50% 0 0 / 32px 32px 0 0;
+  box-shadow: 0 -4px 22px rgba(255, 255, 255, 0.45),
+              0 0 35px rgba(139, 92, 246, 0.35);
+  overflow: hidden;
+  z-index: 20;
 }
 
-/* Organic Free-Form Luminous Aurora Layer 2 (Counter-phase) */
-.ambient-aurora-layer2 {
+/* Active Movie Playback Display Surface */
+.cinema-film-display-surface {
   position: absolute;
-  top: 2px;
-  width: 110%;
-  height: 145px;
-  border-radius: 60% 40% 50% 50% / 45% 45% 55% 55%;
-  background: radial-gradient(
-    ellipse 60% 50% at 50% 5%,
-    rgba(6, 182, 212, 0.6) 0%,
-    rgba(139, 92, 246, 0.5) 40%,
-    rgba(244, 63, 94, 0.35) 70%,
-    transparent 90%
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  border-radius: 50% 50% 0 0 / 28px 28px 0 0;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 27, 75, 0.95) 0%,
+    rgba(147, 51, 234, 0.75) 20%,
+    rgba(6, 182, 212, 0.8) 40%,
+    rgba(244, 63, 94, 0.7) 65%,
+    rgba(245, 158, 11, 0.6) 80%,
+    rgba(30, 27, 75, 0.95) 100%
   );
-  filter: blur(25px);
-  will-change: transform, opacity;
-  animation: hall-light-sweep-secondary 7s ease-in-out infinite alternate;
+  background-size: 250% 250%;
+  animation: cinema-film-scenes 9s ease-in-out infinite,
+             projector-shutter-flicker 0.4s ease-in-out infinite alternate;
   mix-blend-mode: screen;
-  z-index: 6;
+  opacity: 0.92;
+  filter: blur(1px);
 }
 
-/* Horizontal Caustic Sweep Line across the screen */
-.screen-caustic-beam {
+/* Moving Optical Glint across the screen */
+.cinema-screen-glint {
   position: absolute;
-  top: 0px;
-  width: 85%;
-  height: 70px;
-  background: radial-gradient(
-    ellipse at 50% 0%,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(196, 181, 253, 0.45) 40%,
-    transparent 80%
-  );
-  animation: hall-light-sweep-primary 5.5s ease-in-out infinite alternate;
-  filter: blur(8px);
-  z-index: 7;
-}
-
-/* Projector Lens Hotspot gliding across the curved screen */
-.screen-lens-hotspot {
-  position: absolute;
-  top: -9px;
-  width: 120px;
-  height: 22px;
+  top: 0;
+  width: 90px;
+  height: 12px;
   border-radius: 9999px;
   background: radial-gradient(
     ellipse at 50% 50%,
     rgba(255, 255, 255, 1) 0%,
-    rgba(192, 132, 252, 0.8) 45%,
-    transparent 75%
+    rgba(167, 139, 250, 0.8) 45%,
+    transparent 80%
   );
-  filter: blur(5px);
-  animation: screen-lens-flare 5.5s ease-in-out infinite alternate;
-  z-index: 22;
+  filter: blur(4px);
+  animation: screen-curved-flare 6s ease-in-out infinite;
+  z-index: 25;
+}
+
+/* Realistic Downward Projector Light Beam Cone */
+.cinema-projector-light-cone {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  height: 80px;
+  margin-top: -6px;
+  clip-path: polygon(14% 0%, 86% 0%, 100% 100%, 0% 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(139, 92, 246, 0.16) 35%,
+    rgba(6, 182, 212, 0.08) 65%,
+    transparent 100%
+  );
+  animation: projector-shutter-flicker 0.8s ease-in-out infinite alternate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Subtle Film Scanlines */
+.cinema-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
   pointer-events: none;
 }
 

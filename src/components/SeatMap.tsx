@@ -58,31 +58,31 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
         </div>
       </div>
 
-      {/* 2. Top-Down Curved Screen with HORIZONTALLY SWEEPING LIGHT AURORA */}
-      <div className="w-full max-w-lg mb-8 flex flex-col items-center relative overflow-visible">
-        {/* Projector Lens Hotspot gliding along the curved screen */}
-        <div className="screen-lens-hotspot" />
+      {/* 2. Top-Down Contained Curved Screen with Active Movie Display & Projector Cone */}
+      <div className="w-full max-w-lg mb-8 flex flex-col items-center relative overflow-hidden">
+        <div className="cinema-screen-housing">
+          {/* Glint traversing the curved glass */}
+          <div className="cinema-screen-glint" />
 
-        {/* The Curved Screen Arch */}
-        <div className="cinema-screen-arch-premium flex items-center justify-center">
-          <div className="w-2/3 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent -mt-1 opacity-90" />
-        </div>
+          {/* Curved Cinema Screen Edge */}
+          <div className="cinema-screen-arch flex items-center justify-center">
+            {/* Active Moving Film Surface */}
+            <div className="cinema-film-display-surface" />
+            <div className="cinema-scanlines" />
+            <div className="w-2/3 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent -mt-2 opacity-95 z-30" />
+          </div>
 
-        {/* Organic Light Field (Sweeps Left <-> Right as seen from the top of the hall) */}
-        <div className="auditorium-ambient-field -mt-1">
-          {/* Sweeping Aurora Layer 1 (Electric Violet / Magenta) */}
-          <div className="ambient-aurora-layer1" />
-          {/* Sweeping Aurora Layer 2 (Cyan / Deep Violet) */}
-          <div className="ambient-aurora-layer2" />
-          {/* Horizontal Caustic Highlight Beam */}
-          <div className="screen-caustic-beam" />
-          
-          {/* Floating Minimalist Hall Badge */}
-          <div className="relative z-10 mt-6 px-4 py-1.5 rounded-full bg-[#111322]/90 backdrop-blur-md border border-white/10 shadow-lg flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-ping" />
-            <span className="text-[10px] tracking-[0.25em] uppercase font-bold text-slate-200 font-mono">
-              VIP HALL • SCREEN
-            </span>
+          {/* Realistic Downward Projector Light Cone (Strictly Contained) */}
+          <div className="cinema-projector-light-cone">
+            <div className="cinema-scanlines opacity-40" />
+
+            {/* Centered Cinema Screen Badge */}
+            <div className="relative z-10 px-3.5 py-1 rounded-full bg-[#0b0d18]/90 backdrop-blur-md border border-white/15 shadow-xl flex items-center gap-1.5 -mt-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[9px] tracking-[0.25em] uppercase font-bold text-slate-200 font-mono">
+                SCREEN • 4K LASER PROJECTION
+              </span>
+            </div>
           </div>
         </div>
       </div>
