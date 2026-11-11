@@ -48,18 +48,18 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="py-24 flex justify-center">
-        <div className="w-8 h-8 border-3 border-violet-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (errorMsg) {
     return (
-      <div className="p-8 rounded-3xl border border-rose-200 bg-rose-50 text-center space-y-3">
-        <AlertTriangle className="w-8 h-8 text-rose-600 mx-auto" />
-        <h3 className="text-base font-bold text-rose-900">{errorMsg}</h3>
-        <p className="text-xs text-rose-700">
-          Use the Evaluator Fast-Track at the home page or login page to authenticate as Staff or Admin.
+      <div className="p-8 rounded-3xl border border-rose-500/30 bg-rose-950/40 text-center space-y-3">
+        <AlertTriangle className="w-8 h-8 text-rose-400 mx-auto" />
+        <h3 className="text-base font-bold text-white">{errorMsg}</h3>
+        <p className="text-xs text-rose-300">
+          Use the Evaluator Fast-Track in the sidebar to authenticate as Staff or Admin.
         </p>
       </div>
     );
@@ -72,18 +72,18 @@ export default function AdminDashboardPage() {
       {/* Top Controls */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-violet-600" />
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-violet-400" />
             Occupancy & Financial Reconciliation
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400">
             Real-time capacity tracking and audit reconciliation across all screens
           </p>
         </div>
 
         <button
           onClick={fetchReports}
-          className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-full border border-slate-200 bg-white shadow-xs"
+          className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white px-3.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           Refresh Stats
@@ -91,22 +91,22 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Acceptance Test 5 Banner */}
-      <div className="p-4 rounded-3xl border border-emerald-200 bg-emerald-50/70 flex items-center justify-between gap-4 shadow-soft">
+      <div className="p-4 rounded-3xl border border-emerald-500/30 bg-emerald-950/30 flex items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-emerald-100 text-emerald-800">
+          <div className="p-2.5 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
             <Scale className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-emerald-900 uppercase tracking-wide">
-              Acceptance Test 5: Seat & Revenue Reconciliation Status
+            <h4 className="text-xs font-bold text-emerald-300 uppercase tracking-wide">
+              Acceptance Test 5: Seat & Revenue Reconciliation Formula
             </h4>
-            <p className="text-xs text-emerald-800">
+            <p className="text-xs text-emerald-200/80">
               Formula: <code className="font-mono font-bold">Booked Seats + Active Held Seats + Available Seats === Total Screen Capacity</code>
             </p>
           </div>
         </div>
 
-        <span className="px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold flex items-center gap-1.5 font-mono shadow-xs">
+        <span className="px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 font-mono shadow-xs">
           <CheckCircle className="w-3.5 h-3.5" />
           {summary.allShowsReconciled ? '100% RECONCILED' : 'DISCREPANCY DETECTED'}
         </span>
@@ -114,49 +114,49 @@ export default function AdminDashboardPage() {
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-5 rounded-3xl border border-slate-200/90 bg-white shadow-soft">
+        <div className="p-5 rounded-3xl border border-white/10 bg-[#0e101a] shadow-xl">
           <span className="text-[10px] font-mono text-slate-400 uppercase block font-semibold">Total Shows</span>
-          <span className="text-2xl font-bold text-slate-900 mt-1 block font-mono">
+          <span className="text-2xl font-black text-white mt-1 block font-mono">
             {summary.totalShows}
           </span>
-          <span className="text-[11px] text-slate-500">Active scheduled shows</span>
+          <span className="text-[11px] text-slate-400">Active scheduled shows</span>
         </div>
 
-        <div className="p-5 rounded-3xl border border-slate-200/90 bg-white shadow-soft">
+        <div className="p-5 rounded-3xl border border-white/10 bg-[#0e101a] shadow-xl">
           <span className="text-[10px] font-mono text-slate-400 uppercase block font-semibold">Total Seats</span>
-          <span className="text-2xl font-bold text-slate-900 mt-1 block font-mono">
+          <span className="text-2xl font-black text-white mt-1 block font-mono">
             {summary.totalCapacity}
           </span>
-          <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5 font-mono">
-            <span className="text-emerald-700 font-bold">{summary.totalBookedSeats} booked</span>
+          <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5 font-mono">
+            <span className="text-emerald-400 font-bold">{summary.totalBookedSeats} booked</span>
             <span>•</span>
-            <span className="text-amber-700 font-bold">{summary.totalHeldSeats} held</span>
+            <span className="text-amber-400 font-bold">{summary.totalHeldSeats} held</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl border border-slate-200/90 bg-white shadow-soft">
+        <div className="p-5 rounded-3xl border border-white/10 bg-[#0e101a] shadow-xl">
           <span className="text-[10px] font-mono text-slate-400 uppercase block font-semibold">Overall Occupancy</span>
-          <span className="text-2xl font-bold text-violet-700 mt-1 block font-mono">
+          <span className="text-2xl font-black text-violet-400 mt-1 block font-mono">
             {summary.occupancyRate}%
           </span>
-          <span className="text-[11px] text-slate-500">Across all scheduled shows</span>
+          <span className="text-[11px] text-slate-400">Across all screens</span>
         </div>
 
-        <div className="p-5 rounded-3xl border border-slate-200/90 bg-white shadow-soft">
+        <div className="p-5 rounded-3xl border border-white/10 bg-[#0e101a] shadow-xl">
           <span className="text-[10px] font-mono text-slate-400 uppercase block font-semibold">Net Revenue</span>
-          <span className="text-2xl font-bold text-slate-900 mt-1 block font-mono">
+          <span className="text-2xl font-black text-white mt-1 block font-mono">
             {formatCurrency(summary.netRevenue || 0)}
           </span>
-          <span className="text-[11px] text-slate-500">
+          <span className="text-[11px] text-slate-400">
             {summary.totalRefunds > 0 ? `Refunds: -${formatCurrency(summary.totalRefunds)}` : 'Zero refunds'}
           </span>
         </div>
       </div>
 
       {/* Per-Show Detailed Table */}
-      <div className="rounded-3xl border border-slate-200/90 bg-white overflow-hidden shadow-soft">
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-mono">
+      <div className="rounded-3xl border border-white/10 bg-[#0e101a] overflow-hidden shadow-xl">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between">
+          <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
             Detailed Show-by-Show Occupancy Breakdown
           </h3>
           <span className="text-xs text-slate-400 font-mono">{shows.length} shows listed</span>
@@ -164,7 +164,7 @@ export default function AdminDashboardPage() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase font-mono text-[10px] border-b border-slate-200">
+            <thead className="bg-white/[0.02] text-slate-400 uppercase font-mono text-[10px] border-b border-white/10">
               <tr>
                 <th className="py-3.5 px-4 font-semibold">Movie & Screen</th>
                 <th className="py-3.5 px-4 font-semibold">Showtime</th>
@@ -177,52 +177,52 @@ export default function AdminDashboardPage() {
                 <th className="py-3.5 px-4 font-semibold">Audit Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tbody className="divide-y divide-white/5 text-slate-300">
               {shows.map((s: any) => (
-                <tr key={s.showId} className="hover:bg-slate-50/60 transition-colors">
+                <tr key={s.showId} className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-4">
-                    <span className="font-bold text-slate-900 block">{s.movieTitle}</span>
+                    <span className="font-bold text-white block">{s.movieTitle}</span>
                     <span className="text-[11px] text-slate-400">
                       {s.screenName} ({s.format})
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-slate-600">
+                  <td className="py-3.5 px-4 font-mono text-slate-400">
                     {formatDateTime(s.startTime)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
+                  <td className="py-3.5 px-4 font-mono font-bold text-white">
                     {s.totalCapacity}
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-emerald-700 font-bold">
+                  <td className="py-3.5 px-4 font-mono text-emerald-400 font-bold">
                     {s.bookedSeatsCount}
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-amber-700 font-bold">
+                  <td className="py-3.5 px-4 font-mono text-amber-400 font-bold">
                     {s.heldSeatsCount}
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-slate-600">
+                  <td className="py-3.5 px-4 font-mono text-slate-400">
                     {s.availableSeatsCount}
                   </td>
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-16 h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div className="w-16 h-2 rounded-full bg-white/10 overflow-hidden">
                         <div
-                          className="h-full bg-violet-600 rounded-full"
+                          className="h-full bg-violet-500 rounded-full"
                           style={{ width: `${Math.min(100, s.occupancyRate)}%` }}
                         />
                       </div>
-                      <span className="font-mono text-[11px] font-semibold">{s.occupancyRate}%</span>
+                      <span className="font-mono text-[11px] font-semibold text-white">{s.occupancyRate}%</span>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
+                  <td className="py-3.5 px-4 font-mono font-bold text-white">
                     {formatCurrency(s.revenue)}
                   </td>
                   <td className="py-3.5 px-4">
                     {s.isReconciled ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                      <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-medium">
                         <CheckCircle className="w-3.5 h-3.5" />
                         Reconciled
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-rose-700 font-medium">
+                      <span className="inline-flex items-center gap-1 text-[11px] text-rose-400 font-medium">
                         <AlertTriangle className="w-3.5 h-3.5" />
                         Mismatch
                       </span>

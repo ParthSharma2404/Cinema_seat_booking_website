@@ -41,89 +41,88 @@ export default function RegisterPage() {
 
   return (
     <div className="max-w-md mx-auto py-12 px-4">
-      <div className="rounded-3xl border border-slate-200/90 bg-white p-8 shadow-soft">
+      <div className="rounded-3xl border border-white/10 bg-[#0e101a] p-8 shadow-2xl">
         <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-slate-900 text-white items-center justify-center mb-3 shadow-sm">
-            <Film className="w-5 h-5 text-violet-300" />
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white items-center justify-center mb-3 shadow-lg shadow-violet-600/30">
+            <Film className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Create an Account</h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-2xl font-black text-white tracking-tight">Create an Account</h1>
+          <p className="text-xs text-slate-400 mt-1">
             Join CineBook to reserve seats and access turnstile passes
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="mb-6 p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-rose-200 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Full Name
             </label>
             <div className="relative">
-              <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Alex Rivera"
-                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-xs"
+                placeholder="e.g. Alex Morgan"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-violet-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="alex@example.com"
-                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-xs"
+                placeholder="e.g. alex@example.com"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-violet-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="password"
                 required
-                minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 6 characters"
-                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white transition-all shadow-xs"
+                placeholder="Minimum 6 characters"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-violet-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Role
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              Account Persona
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setRole('CUSTOMER')}
-                className={`py-2 px-3 rounded-full border text-xs font-medium transition-colors ${
+                className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
                   role === 'CUSTOMER'
-                    ? 'bg-slate-900 border-slate-900 text-white font-semibold'
-                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+                    ? 'bg-violet-600/30 border-violet-500 text-violet-300 shadow-md'
+                    : 'bg-white/5 border-white/10 text-slate-400'
                 }`}
               >
                 Customer
@@ -131,10 +130,10 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setRole('STAFF')}
-                className={`py-2 px-3 rounded-full border text-xs font-medium transition-colors ${
+                className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
                   role === 'STAFF'
-                    ? 'bg-violet-600 border-violet-600 text-white font-semibold'
-                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900'
+                    ? 'bg-violet-600/30 border-violet-500 text-violet-300 shadow-md'
+                    : 'bg-white/5 border-white/10 text-slate-400'
                 }`}
               >
                 Gate Staff
@@ -145,19 +144,19 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 rounded-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-semibold text-xs tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2"
+            className="w-full mt-2 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-violet-600/30 transition-all flex items-center justify-center gap-2"
           >
-            <UserPlus className="w-3.5 h-3.5" />
-            {loading ? 'Creating Account...' : 'Register'}
+            <UserPlus className="w-4 h-4" />
+            <span>{loading ? 'Creating Account...' : 'Register'}</span>
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-500 mt-6">
+        <div className="mt-6 text-center text-xs text-slate-400">
           Already have an account?{' '}
-          <Link href="/login" className="text-violet-600 hover:text-violet-700 font-semibold">
+          <Link href="/login" className="text-violet-400 hover:text-violet-300 font-semibold underline">
             Sign In
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

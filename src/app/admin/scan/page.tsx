@@ -38,7 +38,6 @@ export default function GateScannerPage() {
       const data = await res.json();
       setResult(data);
 
-      // Append to local session scan history
       setScanHistory((prev) => [
         {
           timestamp: new Date().toLocaleTimeString(),
@@ -69,20 +68,20 @@ export default function GateScannerPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <ScanLine className="w-6 h-6 text-violet-600" />
+        <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <ScanLine className="w-6 h-6 text-violet-400" />
           Turnstile & Gate Entry QR Scanner
         </h2>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-slate-400 mt-1">
           Acceptance Test 4 demonstration: Verifies ticket validity and enforces strict single-use entry
         </p>
       </div>
 
       {/* Main Scanner Box */}
-      <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-soft space-y-6">
+      <div className="rounded-3xl border border-white/10 bg-[#0e101a] p-6 sm:p-8 shadow-2xl space-y-6">
         {/* Quick Test Token Presets */}
-        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-2 font-mono">
+        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 font-mono">
             Evaluator Quick Test Tokens (Click to scan)
           </span>
           <div className="flex flex-wrap gap-2">
@@ -92,117 +91,116 @@ export default function GateScannerPage() {
                 setTokenInput('TCK-DEMO-VAL1');
                 handleValidate('TCK-DEMO-VAL1');
               }}
-              className="px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs text-emerald-800 font-mono transition-colors shadow-xs"
+              className="px-3.5 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs text-emerald-300 font-mono transition-colors shadow-xs"
             >
               Test Pre-Seeded Valid Ticket (TCK-DEMO-VAL1)
             </button>
             <button
               type="button"
               onClick={() => {
-                setTokenInput('TCK-DEMO-CANCELLED');
-                handleValidate('TCK-DEMO-CANCELLED');
+                setTokenInput('TCK-INVALID-DUMMY');
+                handleValidate('TCK-INVALID-DUMMY');
               }}
-              className="px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs text-rose-800 font-mono transition-colors shadow-xs"
+              className="px-3.5 py-1.5 rounded-full bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-xs text-rose-300 font-mono transition-colors shadow-xs"
             >
-              Test Cancelled Ticket (TCK-DEMO-CANCELLED)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setTokenInput('TCK-NONEXISTENT-99');
-                handleValidate('TCK-NONEXISTENT-99');
-              }}
-              className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-600 font-mono transition-colors shadow-xs"
-            >
-              Test Fake Token (TCK-NONEXISTENT)
+              Test Invalid / Fake Token
             </button>
           </div>
         </div>
 
-        {/* Form Input */}
-        <form onSubmit={handleFormSubmit} className="flex gap-3">
-          <div className="relative flex-1">
-            <QrCode className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              required
-              value={tokenInput}
-              onChange={(e) => setTokenInput(e.target.value)}
-              placeholder="Scan or enter QR Validation Token (e.g. TCK-DEMO-VAL1 or BK-DEMO01)..."
-              className="w-full pl-10 pr-4 py-3 rounded-full bg-slate-50 border border-slate-200 text-sm font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-600 focus:bg-white"
-            />
+        {/* Input Bar */}
+        <form onSubmit={handleFormSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-mono font-bold text-slate-300 mb-2 uppercase tracking-wider">
+              Scan or Enter Cryptographic QR Validation Token
+            </label>
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <QrCode className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  placeholder="e.g. TCK-DEMO-VAL1"
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white font-mono text-sm placeholder-slate-600 focus:outline-none focus:border-violet-500 transition-colors"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading || !tokenInput.trim()}
+                className="px-6 py-3 rounded-2xl bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-violet-600/30 shrink-0"
+              >
+                {loading ? 'Verifying...' : 'Validate Entry'}
+              </button>
+            </div>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-3 rounded-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
-          >
-            {loading ? 'Verifying...' : 'Validate Entry'}
-          </button>
         </form>
 
-        {/* Real-time Scan Result Banner */}
+        {/* Scan Result Card */}
         {result && (
           <div
-            className={`p-6 rounded-2xl border text-sm transition-all duration-300 ${
+            className={`p-6 rounded-3xl border transition-all ${
               result.valid
-                ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
-                : result.status === 'ALREADY_REDEEMED'
-                ? 'bg-rose-50 border-rose-300 text-rose-900'
-                : 'bg-amber-50 border-amber-300 text-amber-900'
+                ? 'bg-emerald-950/40 border-emerald-500/50 shadow-2xl shadow-emerald-500/10'
+                : 'bg-rose-950/40 border-rose-500/50 shadow-2xl shadow-rose-500/10'
             }`}
           >
             <div className="flex items-start gap-4">
-              {result.valid ? (
-                <div className="p-2.5 rounded-2xl bg-emerald-600 text-white">
-                  <CheckCircle2 className="w-7 h-7" />
-                </div>
-              ) : result.status === 'ALREADY_REDEEMED' ? (
-                <div className="p-2.5 rounded-2xl bg-rose-600 text-white">
-                  <XCircle className="w-7 h-7" />
-                </div>
-              ) : (
-                <div className="p-2.5 rounded-2xl bg-amber-600 text-white">
-                  <AlertTriangle className="w-7 h-7" />
-                </div>
-              )}
+              <div
+                className={`p-3 rounded-2xl ${
+                  result.valid ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+                }`}
+              >
+                {result.valid ? (
+                  <CheckCircle2 className="w-8 h-8" />
+                ) : (
+                  <XCircle className="w-8 h-8" />
+                )}
+              </div>
 
-              <div className="space-y-2 flex-1">
+              <div className="space-y-1.5 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs uppercase px-2.5 py-0.5 rounded-full font-bold bg-white/80 border border-black/10">
+                  <span
+                    className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${
+                      result.valid
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                        : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                    }`}
+                  >
                     {result.status}
                   </span>
-                  <span className="text-base font-extrabold">{result.message}</span>
+                  <span className="text-xs text-slate-400 font-mono">
+                    Token: {tokenInput}
+                  </span>
                 </div>
 
-                {/* Extended Details when found */}
+                <h3
+                  className={`text-lg font-black tracking-tight ${
+                    result.valid ? 'text-emerald-300' : 'text-rose-300'
+                  }`}
+                >
+                  {result.message}
+                </h3>
+
                 {result.booking && (
-                  <div className="pt-3 border-t border-black/10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="pt-3 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                     <div>
-                      <span className="opacity-70 block text-[10px] uppercase font-mono">
-                        Attendee
-                      </span>
-                      <span className="font-bold">{result.booking.user?.fullName}</span>
+                      <span className="text-[10px] text-slate-400 font-mono uppercase block">Attendee</span>
+                      <span className="font-bold text-white">{result.booking.user?.fullName}</span>
                     </div>
                     <div>
-                      <span className="opacity-70 block text-[10px] uppercase font-mono">
-                        Movie & Screen
-                      </span>
-                      <span className="font-bold">
-                        {result.booking.show?.movie?.title} (
-                        {result.booking.show?.screen?.name})
+                      <span className="text-[10px] text-slate-400 font-mono uppercase block">Movie</span>
+                      <span className="font-bold text-white">{result.booking.show?.movie?.title}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 font-mono uppercase block">Seats</span>
+                      <span className="font-mono font-bold text-violet-300">
+                        {result.booking.bookingSeats?.map((bs: any) => `${bs.seat.rowName}${bs.seat.seatNumber}`).join(', ')}
                       </span>
                     </div>
                     <div>
-                      <span className="opacity-70 block text-[10px] uppercase font-mono">
-                        Seats Validated
-                      </span>
-                      <span className="font-mono font-bold">
-                        {result.booking.bookingSeats
-                          ?.map((bs: any) => `${bs.seat.rowName}${bs.seat.seatNumber}`)
-                          .join(', ')}
-                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono uppercase block">Ref Code</span>
+                      <span className="font-mono text-white">{result.booking.bookingReference}</span>
                     </div>
                   </div>
                 )}
@@ -212,43 +210,50 @@ export default function GateScannerPage() {
         )}
       </div>
 
-      {/* Session Scan Log */}
-      <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-soft">
-        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5 font-mono">
-          <History className="w-4 h-4 text-violet-600" />
-          Recent Turnstile Scans (Session Log)
-        </h3>
-
-        {scanHistory.length === 0 ? (
-          <p className="text-xs text-slate-400 py-3 text-center italic">
-            No tickets scanned yet during this session.
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {scanHistory.map((h, idx) => (
-              <div
-                key={idx}
-                className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between gap-4"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-slate-400 text-[11px]">{h.timestamp}</span>
-                  <span className="font-mono text-slate-900 font-bold">{h.token}</span>
-                  <span className="text-slate-500">({h.attendee})</span>
-                </div>
-                <span
-                  className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                    h.valid
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-rose-100 text-rose-800'
-                  }`}
-                >
-                  {h.status}
-                </span>
-              </div>
-            ))}
+      {/* Session History Table */}
+      {scanHistory.length > 0 && (
+        <div className="rounded-3xl border border-white/10 bg-[#0e101a] overflow-hidden shadow-xl">
+          <div className="p-4 border-b border-white/10 flex items-center justify-between">
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <History className="w-4 h-4 text-violet-400" />
+              Live Scanner Session Audit Logs
+            </h3>
+            <span className="text-[11px] font-mono text-slate-400">{scanHistory.length} scan events</span>
           </div>
-        )}
-      </div>
+          <table className="w-full text-left text-xs">
+            <thead className="bg-white/[0.02] text-slate-400 uppercase font-mono text-[10px] border-b border-white/10">
+              <tr>
+                <th className="py-2.5 px-4 font-semibold">Time</th>
+                <th className="py-2.5 px-4 font-semibold">Token</th>
+                <th className="py-2.5 px-4 font-semibold">Attendee</th>
+                <th className="py-2.5 px-4 font-semibold">Gate Status</th>
+                <th className="py-2.5 px-4 font-semibold">Outcome Message</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 text-slate-300 font-mono">
+              {scanHistory.map((h, i) => (
+                <tr key={i} className="hover:bg-white/[0.02]">
+                  <td className="py-2.5 px-4 text-slate-500">{h.timestamp}</td>
+                  <td className="py-2.5 px-4 font-bold text-white">{h.token}</td>
+                  <td className="py-2.5 px-4 font-sans text-slate-300">{h.attendee}</td>
+                  <td className="py-2.5 px-4">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        h.valid
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                      }`}
+                    >
+                      {h.status}
+                    </span>
+                  </td>
+                  <td className="py-2.5 px-4 font-sans text-slate-400">{h.message}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

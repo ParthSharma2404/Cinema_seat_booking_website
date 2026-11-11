@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #fafbfc;
-  --foreground: #0f172a;
+  --background: #08090e;
+  --foreground: #f8fafc;
+  --card-bg: #11131c;
+  --card-border: #1e2235;
+}
+
+html {
+  color-scheme: dark;
 }
 
 body {
@@ -13,94 +19,95 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Custom Minimalist Scrollbar */
+/* Custom Minimalist Dark Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #0a0b12;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #23273c;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #394063;
 }
 
 /* ========================================================
-   CINEMATIC TOP-DOWN AUDITORIUM LIGHT SWEEP (LEFT <-> RIGHT)
-   Simulates looking down into the cinema hall as vibrant
-   movie projector light washes left <-> right across the room
+   CINEMATIC TOP-DOWN AUDITORIUM LIGHT SWEEP (DARK THEME)
+   Simulates looking down into a dark VIP cinema auditorium
+   as vibrant movie projector rays sweep left <-> right across the hall
    ======================================================== */
 
 @keyframes hall-light-sweep-primary {
   0% {
-    transform: translateX(-30%) skewX(-6deg) scaleX(1.1);
-    opacity: 0.85;
+    transform: translateX(-32%) skewX(-8deg) scaleX(1.12);
+    opacity: 0.82;
   }
   50% {
-    transform: translateX(4%) skewX(2deg) scaleX(1.22);
+    transform: translateX(6%) skewX(2deg) scaleX(1.25);
     opacity: 1;
   }
   100% {
-    transform: translateX(30%) skewX(6deg) scaleX(1.1);
-    opacity: 0.85;
+    transform: translateX(32%) skewX(8deg) scaleX(1.12);
+    opacity: 0.82;
   }
 }
 
 @keyframes hall-light-sweep-secondary {
   0% {
-    transform: translateX(26%) skewX(5deg) scaleX(1.15);
-    opacity: 0.75;
+    transform: translateX(28%) skewX(6deg) scaleX(1.18);
+    opacity: 0.72;
   }
   50% {
-    transform: translateX(-6%) skewX(-3deg) scaleX(1.08);
-    opacity: 0.95;
+    transform: translateX(-8%) skewX(-4deg) scaleX(1.1);
+    opacity: 0.96;
   }
   100% {
-    transform: translateX(-26%) skewX(-5deg) scaleX(1.15);
-    opacity: 0.75;
+    transform: translateX(-28%) skewX(-6deg) scaleX(1.18);
+    opacity: 0.72;
   }
 }
 
 @keyframes screen-hotspot-sweep {
   0% {
-    box-shadow: -28px -6px 32px rgba(139, 92, 246, 0.65), 0 -2px 14px rgba(6, 182, 212, 0.45);
+    box-shadow: -35px -8px 45px rgba(139, 92, 246, 0.75), 0 -4px 22px rgba(6, 182, 212, 0.55);
   }
   50% {
-    box-shadow: 0px -14px 42px rgba(236, 72, 153, 0.75), 0 -4px 22px rgba(139, 92, 246, 0.55);
+    box-shadow: 0px -18px 55px rgba(236, 72, 153, 0.85), 0 -6px 28px rgba(139, 92, 246, 0.65);
   }
   100% {
-    box-shadow: 28px -6px 32px rgba(6, 182, 212, 0.65), 0 -2px 14px rgba(236, 72, 153, 0.45);
+    box-shadow: 35px -8px 45px rgba(6, 182, 212, 0.75), 0 -4px 22px rgba(236, 72, 153, 0.55);
   }
 }
 
 @keyframes screen-lens-flare {
   0% {
-    transform: translateX(-160px);
-    opacity: 0.6;
+    transform: translateX(-180px);
+    opacity: 0.5;
   }
   50% {
     transform: translateX(0px);
     opacity: 1;
   }
   100% {
-    transform: translateX(160px);
-    opacity: 0.6;
+    transform: translateX(180px);
+    opacity: 0.5;
   }
 }
 
-/* Curved Cinema Screen Arch (Top-Down View of Screen Crescent) */
+/* Curved Cinema Screen Arch */
 .cinema-screen-arch-premium {
   position: relative;
   width: 100%;
   max-width: 580px;
   height: 24px;
-  border-top: 5px solid #0f172a;
+  border-top: 4px solid #ffffff;
   border-radius: 50% 50% 0 0 / 24px 24px 0 0;
   animation: screen-hotspot-sweep 5.5s ease-in-out infinite alternate;
   z-index: 20;
@@ -110,8 +117,8 @@ body {
 .auditorium-ambient-field {
   position: relative;
   width: 100%;
-  max-width: 620px;
-  height: 155px;
+  max-width: 640px;
+  height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,44 +126,44 @@ body {
   pointer-events: none;
 }
 
-/* Organic Free-Form Luminous Aurora Layer 1 (Left <-> Right) */
+/* Organic Free-Form Luminous Aurora Layer 1 */
 .ambient-aurora-layer1 {
   position: absolute;
-  top: -6px;
-  width: 115%;
-  height: 145px;
+  top: -8px;
+  width: 120%;
+  height: 155px;
   border-radius: 40% 60% 70% 30% / 35% 35% 65% 65%;
   background: radial-gradient(
     ellipse 65% 55% at 50% 5%,
-    rgba(139, 92, 246, 0.68) 0%,
-    rgba(236, 72, 153, 0.52) 32%,
-    rgba(6, 182, 212, 0.38) 64%,
+    rgba(147, 51, 234, 0.75) 0%,
+    rgba(236, 72, 153, 0.55) 35%,
+    rgba(6, 182, 212, 0.35) 65%,
     transparent 88%
   );
-  filter: blur(24px);
+  filter: blur(22px);
   will-change: transform, opacity;
   animation: hall-light-sweep-primary 5.5s ease-in-out infinite alternate;
   z-index: 5;
 }
 
-/* Organic Free-Form Luminous Aurora Layer 2 (Counter-phase Left <-> Right) */
+/* Organic Free-Form Luminous Aurora Layer 2 (Counter-phase) */
 .ambient-aurora-layer2 {
   position: absolute;
   top: 2px;
-  width: 105%;
-  height: 135px;
+  width: 110%;
+  height: 145px;
   border-radius: 60% 40% 50% 50% / 45% 45% 55% 55%;
   background: radial-gradient(
     ellipse 60% 50% at 50% 5%,
-    rgba(6, 182, 212, 0.55) 0%,
-    rgba(147, 51, 234, 0.48) 38%,
-    rgba(244, 63, 94, 0.35) 68%,
+    rgba(6, 182, 212, 0.6) 0%,
+    rgba(139, 92, 246, 0.5) 40%,
+    rgba(244, 63, 94, 0.35) 70%,
     transparent 90%
   );
-  filter: blur(26px);
+  filter: blur(25px);
   will-change: transform, opacity;
   animation: hall-light-sweep-secondary 7s ease-in-out infinite alternate;
-  mix-blend-mode: multiply;
+  mix-blend-mode: screen;
   z-index: 6;
 }
 
@@ -164,47 +171,60 @@ body {
 .screen-caustic-beam {
   position: absolute;
   top: 0px;
-  width: 80%;
-  height: 65px;
+  width: 85%;
+  height: 70px;
   background: radial-gradient(
     ellipse at 50% 0%,
-    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.85) 0%,
     rgba(196, 181, 253, 0.45) 40%,
-    transparent 78%
+    transparent 80%
   );
   animation: hall-light-sweep-primary 5.5s ease-in-out infinite alternate;
-  filter: blur(10px);
+  filter: blur(8px);
   z-index: 7;
 }
 
 /* Projector Lens Hotspot gliding across the curved screen */
 .screen-lens-hotspot {
   position: absolute;
-  top: -8px;
-  width: 110px;
-  height: 20px;
+  top: -9px;
+  width: 120px;
+  height: 22px;
   border-radius: 9999px;
   background: radial-gradient(
     ellipse at 50% 50%,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(192, 132, 252, 0.7) 45%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(192, 132, 252, 0.8) 45%,
     transparent 75%
   );
-  filter: blur(6px);
+  filter: blur(5px);
   animation: screen-lens-flare 5.5s ease-in-out infinite alternate;
   z-index: 22;
   pointer-events: none;
 }
 
-/* Premium Floating Bottom Bar */
+/* Floating Bottom Bar in Dark Luxury Glass */
 .floating-bottom-bar-luxury {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12), 
-              0 6px 16px -4px rgba(15, 23, 42, 0.06),
-              0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  background: rgba(14, 16, 26, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7),
+              0 0 30px rgba(124, 58, 237, 0.15),
+              0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+/* Modern Dark Card Styling */
+.dark-glass-card {
+  background: rgba(18, 20, 31, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dark-glass-card:hover {
+  background: rgba(22, 25, 39, 0.85);
+  border-color: rgba(139, 92, 246, 0.35);
 }
 
 /* Print Styles */
@@ -213,7 +233,7 @@ body {
     background: #ffffff !important;
     color: #000000 !important;
   }
-  header, nav, footer, .no-print {
+  header, nav, footer, aside, .no-print {
     display: none !important;
   }
   .print-only {

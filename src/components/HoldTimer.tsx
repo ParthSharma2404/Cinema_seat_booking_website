@@ -40,19 +40,19 @@ export function HoldTimer({ expiresAt, onExpire, className }: HoldTimerProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-mono font-medium transition-all shadow-sm',
+        'flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono font-bold transition-all shadow-md',
         isExpired
-          ? 'bg-rose-50 border-rose-200 text-rose-700'
+          ? 'bg-rose-950/60 border-rose-500/50 text-rose-300'
           : isExpiringSoon
-          ? 'bg-amber-50 border-amber-300 text-amber-800 animate-pulse'
-          : 'bg-white border-slate-200 text-slate-700 shadow-sm',
+          ? 'bg-amber-950/60 border-amber-400/50 text-amber-300 animate-pulse'
+          : 'bg-white/10 border-white/15 text-violet-300',
         className
       )}
     >
       {isExpiringSoon || isExpired ? (
-        <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+        <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
       ) : (
-        <Timer className="w-3.5 h-3.5 text-violet-600" />
+        <Timer className="w-3.5 h-3.5 text-violet-400" />
       )}
       <span>
         {isExpired ? 'Hold Expired' : `Locked: ${formattedTime}`}

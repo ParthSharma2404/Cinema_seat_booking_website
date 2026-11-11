@@ -1,24 +1,22 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import {
-  Search,
   Film,
-  Calendar,
   Clock,
   Sparkles,
-  UserCheck,
-  ShieldAlert,
-  ArrowRight,
-  Tv,
+  Search,
+  ChevronLeft,
   ChevronRight,
-  ShieldCheck,
+  ArrowRight,
+  Calendar,
   Lock,
   QrCode,
-  Layers,
+  ShieldCheck,
   Flame,
-  CheckCircle2,
+  Tv,
+  Star,
 } from 'lucide-react';
 import { formatTime } from '@/lib/utils';
 
@@ -47,8 +45,10 @@ export default function HomePage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [search, setSearch] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('ALL');
   const [loading, setLoading] = useState(true);
-  const [quickLoginMsg, setQuickLoginMsg] = useState('');
+  const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const fetchMovies = async () => {
     try {
@@ -73,393 +73,362 @@ export default function HomePage() {
     fetchMovies();
   }, [selectedGenre]);
 
+  // Autoplay hero carousel
+  useEffect(() => {
+    if (movies.length === 0 || isPaused) return;
+    const interval = setInterval(() => {
+      setActiveHeroIndex((prev) => (prev + 1) % movies.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [movies.length, isPaused]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetchMovies();
   };
 
-  const handleQuickLogin = async (email: string, pass: string, roleName: string) => {
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: pass }),
-      });
-      if (res.ok) {
-        setQuickLoginMsg(`Logged in as ${roleName}! Reloading...`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }
-    } catch {
-      setQuickLoginMsg('Quick login failed');
-    }
+  const handlePrevHero = () => {
+    setActiveHeroIndex((prev) => (prev - 1 + movies.length) % movies.length);
+  };
+
+  const handleNextHero = () => {
+    setActiveHeroIndex((prev) => (prev + 1) % movies.length);
   };
 
   const genres = ['All', 'Sci-Fi', 'Action', 'Biography', 'Drama'];
-  const featuredMovie = movies.length > 0 ? movies[0] : null;
+  const formats = ['ALL', 'IMAX', '4K DOLBY', '2D'];
+
+  const activeMovie = movies.length > 0 ? movies[activeHeroIndex] : null;
+
+  // Filter movies by format if selected
+  const displayedMovies = movies.filter((m) => {
+    if (selectedFormat === 'ALL') return true;
+    return m.shows.some((s) => s.format.toUpperCase().includes(selectedFormat));
+  });
 
   return (
     <div className="space-y-12 pb-16">
-      {/* 1. Reviewer Fast-Track Persona Bar */}
-      <div className="p-4 rounded-3xl bg-white/90 backdrop-blur-md border border-slate-200/90 shadow-soft">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-violet-50 text-violet-700 border border-violet-100 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-violet-600" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-xs font-bold text-slate-900 tracking-tight">
-                  Assessment Evaluator Fast-Track
-                </h3>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono font-bold">
-                  Ready
+      {/* 1. GRAND DYNAMIC CINEMATIC HERO SCREEN WITH OVERLAPPING CAROUSEL */}
+      {loading ? (
+        <div className="w-full h-[520px] rounded-3xl bg-white/[0.03] border border-white/10 animate-pulse flex items-center justify-center">
+          <Film className="w-10 h-10 text-slate-700 animate-spin" />
+        </div>
+      ) : activeMovie ? (
+        <div
+          className="relative w-full rounded-3xl overflow-hidden border border-white/10 bg-[#0e101a] min-h-[500px] lg:min-h-[540px] flex flex-col justify-between p-6 sm:p-10 lg:p-12 shadow-2xl transition-all duration-700"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Dynamic Blurred Ambient Background Poster */}
+          <div
+            className="absolute inset-0 bg-cover bg-center filter blur-3xl scale-125 opacity-25 transition-all duration-1000"
+            style={{ backgroundImage: `url(${activeMovie.posterUrl})` }}
+          />
+
+          {/* Cinematic Vignette Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#08090e] via-[#08090e]/90 to-[#08090e]/40 z-0" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08090e] via-transparent to-[#08090e]/60 z-0" />
+
+          {/* Hero Content: 2-Column Split (Left: Movie Details, Right-Center: Overlapping Movie Posters Carousel) */}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1">
+            {/* LEFT COLUMN: Active Movie Presentation */}
+            <div className="lg:col-span-7 space-y-5">
+              {/* Badges & Tags */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-violet-600/30 border border-violet-500/40 text-violet-300 text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5">
+                  <Flame className="w-3 h-3 text-amber-400" />
+                  Premiere Spotlight
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-white text-[10px] font-mono font-bold">
+                  {activeMovie.rating}
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-slate-300 text-[10px] font-mono flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-slate-400" />
+                  {activeMovie.durationMins}m
+                </span>
+                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-widest">
+                  {activeMovie.language} • {activeMovie.genre}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                Instant 1-click login to test Customer, Gate Staff, and Administrator capabilities
-              </p>
-            </div>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => handleQuickLogin('customer@cinema.com', 'password123', 'Customer (Alex)')}
-              className="text-xs px-3.5 py-1.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1.5 transition-colors font-medium shadow-xs"
-            >
-              <UserCheck className="w-3.5 h-3.5 text-blue-600" />
-              Customer (Alex)
-            </button>
-            <button
-              onClick={() => handleQuickLogin('staff@cinema.com', 'staff123', 'Gate Staff (Sam)')}
-              className="text-xs px-3.5 py-1.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1.5 transition-colors font-medium shadow-xs"
-            >
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
-              Gate Staff (Sam)
-            </button>
-            <button
-              onClick={() => handleQuickLogin('admin@cinema.com', 'admin123', 'Admin (Sarah)')}
-              className="text-xs px-3.5 py-1.5 rounded-full bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200 flex items-center gap-1.5 transition-colors font-medium shadow-xs"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-violet-600" />
-              Admin (Sarah)
-            </button>
-          </div>
-        </div>
-        {quickLoginMsg && (
-          <p className="text-xs text-emerald-700 mt-2 font-medium flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            {quickLoginMsg}
-          </p>
-        )}
-      </div>
-
-      {/* 2. Elevated Hero Billboard (Balanced 2-Column Luxury Layout) */}
-      <section className="relative rounded-3xl overflow-hidden border border-slate-200/90 bg-white shadow-soft">
-        {/* Ambient Glow Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-violet-200/40 via-pink-100/25 to-transparent rounded-full filter blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-cyan-100/35 via-violet-100/20 to-transparent rounded-full filter blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 sm:p-12 lg:p-14 items-center">
-          {/* Left Column: Bold Editorial Typography & Search */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-xs font-bold font-mono tracking-wide">
-              <Film className="w-3.5 h-3.5 text-violet-600" />
-              <span>VIP CINEMA AUDITORIUMS • LASER & DOLBY ATMOS</span>
-            </div>
-
-            <div className="space-y-3">
-              <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-black tracking-tight text-slate-900 leading-[1.15]">
-                Atmospheric Cinema. <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-600">
-                  Pure Minimalist Luxury.
-                </span>
+              {/* Title */}
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1] drop-shadow-md">
+                {activeMovie.title}
               </h1>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl">
-                Experience high-fidelity cinema with live microsecond concurrency holds, zero double-booking protection, and single-use digital turnstile passes.
+
+              {/* Synopsis */}
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl line-clamp-3">
+                {activeMovie.description}
               </p>
-            </div>
 
-            {/* Integrated Search Bar */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 max-w-lg">
-              <div className="relative flex-1">
-                <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search movies, genres, languages..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-full bg-slate-50/90 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-xs"
-                />
-              </div>
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase transition-colors shadow-sm shrink-0"
-              >
-                Search
-              </button>
-            </form>
-
-            {/* Specification Highlights Strip */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-slate-500 font-mono">
-              <span className="px-3 py-1 rounded-full bg-slate-50 border border-slate-200">
-                IMAX with Laser
-              </span>
-              <span className="px-3 py-1 rounded-full bg-slate-50 border border-slate-200">
-                Dolby Atmos 64-Ch
-              </span>
-              <span className="px-3 py-1 rounded-full bg-slate-50 border border-slate-200">
-                8-Min Fair Hold
-              </span>
-              <span className="px-3 py-1 rounded-full bg-slate-50 border border-slate-200">
-                Digital Turnstile Pass
-              </span>
-            </div>
-          </div>
-
-          {/* Right Column: Featured Tonight Premiere Showcase Card */}
-          <div className="lg:col-span-5">
-            {featuredMovie ? (
-              <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white border border-slate-800 shadow-float group">
-                {/* Background Poster Artwork with Subtle Dark Overlay */}
-                <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={featuredMovie.posterUrl}
-                    alt={featuredMovie.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-                  
-                  {/* Floating Tags */}
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-violet-600/90 backdrop-blur-md text-[10px] font-mono font-bold tracking-wider uppercase shadow-xs flex items-center gap-1.5">
-                      <Flame className="w-3 h-3 text-amber-300" />
-                      Premiere Tonight
-                    </span>
-                    <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono border border-white/20">
-                      {featuredMovie.rating}
-                    </span>
-                  </div>
-
-                  <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono border border-white/20 flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-slate-300" />
-                    {featuredMovie.durationMins}m
-                  </div>
-                </div>
-
-                {/* Card Content */}
-                <div className="p-6 relative -mt-12 z-10 space-y-4">
-                  <div>
-                    <span className="text-[10px] font-mono tracking-widest text-violet-400 font-bold uppercase block">
-                      {featuredMovie.genre}
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1">
-                      {featuredMovie.title}
-                    </h2>
-                    <p className="text-xs text-slate-300 line-clamp-2 mt-1 leading-relaxed">
-                      {featuredMovie.description}
-                    </p>
-                  </div>
-
-                  {/* Showtimes & Direct Booking */}
-                  {featuredMovie.shows && featuredMovie.shows.length > 0 && (
-                    <div className="pt-3 border-t border-white/10 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
-                          Next Showtimes
-                        </span>
-                        <span className="text-[11px] font-mono text-violet-300 font-bold">
-                          From ₹{featuredMovie.shows[0].basePrice.toFixed(2)}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {featuredMovie.shows.slice(0, 2).map((show) => (
-                          <Link
-                            key={show.id}
-                            href={`/shows/${show.id}`}
-                            className="flex-1 min-w-[120px] py-2 px-3 rounded-2xl bg-white/10 hover:bg-violet-600 border border-white/15 hover:border-violet-500 transition-colors flex items-center justify-between text-xs font-mono group/btn"
-                          >
-                            <div>
-                              <span className="font-bold text-white block">{formatTime(show.startTime)}</span>
-                              <span className="text-[10px] text-slate-300 block">{show.screen.name}</span>
-                            </div>
-                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/20 font-bold">
-                              {show.format}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-
-                      {/* Direct CTA */}
+              {/* Available Showtimes Pill Strip */}
+              {activeMovie.shows && activeMovie.shows.length > 0 && (
+                <div className="space-y-2 pt-1">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">
+                    Select Showtime:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {activeMovie.shows.slice(0, 3).map((show) => (
                       <Link
-                        href={`/shows/${featuredMovie.shows[0].id}`}
-                        className="w-full py-3 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md mt-2"
+                        key={show.id}
+                        href={`/shows/${show.id}`}
+                        className="py-1.5 px-3.5 rounded-xl bg-white/10 hover:bg-violet-600 border border-white/15 hover:border-violet-500 transition-all text-xs font-mono text-white flex items-center gap-2 group/btn shadow-md"
                       >
-                        <span>Select Seats & Buy</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
+                        <span className="font-bold">{formatTime(show.startTime)}</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-black/40 text-violet-300 font-sans font-semibold">
+                          {show.format}
+                        </span>
+                        <span className="text-[10px] text-slate-300">
+                          ₹{show.basePrice.toFixed(0)}
+                        </span>
                       </Link>
-                    </div>
-                  )}
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Primary Call to Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-3">
+                {activeMovie.shows && activeMovie.shows.length > 0 ? (
+                  <Link
+                    href={`/shows/${activeMovie.shows[0].id}`}
+                    className="py-3 px-6 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-violet-600/30 transition-all hover:scale-[1.02]"
+                  >
+                    <span>Book Tickets Now</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/movies/${activeMovie.id}`}
+                    className="py-3 px-6 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-violet-600/30 transition-all"
+                  >
+                    <span>View Movie Overview</span>
+                  </Link>
+                )}
+                <Link
+                  href={`/movies/${activeMovie.id}`}
+                  className="py-3 px-5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white text-xs font-semibold border border-white/10 transition-colors"
+                >
+                  Movie Details
+                </Link>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: Overlapping Movie Posters Carousel */}
+            <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-center space-y-4">
+              <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto py-3 px-1 w-full max-w-full justify-start lg:justify-end">
+                {movies.map((movie, idx) => {
+                  const isCurrent = idx === activeHeroIndex;
+                  return (
+                    <button
+                      key={movie.id}
+                      onClick={() => setActiveHeroIndex(idx)}
+                      className={`relative shrink-0 rounded-2xl overflow-hidden transition-all duration-300 text-left group ${
+                        isCurrent
+                          ? 'w-36 sm:w-44 h-52 sm:h-64 ring-2 ring-violet-500 shadow-2xl shadow-violet-600/40 scale-105 z-20'
+                          : 'w-24 sm:w-28 h-36 sm:h-44 opacity-60 hover:opacity-100 hover:scale-100 z-10'
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={movie.posterUrl}
+                        alt={movie.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <span className="text-[10px] font-bold text-white line-clamp-1 block">
+                          {movie.title}
+                        </span>
+                        {isCurrent && (
+                          <span className="text-[9px] text-violet-300 font-mono block">
+                            Now Playing
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Carousel Controls (Prev / Next & Dots) */}
+              <div className="flex items-center justify-between w-full max-w-xs pt-1">
+                <div className="flex items-center gap-1.5">
+                  {movies.map((_, dotIdx) => (
+                    <button
+                      key={dotIdx}
+                      onClick={() => setActiveHeroIndex(dotIdx)}
+                      className={`h-1.5 rounded-full transition-all ${
+                        dotIdx === activeHeroIndex
+                          ? 'w-6 bg-violet-500'
+                          : 'w-1.5 bg-white/20 hover:bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handlePrevHero}
+                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10"
+                    title="Previous Movie"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleNextHero}
+                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10"
+                    title="Next Movie"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
-            ) : (
-              <div className="aspect-[4/3] rounded-3xl bg-slate-100 border border-slate-200 animate-pulse" />
-            )}
+            </div>
           </div>
         </div>
-      </section>
+      ) : null}
 
-      {/* 3. Cinema Architecture Pillars (SRS Core Engineering Highlights) */}
+      {/* 2. DISCOVERY & FILTERING BAR (STANDARD CINEMA BOOKING WORKFLOW) */}
       <section className="space-y-4">
-        <div className="text-center max-w-xl mx-auto space-y-1">
-          <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-violet-600 font-bold">
-            Algions Assessment Technical Architecture
-          </span>
-          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Engineered for Zero Collisions & High Concurrency
-          </h2>
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-3xl bg-[#0e101a] border border-white/10">
+          {/* Genre Filters */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+            {genres.map((g) => {
+              const active = (g === 'All' && !selectedGenre) || selectedGenre === g;
+              return (
+                <button
+                  key={g}
+                  onClick={() => setSelectedGenre(g === 'All' ? '' : g)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    active
+                      ? 'bg-violet-600 text-white shadow-md shadow-violet-600/30'
+                      : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  {g}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search Bar */}
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 w-full md:w-80">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search titles, cast, genres..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-violet-600 text-white text-xs font-semibold transition-colors shrink-0"
+            >
+              Search
+            </button>
+          </form>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Pillar 1 */}
-          <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-soft space-y-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-violet-50 border border-violet-100 text-violet-700 flex items-center justify-center">
-              <Lock className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-bold text-slate-900">Zero Double-Booking Guard</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Composite unique constraint (`showId_seatId`) within atomic Prisma transactions prevents simultaneous bookings.
-            </p>
-          </div>
-
-          {/* Pillar 2 */}
-          <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-soft space-y-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-amber-50 border border-amber-100 text-amber-700 flex items-center justify-center">
-              <Clock className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-bold text-slate-900">8-Minute Live Hold Timer</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Temporary reservation locks seats with active countdown. Expired holds auto-release back to public pool instantly.
-            </p>
-          </div>
-
-          {/* Pillar 3 */}
-          <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-soft space-y-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-cyan-50 border border-cyan-100 text-cyan-700 flex items-center justify-center">
-              <QrCode className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-bold text-slate-900">Single-Use QR Turnstile</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Cryptographically unique QR token. Gatehouse scanner validates redemption in sub-second time and halts reuse attempts.
-            </p>
-          </div>
-
-          {/* Pillar 4 */}
-          <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-soft space-y-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-            <h3 className="text-sm font-bold text-slate-900">1-Click Self-Refund</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Frictionless cancellation before showtime. Frees seats immediately and updates ledger balance without staff assistance.
-            </p>
-          </div>
+        {/* Format Selector Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto">
+          <span className="text-[11px] font-mono text-slate-400 uppercase font-bold mr-1">
+            Format:
+          </span>
+          {formats.map((fmt) => (
+            <button
+              key={fmt}
+              onClick={() => setSelectedFormat(fmt)}
+              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+                selectedFormat === fmt
+                  ? 'bg-white/20 text-white font-bold border border-white/30'
+                  : 'bg-white/5 text-slate-400 hover:text-white border border-transparent'
+              }`}
+            >
+              {fmt}
+            </button>
+          ))}
         </div>
       </section>
 
-      {/* 4. Genre Filter Pills Bar */}
-      <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-        <div className="flex items-center gap-2 overflow-x-auto">
-          {genres.map((g) => {
-            const isActive = (g === 'All' && !selectedGenre) || selectedGenre === g;
-            return (
-              <button
-                key={g}
-                onClick={() => setSelectedGenre(g === 'All' ? '' : g)}
-                className={`px-4 py-2 rounded-full text-xs font-medium border transition-colors whitespace-nowrap shadow-xs ${
-                  isActive
-                    ? 'bg-slate-900 text-white border-slate-900 font-bold'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-900'
-                }`}
-              >
-                {g}
-              </button>
-            );
-          })}
-        </div>
-
-        <span className="text-xs text-slate-500 font-mono hidden sm:inline-block">
-          {movies.length} {movies.length === 1 ? 'Title' : 'Titles'} Available
-        </span>
-      </div>
-
-      {/* 5. Current Screenings Grid */}
+      {/* 3. NOW SHOWING CATALOG (MOVIE CARDS WITH DIRECT SHOWTIMES) */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-2.5">
-            <Film className="w-5 h-5 text-violet-600" />
-            <span>Current Screenings</span>
-          </h2>
-          <span className="text-xs text-slate-400 font-mono sm:hidden">{movies.length} titles</span>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400">
+              <Film className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Now Showing in Theatres
+              </h2>
+              <p className="text-xs text-slate-400">
+                Live seat availability with microsecond concurrency holds
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-mono text-slate-400">
+            {displayedMovies.length} Available
+          </span>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-96 rounded-3xl bg-white border border-slate-200 animate-pulse shadow-soft" />
+              <div key={i} className="h-96 rounded-3xl bg-white/5 animate-pulse" />
             ))}
           </div>
-        ) : movies.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 shadow-soft">
-            <Film className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <h3 className="text-base font-semibold text-slate-700">No movies found</h3>
-            <p className="text-xs text-slate-400 mt-1">Try adjusting your search or genre filters.</p>
+        ) : displayedMovies.length === 0 ? (
+          <div className="text-center py-16 rounded-3xl bg-[#0e101a] border border-white/10">
+            <Film className="w-10 h-10 text-slate-600 mx-auto mb-2" />
+            <p className="text-sm font-semibold text-slate-300">No movies found</p>
+            <p className="text-xs text-slate-500 mt-1">Try resetting your search or format filters.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {movies.map((movie) => (
+            {displayedMovies.map((movie) => (
               <div
                 key={movie.id}
-                className="group flex flex-col rounded-3xl overflow-hidden bg-white border border-slate-200/90 hover:border-slate-300 transition-all duration-300 shadow-soft hover:shadow-float hover:-translate-y-1"
+                className="group flex flex-col rounded-3xl overflow-hidden bg-[#0e101a] border border-white/10 hover:border-violet-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-600/20 hover:-translate-y-1"
               >
-                {/* Poster Image with Clean Floating Badges */}
-                <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-100">
+                {/* Poster Artwork with Floating Badges */}
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-900">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={movie.posterUrl}
                     alt={movie.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 text-[10px] font-mono font-bold text-slate-900 shadow-xs">
+                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono font-bold text-white shadow-xs">
                     {movie.rating}
                   </div>
-                  <div className="absolute bottom-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 text-[10px] font-mono text-slate-700 flex items-center gap-1 shadow-xs">
-                    <Clock className="w-3 h-3 text-slate-500" />
+                  <div className="absolute bottom-3 left-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-slate-300 flex items-center gap-1 shadow-xs">
+                    <Clock className="w-3 h-3 text-slate-400" />
                     {movie.durationMins}m
                   </div>
                 </div>
 
-                {/* Movie Details */}
+                {/* Details & Showtimes */}
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div>
-                    <span className="text-[10px] font-bold text-violet-700 uppercase tracking-wider font-mono">
+                    <span className="text-[10px] font-mono uppercase text-violet-400 font-bold tracking-wider">
                       {movie.genre}
                     </span>
-                    <h3 className="text-base font-bold text-slate-900 group-hover:text-violet-600 transition-colors line-clamp-1 mt-0.5">
+                    <h3 className="text-base font-bold text-white group-hover:text-violet-400 transition-colors line-clamp-1 mt-0.5">
                       {movie.title}
                     </h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                    <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
                       {movie.description}
                     </p>
                   </div>
 
                   {/* Showtimes Pill List */}
-                  <div className="pt-2 border-t border-slate-100">
-                    <span className="text-[10px] text-slate-400 uppercase font-mono block mb-1.5 font-bold tracking-wider">
-                      Upcoming Shows
+                  <div className="pt-2 border-t border-white/10 space-y-1.5">
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block font-bold">
+                      Today&apos;s Shows:
                     </span>
                     {movie.shows && movie.shows.length > 0 ? (
                       <div className="flex flex-wrap gap-1.5">
@@ -467,27 +436,27 @@ export default function HomePage() {
                           <Link
                             key={show.id}
                             href={`/shows/${show.id}`}
-                            className="text-xs px-2.5 py-1 rounded-full bg-slate-50 hover:bg-violet-600 text-slate-700 hover:text-white border border-slate-200 hover:border-violet-600 font-mono transition-colors flex items-center gap-1 shadow-xs"
+                            className="text-xs px-2.5 py-1 rounded-xl bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white border border-white/10 hover:border-violet-500 font-mono transition-colors flex items-center gap-1.5"
                           >
                             <span>{formatTime(show.startTime)}</span>
-                            <span className="text-[9px] px-1 rounded bg-slate-200 group-hover:bg-violet-800 text-slate-700 font-sans font-semibold">
+                            <span className="text-[9px] px-1 rounded bg-black/40 text-violet-300 font-sans font-bold">
                               {show.format}
                             </span>
                           </Link>
                         ))}
                       </div>
                     ) : (
-                      <span className="text-xs text-slate-400 italic">No shows scheduled</span>
+                      <span className="text-xs text-slate-500 italic">No upcoming shows</span>
                     )}
                   </div>
 
                   {/* Action Link */}
                   <Link
                     href={`/movies/${movie.id}`}
-                    className="w-full mt-2 py-2.5 px-4 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border border-slate-200 shadow-xs"
+                    className="w-full mt-2 py-2.5 px-4 rounded-xl bg-white/5 hover:bg-violet-600 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/10 hover:border-violet-500"
                   >
-                    <span>View Movie & Showtimes</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
+                    <span>Movie & Hall Info</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
@@ -496,43 +465,46 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 6. Reviewer Shortcuts Bar */}
-      <section className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-xs">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 font-mono">
-              Evaluator Test Portals
-            </h4>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Direct access to Gatehouse QR Scanner, Admin Reports Reconciliation, and OpenAPI Documentation.
-            </p>
+      {/* 4. CINEMA ARCHITECTURE PILLARS (SRS TECHNICAL ASSURANCES) */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+        <div className="p-5 rounded-3xl bg-[#0e101a] border border-white/10 space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-violet-600/20 text-violet-400 flex items-center justify-center">
+            <Lock className="w-4 h-4" />
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href="/admin/scan"
-              className="text-xs px-3.5 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-mono font-medium shadow-xs"
-            >
-              Gate Scanner
-            </Link>
-            <Link
-              href="/admin"
-              className="text-xs px-3.5 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-mono font-medium shadow-xs"
-            >
-              Reconciliation
-            </Link>
-            <Link
-              href="/admin/audit-logs"
-              className="text-xs px-3.5 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-mono font-medium shadow-xs"
-            >
-              Audit Trail
-            </Link>
-            <Link
-              href="/api/docs"
-              className="text-xs px-3.5 py-2 rounded-full bg-violet-600 hover:bg-violet-700 text-white font-mono font-semibold shadow-xs"
-            >
-              Swagger API Docs
-            </Link>
+          <h4 className="text-sm font-bold text-white">Zero Double-Booking</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Database composite unique constraint guarantees no duplicate ticket issuance under high traffic.
+          </p>
+        </div>
+
+        <div className="p-5 rounded-3xl bg-[#0e101a] border border-white/10 space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+            <Clock className="w-4 h-4" />
           </div>
+          <h4 className="text-sm font-bold text-white">8-Minute Live Hold</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Temporary reservation with active timer prevents cart hijacking during payment processing.
+          </p>
+        </div>
+
+        <div className="p-5 rounded-3xl bg-[#0e101a] border border-white/10 space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+            <QrCode className="w-4 h-4" />
+          </div>
+          <h4 className="text-sm font-bold text-white">Single-Use QR Pass</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Cryptographically unique dynamic token verified by the gate scanner with sub-second response.
+          </p>
+        </div>
+
+        <div className="p-5 rounded-3xl bg-[#0e101a] border border-white/10 space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <ShieldCheck className="w-4 h-4" />
+          </div>
+          <h4 className="text-sm font-bold text-white">Instant Self-Refund</h4>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            1-click cancellation immediately returns seats to public inventory and updates refund ledger.
+          </p>
         </div>
       </section>
     </div>

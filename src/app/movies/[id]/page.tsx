@@ -9,11 +9,11 @@ import {
   ArrowLeft,
   Armchair,
   Ticket,
-  Sparkles,
   Volume2,
   Tv,
-  CheckCircle,
   ChevronRight,
+  Flame,
+  ShieldCheck,
 } from 'lucide-react';
 import { formatCurrency, formatDateTime, formatTime } from '@/lib/utils';
 
@@ -54,7 +54,6 @@ export default function MovieDetailPage({
   const [movie, setMovie] = useState<MovieDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [selectedDateFilter, setSelectedDateFilter] = useState<string>('ALL');
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -78,8 +77,8 @@ export default function MovieDetailPage({
   if (loading) {
     return (
       <div className="py-28 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-3 border-violet-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs text-slate-400 font-mono">Loading cinematic overview...</p>
+        <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs text-slate-400 font-mono">Loading movie experience...</p>
       </div>
     );
   }
@@ -87,11 +86,11 @@ export default function MovieDetailPage({
   if (error || !movie) {
     return (
       <div className="py-20 text-center space-y-4">
-        <Film className="w-12 h-12 text-slate-300 mx-auto" />
-        <h2 className="text-xl font-bold text-slate-900">{error || 'Movie not found'}</h2>
+        <Film className="w-12 h-12 text-slate-600 mx-auto" />
+        <h2 className="text-xl font-bold text-white">{error || 'Movie not found'}</h2>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-violet-600 hover:text-violet-700"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-violet-400 hover:text-violet-300"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Movies
@@ -100,7 +99,6 @@ export default function MovieDetailPage({
     );
   }
 
-  // Format hours and mins
   const hours = Math.floor(movie.durationMins / 60);
   const mins = movie.durationMins % 60;
   const durationFormatted = `${hours}h ${mins}m`;
@@ -111,66 +109,69 @@ export default function MovieDetailPage({
       <div>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors group"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-          <span>All Screenings</span>
+          <span>Back to All Titles</span>
         </Link>
       </div>
 
-      {/* Cinematic Editorial Showcase Card */}
-      <div className="relative rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-10 shadow-soft overflow-hidden">
-        {/* Ambient Gradient Aura behind poster */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-br from-violet-200/40 via-pink-100/30 to-transparent rounded-full filter blur-3xl pointer-events-none -z-0" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-cyan-100/30 via-violet-100/20 to-transparent rounded-full filter blur-3xl pointer-events-none -z-0" />
+      {/* Cinematic Editorial Showcase Banner */}
+      <div className="relative rounded-3xl border border-white/10 bg-[#0e101a] p-6 sm:p-10 shadow-2xl overflow-hidden">
+        {/* Dynamic Ambient Glow using poster */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-3xl scale-125 opacity-20 pointer-events-none"
+          style={{ backgroundImage: `url(${movie.posterUrl})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#08090e] via-[#08090e]/85 to-transparent pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-          {/* Movie Poster with High-End Glass Framing */}
-          <div className="w-full sm:w-72 lg:w-80 aspect-[2/3] rounded-3xl overflow-hidden shadow-float flex-shrink-0 border border-slate-200/80 bg-slate-100 relative group">
+          {/* Movie Poster Card */}
+          <div className="w-full sm:w-72 lg:w-80 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/80 flex-shrink-0 border border-white/10 bg-black relative group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={movie.posterUrl}
               alt={movie.title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-              <span className="text-white text-xs font-mono tracking-wider">
-                ORIGINAL CINEMATIC RELEASE
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+              <span className="text-[10px] font-mono tracking-widest text-violet-300 uppercase font-bold">
+                CINEBOOK EXCLUSIVE SCREENING
               </span>
             </div>
           </div>
 
-          {/* Editorial Content */}
+          {/* Editorial Details */}
           <div className="flex-1 space-y-6">
-            {/* Badges Strip (Pure Typography & Clean SVGs, No cheap emojis!) */}
+            {/* Badges Strip */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3.5 py-1 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-xs font-bold uppercase tracking-wider font-mono">
+              <span className="px-3.5 py-1 rounded-full bg-violet-600/30 border border-violet-500/40 text-violet-300 text-xs font-bold uppercase tracking-wider font-mono">
                 {movie.genre}
               </span>
-              <span className="px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold font-mono tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold font-mono tracking-wider border border-white/10">
                 {movie.rating}
               </span>
-              <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
+              <span className="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-xs font-medium border border-white/10">
                 {movie.language}
               </span>
-              <span className="px-3 py-1 rounded-full bg-cyan-50 text-cyan-800 text-xs font-bold border border-cyan-200 font-mono">
+              <span className="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-500/30 font-mono">
                 IMAX 4K LASER
               </span>
             </div>
 
             {/* Title */}
             <div>
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
                 {movie.title}
               </h1>
-              <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500 mt-2">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-400 mt-2">
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-violet-600" />
+                  <Clock className="w-3.5 h-3.5 text-violet-400" />
                   {durationFormatted} ({movie.durationMins}m)
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-violet-600" />
+                  <Calendar className="w-3.5 h-3.5 text-violet-400" />
                   Released {new Date(movie.releaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </span>
               </div>
@@ -181,50 +182,50 @@ export default function MovieDetailPage({
               <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-slate-400">
                 Storyline & Synopsis
               </h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
                 {movie.description}
               </p>
             </div>
 
-            {/* Sensory / Hall Experience Specs */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-100">
-              <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-violet-100 text-violet-700">
+            {/* Sensory Experience Specs */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/10">
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-start gap-3">
+                <div className="p-2 rounded-xl bg-violet-600/20 text-violet-400">
                   <Tv className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-slate-900 block font-mono">
+                  <span className="text-[11px] font-bold text-white block font-mono">
                     Laser Projection
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-400">
                     High Dynamic 4K Clarity
                   </span>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-pink-100 text-pink-700">
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-start gap-3">
+                <div className="p-2 rounded-xl bg-pink-600/20 text-pink-400">
                   <Volume2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-slate-900 block font-mono">
+                  <span className="text-[11px] font-bold text-white block font-mono">
                     Dolby Spatial Sound
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-400">
                     12-Channel Acoustic Grid
                   </span>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-cyan-100 text-cyan-700">
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-start gap-3">
+                <div className="p-2 rounded-xl bg-cyan-600/20 text-cyan-400">
                   <Armchair className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-slate-900 block font-mono">
+                  <span className="text-[11px] font-bold text-white block font-mono">
                     Reserved Recliners
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-400">
                     8-Minute Live Seat Hold
                   </span>
                 </div>
@@ -234,18 +235,16 @@ export default function MovieDetailPage({
         </div>
       </div>
 
-      {/* Available Showtimes Section */}
+      {/* Available Showtimes & Screens */}
       <section className="space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <Ticket className="w-6 h-6 text-violet-600" />
-              Available Showtimes & Screens
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Select an auditorium to view live seat availability and reserve your seats
-            </p>
-          </div>
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
+            <Ticket className="w-6 h-6 text-violet-400" />
+            <span>Available Showtimes & Screens</span>
+          </h2>
+          <p className="text-xs text-slate-400 mt-0.5">
+            Select an auditorium to view live seat availability with microsecond concurrency locks
+          </p>
         </div>
 
         {movie.shows && movie.shows.length > 0 ? (
@@ -253,26 +252,26 @@ export default function MovieDetailPage({
             {movie.shows.map((show) => (
               <div
                 key={show.id}
-                className="group p-6 rounded-3xl border border-slate-200/90 bg-white hover:border-violet-300 transition-all duration-300 flex flex-col justify-between space-y-5 shadow-soft hover:shadow-float hover:-translate-y-0.5"
+                className="group p-6 rounded-3xl border border-white/10 bg-[#0e101a] hover:border-violet-500/50 transition-all duration-300 flex flex-col justify-between space-y-5 shadow-lg hover:shadow-2xl hover:shadow-violet-600/20 hover:-translate-y-1"
               >
                 <div>
                   {/* Top Theatre + Format */}
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-mono font-bold text-slate-900 uppercase tracking-wider">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                       {show.screen.theatre.name}
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-[10px] font-bold font-mono">
+                    <span className="px-3 py-1 rounded-full bg-violet-600/30 border border-violet-500/40 text-violet-300 text-[10px] font-bold font-mono">
                       {show.format}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-400">
                     {show.screen.name}
                   </p>
 
-                  {/* Main Showtime */}
-                  <div className="my-3">
-                    <span className="text-3xl font-extrabold text-slate-900 tracking-tight font-mono">
+                  {/* Showtime */}
+                  <div className="my-4">
+                    <span className="text-3xl font-black text-white tracking-tight font-mono">
                       {formatTime(show.startTime)}
                     </span>
                     <p className="text-[11px] text-slate-400 mt-0.5 font-mono">
@@ -282,33 +281,33 @@ export default function MovieDetailPage({
                 </div>
 
                 {/* Pricing & CTA */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase block font-mono font-semibold">
                       Standard Seat From
                     </span>
-                    <span className="text-base font-extrabold text-slate-900 font-mono">
+                    <span className="text-base font-extrabold text-white font-mono">
                       {formatCurrency(show.basePrice)}
                     </span>
                   </div>
 
                   <Link
                     href={`/shows/${show.id}`}
-                    className="px-5 py-2.5 rounded-full bg-slate-900 group-hover:bg-violet-600 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
+                    className="px-5 py-2.5 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold shadow-lg shadow-violet-600/30 flex items-center gap-1.5 transition-all group-hover:scale-105"
                   >
                     <Armchair className="w-3.5 h-3.5" />
                     <span>Select Seats</span>
-                    <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 shadow-soft">
-            <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-            <p className="text-sm font-semibold text-slate-700">No scheduled shows for this title currently.</p>
-            <p className="text-xs text-slate-400 mt-1">Check back soon as new showtimes are added regularly.</p>
+          <div className="text-center py-16 bg-[#0e101a] rounded-3xl border border-white/10">
+            <Calendar className="w-10 h-10 text-slate-600 mx-auto mb-3" />
+            <p className="text-sm font-semibold text-slate-300">No scheduled shows for this title currently.</p>
+            <p className="text-xs text-slate-500 mt-1">Check back soon as new showtimes are added regularly.</p>
           </div>
         )}
       </section>

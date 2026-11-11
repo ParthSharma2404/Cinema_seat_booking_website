@@ -46,18 +46,18 @@ export default function AdminAuditLogsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <History className="w-6 h-6 text-violet-600" />
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <History className="w-6 h-6 text-violet-400" />
             System Audit Trail & Security Log
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             Immutable log of material business transactions, gate redemptions, and cancellations
           </p>
         </div>
 
         <button
           onClick={fetchLogs}
-          className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-full border border-slate-200 bg-white shadow-xs"
+          className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white px-3.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           Refresh Log
@@ -70,10 +70,10 @@ export default function AdminAuditLogsPage() {
           <button
             key={act}
             onClick={() => setActionFilter(act === 'All' ? '' : act)}
-            className={`px-3 py-1 rounded-full text-xs font-mono transition-colors whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-colors whitespace-nowrap ${
               (act === 'All' && !actionFilter) || actionFilter === act
-                ? 'bg-slate-900 text-white font-bold'
-                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+                ? 'bg-violet-600 text-white font-bold shadow-md shadow-violet-600/30'
+                : 'bg-white/5 text-slate-400 hover:text-white border border-white/10'
             }`}
           >
             {act}
@@ -81,58 +81,61 @@ export default function AdminAuditLogsPage() {
         ))}
       </div>
 
-      {loading ? (
-        <div className="py-24 flex justify-center">
-          <div className="w-8 h-8 border-3 border-violet-600 border-t-transparent rounded-full animate-spin" />
+      {/* Audit Logs Table */}
+      <div className="rounded-3xl border border-white/10 bg-[#0e101a] overflow-hidden shadow-2xl">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+          <span className="text-xs font-mono font-bold uppercase text-slate-400 tracking-wider">
+            Audit Records Stream
+          </span>
+          <span className="text-xs font-mono text-slate-500">{logs.length} events logged</span>
         </div>
-      ) : (
-        <div className="rounded-3xl border border-slate-200/90 bg-white overflow-hidden shadow-soft">
+
+        {loading ? (
+          <div className="p-12 text-center text-xs text-slate-400 font-mono">Loading audit logs...</div>
+        ) : logs.length === 0 ? (
+          <div className="p-12 text-center text-xs text-slate-500">No logs match the current filter.</div>
+        ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 uppercase font-mono text-[10px] border-b border-slate-200">
+              <thead className="bg-white/[0.02] text-slate-400 uppercase font-mono text-[10px] border-b border-white/10">
                 <tr>
-                  <th className="py-3.5 px-4 font-semibold">Timestamp</th>
-                  <th className="py-3.5 px-4 font-semibold">Action</th>
-                  <th className="py-3.5 px-4 font-semibold">Actor</th>
-                  <th className="py-3.5 px-4 font-semibold">Target Entity</th>
-                  <th className="py-3.5 px-4 font-semibold">Details</th>
+                  <th className="py-3 px-4 font-semibold">Timestamp</th>
+                  <th className="py-3 px-4 font-semibold">Action</th>
+                  <th className="py-3 px-4 font-semibold">Actor / User</th>
+                  <th className="py-3 px-4 font-semibold">Target Entity</th>
+                  <th className="py-3 px-4 font-semibold">Metadata Details</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700 font-mono">
+              <tbody className="divide-y divide-white/5 text-slate-300 font-mono">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-50/60">
-                    <td className="py-3.5 px-4 text-slate-500 text-[11px] whitespace-nowrap">
+                  <tr key={log.id} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3 px-4 text-slate-500 text-[11px]">
                       {formatDateTime(log.createdAt)}
                     </td>
-                    <td className="py-3.5 px-4">
-                      <span
-                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                          log.action.includes('CONFIRMED')
-                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                            : log.action.includes('CANCELLED')
-                            ? 'bg-rose-50 text-rose-800 border border-rose-200'
-                            : log.action.includes('REDEEMED')
-                            ? 'bg-violet-50 text-violet-800 border border-violet-200'
-                            : 'bg-slate-100 text-slate-700'
-                        }`}
-                      >
+                    <td className="py-3 px-4">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-violet-600/20 text-violet-300 border border-violet-500/30">
                         {log.action}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <span className="text-slate-900 block font-sans font-semibold">
-                        {log.actorEmail || 'System / Guest'}
-                      </span>
-                      {log.actorRole && (
-                        <span className="text-[10px] text-slate-400 uppercase">
-                          {log.actorRole}
+                    <td className="py-3 px-4 font-sans">
+                      {log.actor ? (
+                        <div>
+                          <span className="font-bold text-white block">{log.actor.fullName}</span>
+                          <span className="text-[10px] text-slate-500 font-mono">{log.actor.role}</span>
+                        </div>
+                      ) : (
+                        <span className="text-slate-600 italic">SYSTEM</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="text-slate-400">{log.entityType}</span>
+                      {log.entityId && (
+                        <span className="text-[10px] text-slate-500 block truncate max-w-[120px]">
+                          {log.entityId}
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600">
-                      {log.targetEntity} {log.targetId ? `(#${log.targetId.slice(-6)})` : ''}
-                    </td>
-                    <td className="py-3.5 px-4 max-w-xs truncate text-[11px] text-slate-500 font-sans">
+                    <td className="py-3 px-4 text-[11px] text-slate-400 max-w-xs truncate">
                       {log.details || '—'}
                     </td>
                   </tr>
@@ -140,8 +143,8 @@ export default function AdminAuditLogsPage() {
               </tbody>
             </table>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
