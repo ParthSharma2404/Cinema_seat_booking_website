@@ -215,95 +215,58 @@ export default function HomePage() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* High-Definition Widescreen Cinema Backdrop (Crisp Artwork) */}
+          {/* High-Definition Widescreen Cinema Backdrop (Anchored to Left, Fading Across to Deep Black on Right) */}
           <div
-            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out opacity-75 scale-105"
+            className="absolute inset-0 bg-cover bg-left transition-all duration-1000 ease-out opacity-85 scale-100"
             style={{ backgroundImage: `url(${backdropUrl})` }}
           />
 
-          {/* Luxury Studio Gradient Feathering (Vivid Artwork + Razor Sharp Text Legibility) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#090b14] via-[#090b14]/55 to-[#090b14]/90 z-0 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#090b14] via-transparent to-[#090b14]/75 z-0 pointer-events-none" />
+          {/* Sweeping Left-to-Right Transition into Pure Solid Black on the Right for the Console Card */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#090b14]/15 via-[#090b14]/85 to-[#090b14] z-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#090b14] via-transparent to-[#090b14]/70 z-0 pointer-events-none" />
 
-          {/* Luminous Center Spotlight Halo (Three-Dimensional Pop) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] bg-violet-600/35 rounded-full blur-3xl pointer-events-none z-0" />
+          {/* Ambient Glow behind left poster */}
+          <div className="absolute left-16 top-1/2 -translate-y-1/2 w-[380px] h-[480px] bg-violet-600/30 rounded-full blur-3xl pointer-events-none z-0 hidden lg:block" />
 
           {/* Top Subtle Studio Navigation Bar */}
-          <div className="relative z-10 flex items-center justify-between pb-6 border-b border-white/[0.07]">
+          <div className="relative z-10 flex items-center justify-between pb-6 border-b border-white/[0.08]">
             <div className="flex items-center gap-6 text-[11px] font-mono tracking-widest uppercase">
               <span className="text-white font-black flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-violet-400 animate-ping" />
                 CINEBOOK STUDIOS
               </span>
-              <span className="hidden sm:inline text-slate-400">IMAX 70MM LASER</span>
+              <span className="hidden sm:inline text-slate-300">IMAX 70MM LASER</span>
               <span className="hidden sm:inline text-slate-400">DOLBY ATMOS</span>
               <span className="hidden sm:inline text-slate-400">VIP LEATHER RECLINERS</span>
             </div>
 
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono uppercase text-slate-400">
-                AUDITORIUM SELECTION
+                AUDITORIUM
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-violet-600/30 text-violet-300 font-mono text-[10px] font-bold border border-violet-500/40">
-                HALL 1
+                HALL 1 • LIVE
               </span>
             </div>
           </div>
 
-          {/* CENTER HERO SPREAD: Left Stats | Center Art | Right Title & Action */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6 flex-1">
-            {/* LEFT COLUMN: Large Numerical Stats & Architecture Metrics */}
-            <div className="lg:col-span-3 space-y-6 hidden lg:block">
-              {/* Stat 1 */}
-              <div>
-                <div className="text-4xl xl:text-5xl font-black text-white tracking-tight font-mono">
-                  4K
-                </div>
-                <div className="text-xs text-slate-400 uppercase tracking-widest font-mono mt-1 font-semibold">
-                  Laser Ultra-HD Resolution
-                </div>
-              </div>
-
-              <div className="w-12 h-[1px] bg-white/20" />
-
-              {/* Stat 2 */}
-              <div>
-                <div className="text-4xl xl:text-5xl font-black text-white tracking-tight font-mono">
-                  64
-                </div>
-                <div className="text-xs text-slate-400 uppercase tracking-widest font-mono mt-1 font-semibold">
-                  Dolby Atmos Acoustic Grid
-                </div>
-              </div>
-
-              <div className="w-12 h-[1px] bg-white/20" />
-
-              {/* Stat 3 */}
-              <div>
-                <div className="text-4xl xl:text-5xl font-black text-emerald-400 tracking-tight font-mono">
-                  100%
-                </div>
-                <div className="text-xs text-slate-400 uppercase tracking-widest font-mono mt-1 font-semibold">
-                  Zero Double-Booking Guarantee
-                </div>
-              </div>
-            </div>
-
-            {/* CENTER COLUMN: Hero Portrait Artwork */}
-            <div className="lg:col-span-4 flex justify-center items-center">
-              <div className="relative w-56 sm:w-64 lg:w-72 aspect-[2/3] rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] border border-white/10 group">
+          {/* MAIN HERO SPREAD: Left Movie Poster Card | Right Console Card on Deep Black */}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center py-6 flex-1">
+            {/* LEFT COLUMN: Hero Portrait Poster Artwork Shifted to Left */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-start items-center">
+              <div className="relative w-64 sm:w-72 lg:w-80 aspect-[2/3] rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] border border-white/20 group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeMovie.posterUrl}
                   alt={activeMovie.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex items-end p-5">
                   <div className="flex items-center justify-between w-full text-[10px] font-mono">
-                    <span className="px-2 py-0.5 rounded bg-black/60 text-white font-bold border border-white/20">
+                    <span className="px-2.5 py-1 rounded-lg bg-black/70 text-white font-bold border border-white/20 backdrop-blur-md">
                       {activeMovie.rating}
                     </span>
-                    <span className="text-slate-300">
+                    <span className="text-slate-300 px-2.5 py-1 rounded-lg bg-black/70 border border-white/10 backdrop-blur-md">
                       {activeMovie.durationMins} MINS
                     </span>
                   </div>
@@ -311,78 +274,127 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Bold Studio Typography, Description, & Mini Action Card */}
-            <div className="lg:col-span-5 space-y-6">
-              <div>
-                <span className="text-[11px] font-mono tracking-[0.25em] uppercase text-violet-400 font-bold block mb-1">
-                  PREMIERE SPOTLIGHT • {activeMovie.genre}
+            {/* RIGHT COLUMN: Studio Typography, Synopsis, Console Card, & Controls on Solid Black */}
+            <div className="lg:col-span-7 space-y-6 flex flex-col justify-center">
+              {/* Category & Genre Pills */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-violet-600/30 border border-violet-500/40 text-violet-300 text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+                  PREMIERE SPOTLIGHT
                 </span>
-                <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase leading-[1.05]">
-                  {activeMovie.title}
-                </h1>
-                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-3 line-clamp-3 font-normal max-w-lg">
-                  {activeMovie.description}
-                </p>
+                <span className="px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-mono font-semibold">
+                  {activeMovie.genre}
+                </span>
               </div>
 
-              {/* Mini Preview / Action Card (Matching the Lionsgate Watch/Book widget) */}
+              {/* Grand Movie Title */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.05]">
+                {activeMovie.title}
+              </h1>
+
+              {/* Specs Strip */}
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono text-slate-300">
+                <span className="px-2 py-0.5 rounded bg-white/10 border border-white/15 text-white font-bold">
+                  {activeMovie.rating}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-violet-400" />
+                  {activeMovie.durationMins} MINS
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-300">{activeMovie.language}</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-emerald-400 font-bold">IMAX with Laser</span>
+              </div>
+
+              {/* Synopsis */}
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed line-clamp-3 font-normal max-w-xl">
+                {activeMovie.description}
+              </p>
+
+              {/* The Interactive Console Action Card */}
               {activeMovie.shows && activeMovie.shows.length > 0 && (
-                <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-between gap-4 max-w-md shadow-xl hover:border-violet-500/40 transition-all">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center shrink-0">
-                      <Clapperboard className="w-6 h-6 text-violet-400" />
+                <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 max-w-xl shadow-2xl hover:border-violet-500/40 transition-all backdrop-blur-md">
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="w-12 h-12 rounded-xl bg-violet-600/25 border border-violet-500/40 flex items-center justify-center shrink-0">
+                      <Clapperboard className="w-6 h-6 text-violet-300" />
                     </div>
                     <div className="min-w-0">
                       <span className="text-[10px] font-mono uppercase text-slate-400 block font-semibold">
                         Next Screening • {activeMovie.shows[0].format}
                       </span>
-                      <p className="text-xs font-bold text-white truncate">
+                      <p className="text-sm font-bold text-white truncate">
                         {formatTime(activeMovie.shows[0].startTime)} • {activeMovie.shows[0].screen.name}
                       </p>
-                      <span className="text-[10px] font-mono text-violet-300">
-                        From {formatCurrency(activeMovie.shows[0].basePrice)}
+                      <span className="text-xs font-mono text-violet-300 font-semibold">
+                        Tickets from {formatCurrency(activeMovie.shows[0].basePrice)}
                       </span>
                     </div>
                   </div>
 
-                  <Link
-                    href={`/shows/${activeMovie.shows[0].id}`}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg shadow-violet-600/30 transition-transform active:scale-95"
-                  >
-                    <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Book Seats</span>
-                  </Link>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Link
+                      href={`/shows/${activeMovie.shows[0].id}`}
+                      className="px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-violet-600/30 transition-transform active:scale-95 group"
+                    >
+                      <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
+                      <span>BOOK SEATS</span>
+                    </Link>
+                    <Link
+                      href={`/movies/${activeMovie.id}`}
+                      className="px-3.5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors border border-white/10"
+                      title="View full film overview & showtimes"
+                    >
+                      Details
+                    </Link>
+                  </div>
                 </div>
               )}
 
               {/* Bottom Carousel Controls (Prev / Next & Numeric Progress: 01 / 04) */}
-              <div className="flex items-center justify-between pt-2 max-w-md border-t border-white/[0.08]">
+              <div className="pt-2 flex items-center justify-between max-w-xl border-t border-white/[0.08]">
+                {/* Slide Counter & Animated Progress */}
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs font-bold text-white tracking-widest">
+                  <span className="font-mono text-sm font-black text-white tracking-widest">
                     0{activeHeroIndex + 1}
                   </span>
-                  <div className="w-16 h-1 rounded-full bg-white/10 overflow-hidden">
+                  <div className="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
-                      className="h-full bg-violet-500 transition-all duration-500"
+                      className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
                       style={{ width: `${((activeHeroIndex + 1) / movies.length) * 100}%` }}
                     />
                   </div>
-                  <span className="font-mono text-xs text-slate-500 tracking-widest">
+                  <span className="font-mono text-sm text-slate-500 tracking-widest">
                     0{movies.length}
                   </span>
                 </div>
 
+                {/* Quick Slide Selector Dots */}
+                <div className="hidden sm:flex items-center gap-1.5">
+                  {movies.map((m, idx) => (
+                    <button
+                      key={m.id}
+                      onClick={() => setActiveHeroIndex(idx)}
+                      className={`h-2 rounded-full transition-all ${
+                        idx === activeHeroIndex ? 'w-6 bg-violet-500' : 'w-2 bg-white/20 hover:bg-white/40'
+                      }`}
+                      title={`Switch to ${m.title}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Prev / Next Action Buttons */}
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handlePrevHero}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10"
+                    className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10 active:scale-95"
                     title="Previous Film"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleNextHero}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10"
+                    className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10 active:scale-95"
                     title="Next Film"
                   >
                     <ChevronRight className="w-4 h-4" />
