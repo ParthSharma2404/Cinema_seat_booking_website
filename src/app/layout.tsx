@@ -14,14 +14,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#08090e] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-violet-600 selection:text-white">
+      <body className="bg-[#08090e] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-violet-600 selection:text-white overflow-x-hidden">
         <Sidebar />
-        <div className="flex-1 md:pl-64 flex flex-col min-h-screen">
-          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex-1 md:pl-64 flex flex-col min-h-screen w-full">
+          <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6">
             {children}
           </main>
           <footer className="border-t border-white/5 bg-[#0a0b12] py-8 text-center text-xs text-slate-500">
-            <div className="max-w-7xl mx-auto px-4 space-y-2">
+            <div className="w-full px-4 sm:px-8 space-y-2">
               <p className="font-semibold text-slate-400">
                 © 2026 Algions AI Labs Assessment — Cinema Hall Ticket Booking System
               </p>
