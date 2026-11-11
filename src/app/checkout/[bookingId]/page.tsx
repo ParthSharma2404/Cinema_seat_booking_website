@@ -109,7 +109,7 @@ export default function CheckoutPage({
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4">
+    <div className="max-w-4xl mx-auto space-y-8 pt-24 px-4 sm:px-8 pb-16 w-full">
       <div>
         <span className="text-xs uppercase font-mono text-violet-400 tracking-wider font-semibold">
           Checkout Step 2 of 2

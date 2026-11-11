@@ -71,7 +71,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-24 px-4 sm:px-8 pb-12 max-w-7xl mx-auto w-full">
       {/* Admin Subheader Strip */}
       <div className="p-4 rounded-3xl border border-white/10 bg-[#0e101a] shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">

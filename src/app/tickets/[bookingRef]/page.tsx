@@ -97,7 +97,7 @@ export default function TicketPage({
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 py-4">
+    <div className="max-w-2xl mx-auto space-y-6 pt-24 px-4 sm:px-8 pb-16 w-full">
       {/* Top Controls */}
       <div className="flex items-center justify-between no-print">
         <Link

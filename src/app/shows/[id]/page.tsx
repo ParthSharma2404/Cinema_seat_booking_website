@@ -220,7 +220,7 @@ export default function ShowBookingPage({
   });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-32">
+    <div className="max-w-4xl mx-auto space-y-6 pt-24 px-4 sm:px-6 pb-32 w-full">
       {/* Top Controls */}
       <div className="flex items-center justify-between pt-1">
         <Link

@@ -104,7 +104,7 @@ export default function MovieDetailPage({
   const durationFormatted = `${hours}h ${mins}m`;
 
   return (
-    <div className="space-y-10 pb-16">
+    <div className="space-y-10 pt-24 px-4 sm:px-8 pb-16 max-w-7xl mx-auto w-full">
       {/* Top Back Navigation */}
       <div>
         <Link

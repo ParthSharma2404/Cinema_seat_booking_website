@@ -87,7 +87,7 @@ export default function MyBookingsPage() {
   }
 
   return (
-    <div className="space-y-6 py-4">
+    <div className="space-y-6 pt-24 px-4 sm:px-8 pb-16 max-w-5xl mx-auto w-full">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">

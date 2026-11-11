@@ -40,7 +40,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto py-12 px-4">
+    <div className="max-w-md mx-auto pt-28 pb-16 px-4">
       <div className="rounded-3xl border border-white/10 bg-[#0e101a] p-8 shadow-2xl">
         <div className="text-center mb-8">
           <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-white items-center justify-center mb-3 shadow-lg shadow-violet-600/30">
