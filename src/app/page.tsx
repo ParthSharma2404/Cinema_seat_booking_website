@@ -140,25 +140,25 @@ export default function HomePage() {
 
           {/* Giant Slide Number + Movie Title */}
           <div className="flex items-baseline gap-4 sm:gap-6">
-            <span className="text-6xl sm:text-7xl lg:text-8xl font-light text-white/90 tracking-tighter font-mono select-none">
+            <span className="font-cinematic text-6xl sm:text-7xl lg:text-8xl font-light text-white/80 tracking-tight select-none">
               0{activeHeroIndex + 1}
             </span>
             <div className="space-y-1.5">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.05]">
+              <h1 className="font-cinematic text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-[0.04em] uppercase leading-[1.05]">
                 {activeMovie.title}
               </h1>
               {/* Star Ratings + Genre + Screen Format */}
               <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                <div className="flex items-center text-amber-400 text-sm leading-none">
+                <div className="flex items-center text-[#d4af37] text-sm leading-none">
                   ★ ★ ★ ★ ★
                 </div>
-                <span className="text-slate-400 font-mono">
-                  Genre: <span className="text-slate-200">{activeMovie.genre}</span>
+                <span className="text-zinc-400 font-mono">
+                  Genre: <span className="text-zinc-200 font-sans">{activeMovie.genre}</span>
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-slate-200 border border-white/15">
+                <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px] font-mono text-zinc-200 border border-white/15">
                   IMAX 70mm
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-slate-200 border border-white/15">
+                <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px] font-mono text-zinc-200 border border-white/15">
                   {activeMovie.rating}
                 </span>
               </div>
@@ -167,7 +167,7 @@ export default function HomePage() {
 
           {/* Session Schedule (Interactive Time Pills) */}
           <div className="space-y-2 pt-1">
-            <span className="text-xs font-mono font-semibold text-slate-300 uppercase tracking-wider block">
+            <span className="text-xs font-mono font-medium text-zinc-400 uppercase tracking-widest block">
               Session schedule
             </span>
             <div className="flex flex-wrap items-center gap-2.5">
@@ -180,8 +180,8 @@ export default function HomePage() {
                       onClick={() => setSelectedShowId(show.id)}
                       className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all border ${
                         isSelected
-                          ? 'bg-amber-400 text-black border-amber-300 shadow-lg shadow-amber-400/25 scale-105'
-                          : 'bg-white/10 hover:bg-white/20 text-slate-200 border-white/15'
+                          ? 'bg-gradient-to-r from-[#e8c582] to-[#d4af37] text-zinc-950 border-[#d4af37] shadow-lg shadow-[#d4af37]/25 scale-105'
+                          : 'bg-white/10 hover:bg-white/20 text-zinc-200 border-white/15'
                       }`}
                     >
                       {formatTime(show.startTime)}
@@ -189,17 +189,17 @@ export default function HomePage() {
                   );
                 })
               ) : (
-                <span className="text-xs text-slate-400 font-mono">No shows scheduled</span>
+                <span className="text-xs text-zinc-400 font-mono">No shows scheduled</span>
               )}
             </div>
           </div>
 
           {/* Action Buttons + Slider Navigation Arrows */}
           <div className="pt-3 flex flex-wrap items-center gap-4">
-            {/* Primary Action Button (Amber / Gold like reference image) */}
+            {/* Primary Action Button (Champagne Gold Luxury Pill) */}
             <Link
               href={targetShowId ? `/movies/${activeMovie.id}?showId=${targetShowId}` : `/movies/${activeMovie.id}`}
-              className="px-7 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-400/20 transition-all hover:scale-105 active:scale-95"
+              className="luxury-gold-btn px-8 py-3.5 rounded-full font-display text-xs tracking-[0.14em] uppercase flex items-center gap-2 shadow-xl"
             >
               <Ticket className="w-4 h-4 fill-current" />
               <span>Book Now</span>
@@ -208,7 +208,7 @@ export default function HomePage() {
             {/* Secondary Action Button (Outlined like reference image) */}
             <Link
               href={`/movies/${activeMovie.id}`}
-              className="px-6 py-3.5 rounded-xl border border-white/25 hover:border-white/60 bg-black/40 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider transition-all backdrop-blur-md"
+              className="px-7 py-3.5 rounded-full border border-white/20 hover:border-white/50 bg-black/40 hover:bg-white/10 text-white font-display font-medium text-xs tracking-[0.14em] uppercase transition-all backdrop-blur-md"
             >
               More Details
             </Link>
@@ -217,14 +217,14 @@ export default function HomePage() {
             <div className="flex items-center gap-2 sm:ml-2">
               <button
                 onClick={handlePrevHero}
-                className="w-10 h-10 rounded-full border border-white/25 hover:border-white/80 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg"
+                className="w-10 h-10 rounded-full border border-white/20 hover:border-white/70 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg"
                 title="Previous film"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNextHero}
-                className="w-10 h-10 rounded-full border border-white/25 hover:border-white/80 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg"
+                className="w-10 h-10 rounded-full border border-white/20 hover:border-white/70 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg"
                 title="Next film"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -233,7 +233,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Overlapping Horizontal Movie Poster Card Reel (Matching reference image) */}
+        {/* RIGHT COLUMN: Overlapping Horizontal Movie Poster Card Reel */}
         <div className="lg:col-span-6 xl:col-span-7 flex justify-start lg:justify-end items-end overflow-x-auto scrollbar-none pb-2 pt-4 w-full">
           <div className="flex items-end gap-4 overflow-visible">
             {movies.map((movie, idx) => {
@@ -247,8 +247,8 @@ export default function HomePage() {
                 >
                   {/* Number tag above each card (e.g. 01, 02, 03, 04) */}
                   <span
-                    className={`text-xs font-mono font-bold tracking-widest pl-1 transition-colors ${
-                      isCurrent ? 'text-amber-400 font-black' : 'text-slate-400 group-hover:text-white'
+                    className={`text-xs font-mono tracking-widest pl-1 transition-colors ${
+                      isCurrent ? 'text-[#d4af37] font-black' : 'text-zinc-500 group-hover:text-white'
                     }`}
                   >
                     {displayNum}
@@ -258,7 +258,7 @@ export default function HomePage() {
                   <div
                     className={`relative w-36 sm:w-40 lg:w-44 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 border ${
                       isCurrent
-                        ? 'border-amber-400 ring-2 ring-amber-400/60 scale-105 z-10'
+                        ? 'border-[#d4af37] ring-2 ring-[#d4af37]/60 scale-105 z-10'
                         : 'border-white/15 opacity-75 group-hover:opacity-100 group-hover:scale-105 group-hover:border-white/40'
                     }`}
                   >
@@ -269,7 +269,7 @@ export default function HomePage() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-3">
-                      <p className="text-xs font-bold text-white uppercase tracking-tight line-clamp-1 leading-tight">
+                      <p className="font-cinematic text-xs font-bold text-white uppercase tracking-wider line-clamp-1 leading-tight">
                         {movie.title}
                       </p>
                     </div>

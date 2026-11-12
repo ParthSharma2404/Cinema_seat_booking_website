@@ -108,28 +108,33 @@ export function TopNavbar() {
         {/* LEFT: Logo & All Movies Pill */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-black font-black shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
-              <Film className="w-5 h-5 text-black" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2a2315] via-[#161823] to-[#0b0c11] border border-[#d4af37]/50 flex items-center justify-center text-[#d4af37] shadow-lg shadow-[#d4af37]/10 group-hover:border-[#d4af37] transition-all">
+              <Film className="w-4 h-4 text-[#d4af37]" />
             </div>
-            <span className="text-xl font-black tracking-tight text-white uppercase">
-              CINE<span className="text-amber-400">BOOK</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="font-cinematic text-lg tracking-[0.2em] font-bold text-white uppercase leading-none">
+                CINE<span className="text-[#d4af37]">BOOK</span>
+              </span>
+              <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-zinc-400 mt-1">
+                Luxury Cinema
+              </span>
+            </div>
           </Link>
 
           {/* All Movies Pill (from reference image) */}
           <Link
             href="/"
-            className="hidden sm:inline-flex items-center px-4 py-1.5 rounded-full border border-white/20 hover:border-amber-400/80 text-xs font-medium text-slate-200 hover:text-white transition-all bg-white/[0.03] hover:bg-white/[0.08]"
+            className="hidden sm:inline-flex items-center px-4 py-1.5 rounded-full border border-white/15 hover:border-[#d4af37]/60 text-xs font-display tracking-wider text-zinc-300 hover:text-white transition-all bg-white/[0.03] hover:bg-white/[0.08]"
           >
             All Movies
           </Link>
 
           {/* Quick Nav Links */}
-          <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-300">
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-display tracking-wider uppercase text-zinc-400">
             <Link
               href="/my-bookings"
               className={`hover:text-white transition-colors ${
-                pathname === '/my-bookings' ? 'text-amber-400 font-bold' : ''
+                pathname === '/my-bookings' ? 'text-[#d4af37] font-bold' : ''
               }`}
             >
               My Passes
@@ -137,7 +142,7 @@ export function TopNavbar() {
             <Link
               href="/admin/scan"
               className={`hover:text-white transition-colors ${
-                pathname === '/admin/scan' ? 'text-amber-400 font-bold' : ''
+                pathname === '/admin/scan' ? 'text-[#d4af37] font-bold' : ''
               }`}
             >
               Gate Turnstile
@@ -145,7 +150,7 @@ export function TopNavbar() {
             <Link
               href="/admin"
               className={`hover:text-white transition-colors ${
-                pathname === '/admin' ? 'text-amber-400 font-bold' : ''
+                pathname === '/admin' ? 'text-[#d4af37] font-bold' : ''
               }`}
             >
               Reconciliation
@@ -153,7 +158,7 @@ export function TopNavbar() {
             <Link
               href="/api/docs"
               target="_blank"
-              className="hover:text-white transition-colors text-slate-400"
+              className="hover:text-white transition-colors text-zinc-500"
             >
               Swagger Docs
             </Link>
@@ -162,21 +167,21 @@ export function TopNavbar() {
 
         {/* RIGHT: Location, Fast-Track Switcher, User, & Menu */}
         <div className="flex items-center gap-4 sm:gap-6">
-          {/* Location Pin (matching "Malaysia, Global" in reference) */}
-          <div className="hidden xl:flex items-center gap-1.5 text-xs font-mono text-slate-300">
-            <MapPin className="w-3.5 h-3.5 text-amber-400" />
+          {/* Location Pin */}
+          <div className="hidden xl:flex items-center gap-1.5 text-xs font-mono text-zinc-400">
+            <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
             <span>Metropolis, Grand IMAX</span>
           </div>
 
           {/* Evaluator 1-Click Fast-Track Persona Dock */}
-          <div className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md">
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md">
             <button
               onClick={() => handleQuickLogin('customer@cinema.com', 'password123', 'Customer')}
               title="Fast Switch: Customer Persona (Alex)"
-              className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all ${
                 user?.role === 'CUSTOMER'
-                  ? 'bg-amber-500 text-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-[#e6c280] to-[#d4af37] text-zinc-950 font-bold shadow-md'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               Customer
@@ -184,10 +189,10 @@ export function TopNavbar() {
             <button
               onClick={() => handleQuickLogin('staff@cinema.com', 'staff123', 'Staff')}
               title="Fast Switch: Gate Staff (Turnstile Scanner)"
-              className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all ${
                 user?.role === 'STAFF'
-                  ? 'bg-amber-500 text-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-[#e6c280] to-[#d4af37] text-zinc-950 font-bold shadow-md'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               Staff
@@ -195,10 +200,10 @@ export function TopNavbar() {
             <button
               onClick={() => handleQuickLogin('admin@cinema.com', 'admin123', 'Admin')}
               title="Fast Switch: Admin (Reconciliation)"
-              className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all ${
                 user?.role === 'ADMIN'
-                  ? 'bg-amber-500 text-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-[#e6c280] to-[#d4af37] text-zinc-950 font-bold shadow-md'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               Admin
@@ -208,15 +213,15 @@ export function TopNavbar() {
           {/* User Profile / Login */}
           {user ? (
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-amber-600 p-[1.5px] shadow-md flex items-center justify-center">
-                  <div className="w-full h-full rounded-full bg-[#0d0e1a] flex items-center justify-center text-white font-black text-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#d4af37] to-[#aa801a] p-[1.5px] shadow-md flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-[#0a0b12] flex items-center justify-center text-white font-display font-bold text-xs">
                     {user.fullName ? user.fullName[0].toUpperCase() : 'U'}
                   </div>
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="text-xs font-bold text-white leading-tight line-clamp-1">{user.fullName}</p>
-                  <span className="text-[10px] font-mono text-amber-400 uppercase font-semibold">
+                  <p className="text-xs font-semibold text-white leading-tight line-clamp-1">{user.fullName}</p>
+                  <span className="text-[10px] font-mono text-[#d4af37] uppercase font-medium tracking-wider">
                     {user.role}
                   </span>
                 </div>
@@ -224,7 +229,7 @@ export function TopNavbar() {
               <button
                 onClick={handleLogout}
                 title="Logout"
-                className="p-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                className="p-2 rounded-xl text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -232,7 +237,7 @@ export function TopNavbar() {
           ) : (
             <Link
               href="/login"
-              className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold transition-all"
+              className="px-5 py-2 rounded-full border border-white/20 hover:border-[#d4af37] text-white text-xs font-display tracking-wider font-semibold transition-all hover:bg-white/5"
             >
               Sign In
             </Link>

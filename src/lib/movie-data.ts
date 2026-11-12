@@ -28,27 +28,27 @@ export const MOVIE_EXTENDED_DATA: Record<string, MovieExtendedMeta> = {
       {
         name: 'Matthew McConaughey',
         character: 'Joseph Cooper',
-        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Matthew_McConaughey_-_2019_%28cropped%29.jpg/440px-Matthew_McConaughey_-_2019_%28cropped%29.jpg',
       },
       {
         name: 'Anne Hathaway',
         character: 'Dr. Amelia Brand',
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Anne_Hathaway_at_The_Intern_premiere_in_London_%28cropped%29.jpg/440px-Anne_Hathaway_at_The_Intern_premiere_in_London_%28cropped%29.jpg',
       },
       {
         name: 'Jessica Chastain',
         character: 'Murphy "Murph" Cooper',
-        photoUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Jessica_Chastain_Cannes_2016_2.jpg/440px-Jessica_Chastain_Cannes_2016_2.jpg',
       },
       {
         name: 'Michael Caine',
         character: 'Professor John Brand',
-        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Michael_Caine_at_the_Karlovy_Vary_International_Film_Festival_%28cropped%29.jpg/440px-Michael_Caine_at_the_Karlovy_Vary_International_Film_Festival_%28cropped%29.jpg',
       },
       {
         name: 'Matt Damon',
         character: 'Dr. Mann',
-        photoUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Matt_Damon_TIFF_2015.jpg/440px-Matt_Damon_TIFF_2015.jpg',
       },
     ],
   },
@@ -64,27 +64,27 @@ export const MOVIE_EXTENDED_DATA: Record<string, MovieExtendedMeta> = {
       {
         name: 'Timothée Chalamet',
         character: 'Paul Atreides',
-        photoUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Timoth%C3%A9e_Chalamet-62520_%28cropped%29.jpg/440px-Timoth%C3%A9e_Chalamet-62520_%28cropped%29.jpg',
       },
       {
         name: 'Zendaya',
         character: 'Chani',
-        photoUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Zendaya_-_2019_by_Glenn_Francis.jpg/440px-Zendaya_-_2019_by_Glenn_Francis.jpg',
       },
       {
         name: 'Rebecca Ferguson',
         character: 'Lady Jessica',
-        photoUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Rebecca_Ferguson_in_2018.jpg/440px-Rebecca_Ferguson_in_2018.jpg',
       },
       {
         name: 'Austin Butler',
         character: 'Feyd-Rautha Harkonnen',
-        photoUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Austin_Butler_by_Gage_Skidmore.jpg/440px-Austin_Butler_by_Gage_Skidmore.jpg',
       },
       {
         name: 'Florence Pugh',
         character: 'Princess Irulan',
-        photoUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Florence_Pugh_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg/440px-Florence_Pugh_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg',
       },
     ],
   },
@@ -100,27 +100,27 @@ export const MOVIE_EXTENDED_DATA: Record<string, MovieExtendedMeta> = {
       {
         name: 'Cillian Murphy',
         character: 'J. Robert Oppenheimer',
-        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Cillian_Murphy_Press_Conference_The_Party_Berlinale_2017_02_%28cropped%29.jpg/440px-Cillian_Murphy_Press_Conference_The_Party_Berlinale_2017_02_%28cropped%29.jpg',
       },
       {
         name: 'Emily Blunt',
         character: 'Katherine "Kitty" Oppenheimer',
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Emily_Blunt_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg/440px-Emily_Blunt_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg',
       },
       {
         name: 'Matt Damon',
         character: 'Gen. Leslie Groves',
-        photoUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Matt_Damon_TIFF_2015.jpg/440px-Matt_Damon_TIFF_2015.jpg',
       },
       {
         name: 'Robert Downey Jr.',
         character: 'Lewis Strauss',
-        photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/440px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
       },
       {
         name: 'Florence Pugh',
         character: 'Jean Tatlock',
-        photoUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Florence_Pugh_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg/440px-Florence_Pugh_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg',
       },
     ],
   },
@@ -136,27 +136,27 @@ export const MOVIE_EXTENDED_DATA: Record<string, MovieExtendedMeta> = {
       {
         name: 'Leonardo DiCaprio',
         character: 'Dom Cobb',
-        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Leonardo_DiCaprio_2014.jpg/440px-Leonardo_DiCaprio_2014.jpg',
       },
       {
         name: 'Joseph Gordon-Levitt',
         character: 'Arthur',
-        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Joseph_Gordon-Levitt_2013.jpg/440px-Joseph_Gordon-Levitt_2013.jpg',
       },
       {
         name: 'Elliot Page',
         character: 'Ariadne',
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Elliot_Page_in_2019.jpg/440px-Elliot_Page_in_2019.jpg',
       },
       {
         name: 'Tom Hardy',
         character: 'Eames',
-        photoUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Tom_Hardy_by_Gage_Skidmore.jpg/440px-Tom_Hardy_by_Gage_Skidmore.jpg',
       },
       {
         name: 'Ken Watanabe',
         character: 'Mr. Saito',
-        photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Ken_Watanabe_2014.jpg/440px-Ken_Watanabe_2014.jpg',
       },
     ],
   },
@@ -169,7 +169,6 @@ export function getMovieExtendedMeta(title: string): MovieExtendedMeta {
   if (match) {
     return MOVIE_EXTENDED_DATA[match];
   }
-  // Default fallback
   return {
     director: 'Acclaimed Director',
     imdbRating: '8.5',
@@ -182,19 +181,18 @@ export function getMovieExtendedMeta(title: string): MovieExtendedMeta {
       {
         name: 'Lead Actor',
         character: 'Protagonist',
-        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Matthew_McConaughey_-_2019_%28cropped%29.jpg/440px-Matthew_McConaughey_-_2019_%28cropped%29.jpg',
       },
       {
         name: 'Lead Actress',
         character: 'Co-Star',
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Anne_Hathaway_at_The_Intern_premiere_in_London_%28cropped%29.jpg/440px-Anne_Hathaway_at_The_Intern_premiere_in_London_%28cropped%29.jpg',
       },
       {
         name: 'Supporting Actor',
         character: 'Antagonist',
-        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Michael_Caine_at_the_Karlovy_Vary_International_Film_Festival_%28cropped%29.jpg/440px-Michael_Caine_at_the_Karlovy_Vary_International_Film_Festival_%28cropped%29.jpg',
       },
     ],
   };
 }
-
