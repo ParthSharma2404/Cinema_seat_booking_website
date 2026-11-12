@@ -21,6 +21,7 @@ import {
   User,
   ShieldCheck,
   Award,
+  Clapperboard,
 } from 'lucide-react';
 import { formatCurrency, formatTime } from '@/lib/utils';
 import { getMovieExtendedMeta, CastMember } from '@/lib/movie-data';
@@ -58,7 +59,7 @@ interface MovieDetail {
   shows: MovieShow[];
 }
 
-// Failsafe, High-Fashion Editorial Cast Card
+// Failsafe, High-Fashion Editorial Cast Card with Fira Sans Typography
 function CastMemberCard({ actor }: { actor: CastMember }) {
   const [imgError, setImgError] = useState(false);
   const initials = actor.name
@@ -68,8 +69,8 @@ function CastMemberCard({ actor }: { actor: CastMember }) {
     .join('');
 
   return (
-    <div className="p-3 rounded-2xl bg-gradient-to-b from-white/[0.04] to-black/40 border border-white/[0.08] hover:border-[#d4af37]/60 hover:bg-white/[0.07] transition-all flex flex-col items-center text-center group shadow-lg">
-      <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-white/15 group-hover:border-[#d4af37] group-hover:scale-105 transition-all shadow-md bg-[#10121b] mb-2.5 relative flex items-center justify-center">
+    <div className="flex-shrink-0 w-32 sm:w-36 p-2.5 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-[#d4af37]/60 hover:bg-black/60 transition-all flex flex-col items-center text-center group shadow-xl">
+      <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl overflow-hidden border border-white/15 group-hover:border-[#d4af37] group-hover:scale-105 transition-all shadow-md bg-[#10121b] mb-2 relative flex items-center justify-center">
         {!imgError && actor.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -81,14 +82,14 @@ function CastMemberCard({ actor }: { actor: CastMember }) {
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#1a1c29] via-[#12141e] to-[#0a0b12] text-[#d4af37] p-2">
             <User className="w-5 h-5 text-[#d4af37]/70 mb-0.5" />
-            <span className="font-cinematic text-xs font-bold tracking-widest">{initials}</span>
+            <span className="font-sans text-xs font-bold tracking-widest">{initials}</span>
           </div>
         )}
       </div>
-      <span className="text-xs font-display font-semibold text-zinc-100 leading-tight group-hover:text-[#d4af37] transition-colors line-clamp-1">
+      <span className="text-xs font-sans font-semibold text-zinc-100 leading-tight group-hover:text-[#d4af37] transition-colors line-clamp-1">
         {actor.name}
       </span>
-      <span className="text-[10px] text-zinc-400 font-mono tracking-wider uppercase leading-tight mt-1 line-clamp-1">
+      <span className="text-[10px] text-zinc-400 font-sans tracking-wide uppercase leading-tight mt-1 line-clamp-1">
         {actor.character}
       </span>
     </div>
@@ -330,24 +331,24 @@ export default function MovieDetailPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-28 flex flex-col items-center justify-center gap-3">
+      <div className="min-h-screen pt-28 flex flex-col items-center justify-center gap-3 bg-[#07080d]">
         <div className="w-8 h-8 border-2 border-[#d4af37] border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs text-zinc-400 font-mono tracking-widest uppercase">Loading cinematic experience...</p>
+        <p className="text-xs text-zinc-400 font-sans tracking-widest uppercase">Loading immersive showcase...</p>
       </div>
     );
   }
 
   if (error || !movie) {
     return (
-      <div className="min-h-screen pt-32 text-center space-y-4 px-4">
+      <div className="min-h-screen pt-32 text-center space-y-4 px-4 bg-[#07080d]">
         <Film className="w-12 h-12 text-zinc-600 mx-auto" />
-        <h2 className="text-xl font-cinematic font-bold text-white">{error || 'Movie not found'}</h2>
+        <h2 className="text-2xl font-sans font-bold text-white">{error || 'Movie not found'}</h2>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-display tracking-wider text-[#d4af37] hover:underline"
+          className="inline-flex items-center gap-2 text-xs font-sans tracking-wider text-[#d4af37] hover:underline uppercase"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Premiere Feed
+          Back to Featured Screenings
         </Link>
       </div>
     );
@@ -373,245 +374,191 @@ export default function MovieDetailPage({
   const selectedSeats = seats.filter((s) => selectedSeatIds.includes(s.id));
   const totalPrice = selectedSeats.reduce((acc, curr) => acc + curr.price, 0);
 
+  const heroBackgroundUrl = extendedMeta.backdropUrl || movie.posterUrl;
+
   return (
-    <div className="min-h-screen pb-32 text-zinc-100 font-sans">
+    <div className="relative min-h-screen text-zinc-100 font-sans selection:bg-[#d4af37] selection:text-black">
       {/* ========================================================
-          FIRST FOLD: CINEMATIC SHOWCASE & EDITORIAL CAST GALLERY
+          FULL-BLEED CINEMATIC COVER BACKDROP (UNCONVENTIONAL UI)
+          The cover image spans the entire viewport background
+          with atmospheric multi-stop gradients for crisp legibility
           ======================================================== */}
-      <section className="relative w-full overflow-hidden border-b border-white/[0.08] pt-24 pb-14">
-        {/* Full-width Ambient Backdrop */}
-        <div
-          className="absolute inset-0 bg-cover bg-center filter blur-3xl opacity-15 scale-110 pointer-events-none"
-          style={{ backgroundImage: `url(${extendedMeta.backdropUrl || movie.posterUrl})` }}
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={heroBackgroundUrl}
+          alt={movie.title}
+          className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.08] scale-105 transition-transform duration-1000 ease-out"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#07080d]/80 via-[#07080d]/95 to-[#07080d] pointer-events-none" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
-          {/* Back Navigation Bar */}
-          <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-xs font-display tracking-wider uppercase text-zinc-400 hover:text-white transition-colors group"
-            >
-              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-              <span>Back to Premiere Showcase</span>
-            </Link>
+        {/* Cinematic Vignettes & Radial Depth Scrims */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse at 30% 40%, rgba(7, 8, 13, 0.45) 0%, rgba(7, 8, 13, 0.88) 60%, #07080d 100%)',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] via-transparent to-[#07080d]/80 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#07080d]/90 via-[#07080d]/60 to-transparent pointer-events-none" />
+      </div>
 
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-[#d4af37]/40 text-[#d4af37] text-[10px] font-mono font-semibold tracking-[0.25em] uppercase">
-              <Sparkles className="w-3 h-3 text-[#d4af37]" />
-              <span>Exclusive Theatrical Engagement</span>
+      {/* ========================================================
+          FIRST FOLD: IMMERSIVE PRESTIGE FILM EXPERIENCE
+          Completely different from traditional e-commerce ticket sites
+          ======================================================== */}
+      <section className="relative z-10 w-full min-h-[92vh] flex flex-col justify-between pt-24 pb-12 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+        {/* Top Controls: Sleek Back Pill & Live Theatrical Tag */}
+        <div className="flex items-center justify-between pt-2">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/40 hover:bg-black/70 border border-white/15 hover:border-[#d4af37]/60 text-xs font-sans tracking-wider uppercase text-zinc-300 hover:text-white transition-all backdrop-blur-md group"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            <span>All Screenings</span>
+          </Link>
+
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/50 border border-[#d4af37]/40 text-[#d4af37] text-[10px] font-sans font-semibold tracking-[0.25em] uppercase backdrop-blur-md shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-[#d4af37] animate-pulse" />
+            <span>Curated Theatrical Presentation</span>
+          </div>
+        </div>
+
+        {/* Central Editorial Movie Content */}
+        <div className="my-auto py-8 lg:py-12 max-w-3xl space-y-6">
+          {/* Format & Classification Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3.5 py-1 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/40 text-[#d4af37] text-xs font-sans font-semibold uppercase tracking-wider backdrop-blur-md">
+              {movie.genre}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-sans font-bold tracking-wider border border-white/15 backdrop-blur-md">
+              {movie.rating}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-white/5 text-zinc-200 text-xs font-sans border border-white/10 backdrop-blur-md">
+              {movie.language}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 text-xs font-sans font-semibold border border-cyan-500/30 backdrop-blur-md">
+              IMAX 70mm Laser
+            </span>
+          </div>
+
+          {/* Monumental Title in Fira Sans */}
+          <div>
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tight uppercase leading-[0.95] drop-shadow-2xl">
+              {movie.title}
+            </h1>
+            <p className="text-lg sm:text-2xl text-[#d4af37] font-light italic mt-3 border-l-2 border-[#d4af37] pl-4 leading-snug">
+              &ldquo;{extendedMeta.tagline}&rdquo;
+            </p>
+          </div>
+
+          {/* Quick Technical Specs Strip */}
+          <div className="flex flex-wrap items-center gap-5 text-xs font-sans text-zinc-300 font-medium">
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-[#d4af37]" />
+              {durationFormatted} ({movie.durationMins}m)
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <Clapperboard className="w-4 h-4 text-[#d4af37]" />
+              Directed by {extendedMeta.director}
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 text-[#d4af37]" />
+              {new Date(movie.releaseDate).getFullYear()} Premiere
+            </span>
+          </div>
+
+          {/* Film Narrative Synopsis */}
+          <p className="text-base sm:text-lg text-zinc-200 font-light leading-relaxed max-w-2xl drop-shadow-md">
+            {movie.description}
+          </p>
+
+          {/* Critics & Audience Reception Capsule */}
+          <div className="inline-flex flex-wrap items-center gap-6 p-3 px-5 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 shadow-xl">
+            <div className="flex items-center gap-2 text-[#d4af37]">
+              <Star className="w-4 h-4 fill-[#d4af37]" />
+              <span className="text-base font-bold font-sans">{extendedMeta.imdbRating}</span>
+              <span className="text-[10px] text-zinc-400 uppercase font-sans">IMDb Score</span>
+            </div>
+
+            <div className="w-[1px] h-5 bg-white/15 hidden sm:block" />
+
+            <div className="flex items-center gap-2 text-zinc-100">
+              <Award className="w-4 h-4 text-[#d4af37]" />
+              <span className="text-base font-bold font-sans">{extendedMeta.rottenTomatoes}</span>
+              <span className="text-[10px] text-zinc-400 uppercase font-sans">Tomatometer</span>
+            </div>
+
+            <div className="w-[1px] h-5 bg-white/15 hidden sm:block" />
+
+            <div className="flex items-center gap-2 text-zinc-100">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span className="text-base font-bold font-sans">{extendedMeta.audienceScore}</span>
+              <span className="text-[10px] text-zinc-400 uppercase font-sans">Audience</span>
             </div>
           </div>
 
-          {/* Main Hero Showcase */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* Left: Movie Poster Card */}
-            <div className="lg:col-span-4 xl:col-span-4 flex justify-center">
-              <div className="w-64 sm:w-72 lg:w-full aspect-[2/3] rounded-3xl overflow-hidden shadow-2xl shadow-black border border-white/10 bg-black relative group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={movie.posterUrl}
-                  alt={movie.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-5">
-                  <span className="text-[9px] font-mono tracking-[0.25em] text-[#d4af37] uppercase font-bold">
-                    Official Release
-                  </span>
-                  <span className="text-xs text-zinc-200 font-display font-medium mt-0.5">
-                    Directed by {extendedMeta.director}
-                  </span>
-                </div>
-              </div>
-            </div>
+          {/* Action CTA: Smoothly Jump to Theatrical Booking */}
+          <div className="pt-2 flex items-center gap-4">
+            <button
+              onClick={scrollToBooking}
+              className="luxury-gold-btn px-9 py-4 rounded-full flex items-center gap-3 font-sans text-xs tracking-[0.15em] uppercase font-bold shadow-2xl transition-all cursor-pointer group hover:scale-105 active:scale-95"
+            >
+              <Ticket className="w-4 h-4 fill-current" />
+              <span>Reserve Seats in VIP Auditorium</span>
+              <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+            </button>
+          </div>
+        </div>
 
-            {/* Right: Movie Title, Ratings, Storyline, Cast */}
-            <div className="lg:col-span-8 xl:col-span-8 space-y-6">
-              {/* Category & Format Badges */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3.5 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/35 text-[#d4af37] text-xs font-mono font-medium uppercase tracking-wider">
-                  {movie.genre}
-                </span>
-                <span className="px-3 py-1 rounded-full bg-white/[0.06] text-white text-xs font-mono tracking-wider border border-white/10">
-                  {movie.rating}
-                </span>
-                <span className="px-3 py-1 rounded-full bg-white/[0.04] text-zinc-300 text-xs font-display tracking-wide border border-white/10">
-                  {movie.language}
-                </span>
-                <span className="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-xs font-mono border border-cyan-500/25">
-                  IMAX 4K Laser
-                </span>
-              </div>
+        {/* Bottom Principal Cast Horizontal Reel */}
+        <div className="pt-6 border-t border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs uppercase tracking-[0.2em] font-sans font-bold text-[#d4af37]">
+              Principal Cast & Ensembles
+            </span>
+            <span className="text-[11px] font-sans text-zinc-400">
+              Scroll to explore cast &rarr;
+            </span>
+          </div>
 
-              {/* Title & Editorial Tagline */}
-              <div className="space-y-3">
-                <h1 className="font-cinematic text-4xl sm:text-6xl font-bold text-white tracking-[0.03em] uppercase leading-tight">
-                  {movie.title}
-                </h1>
-                <p className="font-display italic text-zinc-300 border-l-2 border-[#d4af37]/70 pl-4 py-0.5 text-base sm:text-lg font-light leading-relaxed">
-                  &ldquo;{extendedMeta.tagline}&rdquo;
-                </p>
-                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-400 pt-1">
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#d4af37]" />
-                    {durationFormatted} ({movie.durationMins}m)
-                  </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Released {new Date(movie.releaseDate).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </span>
-                </div>
-              </div>
-
-              {/* Luxury Critics & Audience Rating Cards (No Emoji) */}
-              <div className="grid grid-cols-3 gap-3 max-w-lg pt-1">
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col items-center justify-center text-center">
-                  <div className="flex items-center gap-1.5 text-[#d4af37]">
-                    <Star className="w-4 h-4 fill-[#d4af37]" />
-                    <span className="text-lg font-black font-mono tracking-tight">{extendedMeta.imdbRating}</span>
-                    <span className="text-[10px] text-zinc-400 font-mono">/ 10</span>
-                  </div>
-                  <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 mt-1">
-                    IMDb Score
-                  </span>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col items-center justify-center text-center">
-                  <div className="flex items-center gap-1.5 text-zinc-100">
-                    <Award className="w-4 h-4 text-[#d4af37]" />
-                    <span className="text-lg font-black font-mono tracking-tight">{extendedMeta.rottenTomatoes}</span>
-                  </div>
-                  <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 mt-1">
-                    Tomatometer
-                  </span>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col items-center justify-center text-center">
-                  <div className="flex items-center gap-1.5 text-zinc-100">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span className="text-lg font-black font-mono tracking-tight">{extendedMeta.audienceScore}</span>
-                  </div>
-                  <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 mt-1">
-                    Audience
-                  </span>
-                </div>
-              </div>
-
-              {/* Storyline & Synopsis */}
-              <div className="space-y-1.5 pt-1">
-                <h3 className="font-cinematic text-xs uppercase tracking-[0.2em] text-[#d4af37] font-bold">
-                  Storyline & Synopsis
-                </h3>
-                <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-light">
-                  {movie.description}
-                </p>
-              </div>
-
-              {/* Top Cast & Characters Gallery */}
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-cinematic text-xs uppercase tracking-[0.2em] text-[#d4af37] font-bold">
-                    Principal Cast
-                  </h3>
-                  <span className="text-[10px] text-zinc-500 font-mono tracking-wider uppercase">
-                    Theatrical Ensemble
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                  {extendedMeta.cast.map((actor, idx) => (
-                    <CastMemberCard key={idx} actor={actor} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Sensory Highlights */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-[#d4af37]/10 text-[#d4af37]">
-                    <Tv className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-display font-semibold text-white block">
-                      Laser 4K Projection
-                    </span>
-                    <span className="text-[10px] text-zinc-400 font-mono">Dual-Laser HDR Clarity</span>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-[#d4af37]/10 text-[#d4af37]">
-                    <Volume2 className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-display font-semibold text-white block">
-                      Dolby Atmos Sound
-                    </span>
-                    <span className="text-[10px] text-zinc-400 font-mono">12-Channel Spatial Field</span>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-[#d4af37]/10 text-[#d4af37]">
-                    <Armchair className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-display font-semibold text-white block">
-                      VIP Recliners
-                    </span>
-                    <span className="text-[10px] text-zinc-400 font-mono">8-Minute Live Hold Protection</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Primary Luxury CTA */}
-              <div className="pt-4 flex items-center gap-4">
-                <button
-                  onClick={scrollToBooking}
-                  className="luxury-gold-btn px-8 py-4 rounded-full flex items-center gap-3 font-display text-xs tracking-[0.14em] uppercase transition-all group cursor-pointer"
-                >
-                  <Ticket className="w-4 h-4 fill-current" />
-                  <span>Reserve Screening & Seats</span>
-                  <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
-                </button>
-              </div>
-            </div>
+          <div className="flex items-center gap-3.5 overflow-x-auto pb-2 scrollbar-none">
+            {extendedMeta.cast.map((actor, idx) => (
+              <CastMemberCard key={idx} actor={actor} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* ========================================================
-          SECOND FOLD: DATE PICKER, SHOWTIMES & INTERACTIVE SEATS
-          Smoothly revealed when the user scrolls down
+          SECOND FOLD: AMBIENT THEATRICAL AUDITORIUM & BOOKING
+          Seamlessly reveals when the user scrolls down
           ======================================================== */}
       <section
         id="booking-section"
         ref={bookingSectionRef}
-        className="max-w-7xl mx-auto px-4 sm:px-8 pt-16 space-y-10 scroll-mt-24 transition-opacity duration-700"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-20 pb-28 space-y-10 scroll-mt-20"
       >
-        {/* Section Header */}
+        {/* Section Heading */}
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 text-[#d4af37] text-[10px] font-mono font-semibold uppercase tracking-[0.25em]">
-            <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
-            <span>Auditorium Reservations</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/60 border border-[#d4af37]/40 text-[#d4af37] text-[10px] font-sans font-bold uppercase tracking-[0.25em] backdrop-blur-md">
+            <Sparkles className="w-3 h-3 text-[#d4af37]" />
+            <span>Live Interactive Seating Map</span>
           </div>
-          <h2 className="font-cinematic text-3xl sm:text-4xl font-bold text-white tracking-wide uppercase">
-            Select Screening Date & Seats
+          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+            Select Screening & Seats
           </h2>
-          <p className="text-xs sm:text-sm text-zinc-400 font-light">
-            Microsecond concurrency locks with 8-minute TTL reservation protection and instant turnstile ticketing.
+          <p className="text-xs sm:text-sm text-zinc-400 font-light max-w-lg mx-auto">
+            Real-time atomic seat locks with 8-minute TTL reservation protection and instant single-use digital turnstile passes.
           </p>
         </div>
 
-        {/* STEP 1: Date Selection Strip */}
+        {/* STEP 1: Interactive Date Ribbon */}
         <div className="space-y-3">
-          <span className="text-xs font-mono tracking-widest uppercase text-zinc-400 block text-center sm:text-left">
-            1. Select Screening Date:
+          <span className="text-xs font-sans tracking-widest uppercase text-zinc-400 block text-center sm:text-left font-semibold">
+            1. Choose Screening Date:
           </span>
           <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none justify-start sm:justify-center">
             {upcomingDates.map((item, idx) => {
@@ -620,19 +567,19 @@ export default function MovieDetailPage({
                 <button
                   key={idx}
                   onClick={() => setSelectedDateIndex(idx)}
-                  className={`flex flex-col items-center justify-center min-w-[78px] sm:min-w-[86px] py-3.5 px-3 rounded-2xl border transition-all duration-300 ${
+                  className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-3.5 px-3 rounded-2xl border transition-all duration-300 backdrop-blur-md ${
                     isSelected
-                      ? 'bg-gradient-to-b from-[#f0d59e] via-[#d4af37] to-[#aa801a] text-zinc-950 border-[#d4af37] shadow-xl shadow-[#d4af37]/20 scale-105 font-bold'
-                      : 'bg-[#0f111a] text-zinc-300 border-white/[0.08] hover:border-white/25 hover:bg-white/[0.04]'
+                      ? 'bg-gradient-to-b from-[#f0d59e] via-[#d4af37] to-[#aa801a] text-zinc-950 border-[#d4af37] shadow-xl shadow-[#d4af37]/25 scale-105 font-bold'
+                      : 'bg-black/50 text-zinc-300 border-white/10 hover:border-white/30 hover:bg-black/70'
                   }`}
                 >
-                  <span className={`text-[10px] font-mono uppercase tracking-wider ${isSelected ? 'text-zinc-950 font-bold' : 'text-zinc-400'}`}>
+                  <span className={`text-[10px] font-sans uppercase tracking-wider ${isSelected ? 'text-zinc-950 font-bold' : 'text-zinc-400'}`}>
                     {item.dayName}
                   </span>
-                  <span className="text-xl sm:text-2xl font-black font-display tracking-tight my-0.5">
+                  <span className="text-xl sm:text-2xl font-black font-sans tracking-tight my-0.5">
                     {item.dayNumber}
                   </span>
-                  <span className={`text-[9px] font-mono uppercase tracking-widest ${isSelected ? 'text-zinc-900 font-bold' : 'text-zinc-500'}`}>
+                  <span className={`text-[9px] font-sans uppercase tracking-widest ${isSelected ? 'text-zinc-900 font-bold' : 'text-zinc-500'}`}>
                     {item.monthName}
                   </span>
                 </button>
@@ -641,14 +588,14 @@ export default function MovieDetailPage({
           </div>
         </div>
 
-        {/* STEP 2: Time Slots & Screen Selection */}
+        {/* STEP 2: Time Slots & Screen Formats */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono tracking-widest uppercase text-zinc-400">
+            <span className="text-xs font-sans tracking-widest uppercase text-zinc-400 font-semibold">
               2. Available Showtimes & Formats:
             </span>
-            <span className="text-[11px] font-mono text-[#d4af37]">
-              Showing for {upcomingDates[selectedDateIndex].dayName}, {upcomingDates[selectedDateIndex].dayNumber} {upcomingDates[selectedDateIndex].monthName}
+            <span className="text-[11px] font-sans text-[#d4af37]">
+              Screenings for {upcomingDates[selectedDateIndex].dayName}, {upcomingDates[selectedDateIndex].dayNumber} {upcomingDates[selectedDateIndex].monthName}
             </span>
           </div>
 
@@ -666,39 +613,39 @@ export default function MovieDetailPage({
                       setHoldExpiresAt(null);
                       setErrorMsg('');
                     }}
-                    className={`p-5 rounded-2xl border text-left transition-all duration-200 relative flex flex-col justify-between ${
+                    className={`p-5 rounded-2xl border text-left transition-all duration-200 relative flex flex-col justify-between backdrop-blur-md ${
                       isSelected
-                        ? 'bg-gradient-to-br from-[#1c1810] via-[#12141e] to-[#0c0d14] border-[#d4af37] shadow-xl shadow-[#d4af37]/15 ring-1 ring-[#d4af37]/60'
-                        : 'bg-[#0e101a] border-white/[0.08] hover:border-white/20 hover:bg-white/[0.03]'
+                        ? 'bg-gradient-to-br from-[#241c10] via-black/80 to-[#10121b] border-[#d4af37] shadow-xl shadow-[#d4af37]/20 ring-1 ring-[#d4af37]/60'
+                        : 'bg-black/50 border-white/10 hover:border-white/25 hover:bg-black/70'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
+                      <span className="text-xs font-sans font-bold text-white uppercase tracking-wider">
                         {show.screen.name}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 text-[#d4af37] text-[10px] font-mono font-medium">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/35 text-[#d4af37] text-[10px] font-sans font-semibold">
                         {show.format}
                       </span>
                     </div>
 
                     <div className="my-3.5 flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-white font-mono tracking-tight">
+                      <span className="text-2xl font-black text-white font-sans tracking-tight">
                         {formatTime(show.startTime)}
                       </span>
-                      <span className="text-xs text-zinc-400 font-display">
+                      <span className="text-xs text-zinc-400 font-sans">
                         {show.screen.theatre.name}
                       </span>
                     </div>
 
-                    <div className="pt-2.5 border-t border-white/[0.08] flex items-center justify-between text-xs">
-                      <span className="text-zinc-400 font-mono text-[11px]">From {formatCurrency(show.basePrice)}</span>
+                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-sans">
+                      <span className="text-zinc-400 text-[11px]">From {formatCurrency(show.basePrice)}</span>
                       {isSelected ? (
-                        <span className="text-[#d4af37] font-mono font-semibold flex items-center gap-1 text-[11px]">
+                        <span className="text-[#d4af37] font-semibold flex items-center gap-1 text-[11px]">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           Auditorium Selected
                         </span>
                       ) : (
-                        <span className="text-zinc-400 font-mono text-[11px] group-hover:text-white">
+                        <span className="text-zinc-400 text-[11px] group-hover:text-white">
                           Select Auditorium →
                         </span>
                       )}
@@ -708,9 +655,9 @@ export default function MovieDetailPage({
               })}
             </div>
           ) : (
-            <div className="p-8 text-center bg-[#0e101a] rounded-2xl border border-white/[0.08]">
+            <div className="p-8 text-center bg-black/50 rounded-2xl border border-white/10 backdrop-blur-md">
               <Calendar className="w-8 h-8 text-zinc-600 mx-auto mb-2" />
-              <p className="text-xs text-zinc-400">No screenings available for this date. Please select another date.</p>
+              <p className="text-xs text-zinc-400 font-sans">No screenings available for this date. Please select another date.</p>
             </div>
           )}
         </div>
@@ -720,17 +667,17 @@ export default function MovieDetailPage({
           <div className="space-y-4 pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-mono tracking-widest uppercase text-zinc-400 block">
+                <span className="text-xs font-sans tracking-widest uppercase text-zinc-400 block font-semibold">
                   3. Select Your Seats:
                 </span>
-                <p className="text-[11px] text-zinc-500 font-mono mt-0.5">
+                <p className="text-[11px] text-zinc-400 font-sans mt-0.5">
                   {currentShow ? `${currentShow.screen.name} • ${currentShow.format} Auditorium` : 'Auditorium'}
                 </p>
               </div>
 
               <button
                 onClick={() => loadSeats(false)}
-                className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 hover:text-white px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
+                className="flex items-center gap-1.5 text-[11px] font-sans text-zinc-400 hover:text-white px-3.5 py-1.5 rounded-full border border-white/15 bg-black/40 hover:bg-black/70 transition-colors backdrop-blur-md"
               >
                 <RefreshCw className="w-3 h-3 text-zinc-400" />
                 <span>Refresh Grid</span>
@@ -739,7 +686,7 @@ export default function MovieDetailPage({
 
             {/* Error & Success Messages */}
             {errorMsg && (
-              <div className="p-4 rounded-2xl bg-rose-950/60 border border-rose-500/40 text-rose-200 text-xs flex items-center justify-between gap-3 shadow-lg">
+              <div className="p-4 rounded-2xl bg-rose-950/80 border border-rose-500/40 text-rose-200 text-xs flex items-center justify-between gap-3 shadow-lg backdrop-blur-md">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
                   <span>{errorMsg}</span>
@@ -751,18 +698,18 @@ export default function MovieDetailPage({
             )}
 
             {successMsg && (
-              <div className="p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-2 shadow-lg">
+              <div className="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-2 shadow-lg backdrop-blur-md">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                 <span>{successMsg}</span>
               </div>
             )}
 
             {/* STRICTLY CONTAINED AUDITORIUM CARD */}
-            <div className="rounded-3xl bg-[#0a0b12] border border-white/[0.08] p-5 sm:p-10 shadow-2xl overflow-hidden relative">
+            <div className="rounded-3xl bg-[#0a0b12]/95 border border-white/10 p-5 sm:p-10 shadow-2xl overflow-hidden relative backdrop-blur-xl">
               {seatsLoading ? (
                 <div className="py-24 flex flex-col items-center justify-center gap-3">
                   <div className="w-7 h-7 border-2 border-[#d4af37] border-t-transparent rounded-full animate-spin" />
-                  <p className="text-xs text-zinc-400 font-mono">Syncing luxury seating status...</p>
+                  <p className="text-xs text-zinc-400 font-sans">Syncing luxury seating status...</p>
                 </div>
               ) : (
                 <SeatMap
@@ -782,16 +729,16 @@ export default function MovieDetailPage({
           ======================================================== */}
       {selectedSeatIds.length > 0 && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl px-4 z-40 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="floating-bottom-bar-luxury rounded-full p-3 pl-6 pr-3 flex items-center justify-between shadow-2xl border border-white/10 bg-[#0b0c13]/95 backdrop-blur-2xl">
+          <div className="floating-bottom-bar-luxury rounded-full p-3 pl-6 pr-3 flex items-center justify-between shadow-2xl border border-white/15 bg-[#0b0c13]/95 backdrop-blur-2xl">
             {/* Left: Total Price */}
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 font-semibold">
+              <span className="text-[9px] font-sans uppercase tracking-[0.2em] text-zinc-400 font-semibold">
                 Total Amount:
               </span>
-              <div className="text-xl sm:text-2xl font-black text-white font-mono tracking-tight leading-none mt-0.5">
+              <div className="text-xl sm:text-2xl font-black text-white font-sans tracking-tight leading-none mt-0.5">
                 {formatCurrency(totalPrice)}
               </div>
-              <span className="text-[10px] text-[#d4af37] font-mono mt-0.5">
+              <span className="text-[10px] text-[#d4af37] font-sans mt-0.5">
                 {selectedSeatIds.length} seat(s) selected
               </span>
             </div>
@@ -809,7 +756,7 @@ export default function MovieDetailPage({
                 <button
                   type="button"
                   onClick={handleAcquireHold}
-                  className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-semibold border border-white/15 transition-all"
+                  className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-xs font-semibold border border-white/15 transition-all"
                 >
                   Hold Seats (8m)
                 </button>
@@ -819,7 +766,7 @@ export default function MovieDetailPage({
                 type="button"
                 onClick={handleProceedToCheckout}
                 disabled={isBooking}
-                className="luxury-gold-btn px-7 py-3 rounded-full text-zinc-950 font-display text-xs tracking-[0.14em] uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
+                className="luxury-gold-btn px-7 py-3 rounded-full text-zinc-950 font-sans text-xs tracking-[0.14em] uppercase font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
               >
                 {isBooking ? (
                   <>
@@ -829,7 +776,7 @@ export default function MovieDetailPage({
                 ) : (
                   <>
                     <span>BUY</span>
-                    <span className="font-sans font-bold">→</span>
+                    <span className="font-bold">→</span>
                   </>
                 )}
               </button>

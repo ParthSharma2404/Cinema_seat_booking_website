@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,9 +9,9 @@
   --foreground: #f4f4f8;
   --card-bg: #0f111a;
   --card-border: #1a1d2c;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-  --font-cinematic: 'Cinzel', serif;
+  --font-sans: 'Fira Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Fira Sans', sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, Menlo, monospace;
 }
 
 html {
@@ -22,20 +22,24 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-sans);
-  letter-spacing: -0.012em;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Luxury Editorial Typography utilities */
+/* Luxury Editorial Typography utilities with Fira Sans */
 .font-cinematic {
-  font-family: 'Cinzel', serif;
-  letter-spacing: 0.04em;
+  font-family: 'Fira Sans', sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .font-display {
-  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.font-mono-fira {
+  font-family: 'Fira Code', monospace;
 }
 
 /* Luxury Gold & Glass Accents */

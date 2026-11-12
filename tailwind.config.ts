@@ -9,10 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
-        cinematic: ['"Cinzel"', 'serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'Menlo', 'monospace'],
+        sans: ['"Fira Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Fira Sans"', 'sans-serif'],
+        cinematic: ['"Fira Sans"', 'sans-serif'],
+        mono: ['"Fira Code"', '"JetBrains Mono"', 'ui-monospace', 'Menlo', 'monospace'],
       },
       colors: {
         background: "var(--background)",
