@@ -43,9 +43,24 @@ interface Movie {
 
 export default function HomePage() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
+
+  const fetchSession = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data.user);
+      } else {
+        setCurrentUser(null);
+      }
+    } catch {
+      setCurrentUser(null);
+    }
+  };
 
   const fetchMovies = async () => {
     try {
@@ -64,6 +79,7 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchMovies();
+    fetchSession();
   }, []);
 
   const activeMovie = movies.length > 0 ? movies[activeHeroIndex] : null;
@@ -122,6 +138,37 @@ export default function HomePage() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-transparent z-0 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-0 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent z-0 pointer-events-none" />
+
+      {/* Staff / Admin Fast-Link Banner if logged in */}
+      {currentUser?.role === 'STAFF' && (
+        <div className="absolute top-24 left-6 sm:left-12 lg:left-16 z-30 flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#0e101a]/95 border border-emerald-500/40 shadow-2xl backdrop-blur-xl">
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-xs text-zinc-300">
+            Logged in as <strong className="text-white">Gate Staff</strong>.
+          </span>
+          <Link
+            href="/staff"
+            className="px-3 py-1 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-all ml-1 shadow-sm"
+          >
+            Open Staff Workstation →
+          </Link>
+        </div>
+      )}
+
+      {currentUser?.role === 'ADMIN' && (
+        <div className="absolute top-24 left-6 sm:left-12 lg:left-16 z-30 flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#0e101a]/95 border border-white/20 shadow-2xl backdrop-blur-xl">
+          <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+          <span className="text-xs text-zinc-300">
+            Logged in as <strong className="text-white">Cinema Administrator</strong>.
+          </span>
+          <Link
+            href="/admin"
+            className="px-3 py-1 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-all ml-1 shadow-sm"
+          >
+            Open Admin Control Center →
+          </Link>
+        </div>
+      )}
 
       {/* 3. Hero Content Grid */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end w-full">
