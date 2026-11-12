@@ -196,19 +196,19 @@ export default function HomePage() {
 
           {/* Action Buttons + Slider Navigation Arrows */}
           <div className="pt-3 flex flex-wrap items-center gap-4">
-            {/* Primary Action Button (Champagne Gold Luxury Pill) */}
+            {/* Primary Action Button: Clean Minimalist White Pill */}
             <Link
               href={targetShowId ? `/movies/${activeMovie.id}?showId=${targetShowId}` : `/movies/${activeMovie.id}`}
-              className="luxury-gold-btn px-8 py-3.5 rounded-full font-display text-xs tracking-[0.14em] uppercase flex items-center gap-2 shadow-xl"
+              className="bg-white hover:bg-zinc-200 text-black font-semibold text-xs tracking-wider uppercase px-7 py-3.5 rounded-xl transition-colors flex items-center gap-2 shadow-md cursor-pointer"
             >
-              <Ticket className="w-4 h-4 fill-current" />
+              <Ticket className="w-4 h-4" />
               <span>Book Now</span>
             </Link>
 
-            {/* Secondary Action Button (Outlined like reference image) */}
+            {/* Secondary Action Button */}
             <Link
               href={`/movies/${activeMovie.id}`}
-              className="px-7 py-3.5 rounded-full border border-white/20 hover:border-white/50 bg-black/40 hover:bg-white/10 text-white font-display font-medium text-xs tracking-[0.14em] uppercase transition-all backdrop-blur-md"
+              className="px-6 py-3.5 rounded-xl border border-white/20 hover:border-white/50 bg-black/40 hover:bg-white/10 text-white font-medium text-xs tracking-wider uppercase transition-colors backdrop-blur-md"
             >
               More Details
             </Link>

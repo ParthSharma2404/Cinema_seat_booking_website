@@ -408,123 +408,113 @@ export default function MovieDetailPage({
           Completely different from traditional e-commerce ticket sites
           ======================================================== */}
       <section className="relative z-10 w-full min-h-[92vh] flex flex-col justify-between pt-24 pb-12 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
-        {/* Top Controls: Sleek Back Pill & Live Theatrical Tag */}
+        {/* Top Controls */}
         <div className="flex items-center justify-between pt-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/40 hover:bg-black/70 border border-white/15 hover:border-[#d4af37]/60 text-xs font-sans tracking-wider uppercase text-zinc-300 hover:text-white transition-all backdrop-blur-md group"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-black/40 hover:bg-black/60 border border-white/15 text-xs font-sans tracking-wide text-zinc-300 hover:text-white transition-all backdrop-blur-md group"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-            <span>All Screenings</span>
+            <span>All Movies</span>
           </Link>
-
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/50 border border-[#d4af37]/40 text-[#d4af37] text-[10px] font-sans font-semibold tracking-[0.25em] uppercase backdrop-blur-md shadow-lg">
-            <Sparkles className="w-3.5 h-3.5 text-[#d4af37] animate-pulse" />
-            <span>Curated Theatrical Presentation</span>
-          </div>
         </div>
 
         {/* Central Editorial Movie Content */}
-        <div className="my-auto py-8 lg:py-12 max-w-3xl space-y-6">
+        <div className="my-auto py-8 lg:py-12 max-w-3xl space-y-5">
           {/* Format & Classification Pills */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3.5 py-1 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/40 text-[#d4af37] text-xs font-sans font-semibold uppercase tracking-wider backdrop-blur-md">
+            <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-zinc-200 text-xs font-sans font-medium">
               {movie.genre}
             </span>
-            <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-sans font-bold tracking-wider border border-white/15 backdrop-blur-md">
+            <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-sans font-semibold border border-white/15">
               {movie.rating}
             </span>
-            <span className="px-3 py-1 rounded-full bg-white/5 text-zinc-200 text-xs font-sans border border-white/10 backdrop-blur-md">
+            <span className="px-3 py-1 rounded-full bg-white/5 text-zinc-300 text-xs font-sans border border-white/10">
               {movie.language}
             </span>
-            <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 text-xs font-sans font-semibold border border-cyan-500/30 backdrop-blur-md">
-              IMAX 70mm Laser
+            <span className="px-3 py-1 rounded-full bg-white/10 text-zinc-200 text-xs font-sans border border-white/15">
+              IMAX 70mm
             </span>
           </div>
 
-          {/* Monumental Title in Fira Sans */}
+          {/* Clean Title in Fira Sans */}
           <div>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tight uppercase leading-[0.95] drop-shadow-2xl">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight">
               {movie.title}
             </h1>
-            <p className="text-lg sm:text-2xl text-[#d4af37] font-light italic mt-3 border-l-2 border-[#d4af37] pl-4 leading-snug">
+            <p className="text-base sm:text-lg text-zinc-300 italic mt-2 border-l-2 border-zinc-500 pl-3.5 font-light">
               &ldquo;{extendedMeta.tagline}&rdquo;
             </p>
           </div>
 
           {/* Quick Technical Specs Strip */}
-          <div className="flex flex-wrap items-center gap-5 text-xs font-sans text-zinc-300 font-medium">
+          <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-zinc-400">
             <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-[#d4af37]" />
+              <Clock className="w-3.5 h-3.5 text-zinc-400" />
               {durationFormatted} ({movie.durationMins}m)
             </span>
             <span>•</span>
             <span className="flex items-center gap-1.5">
-              <Clapperboard className="w-4 h-4 text-[#d4af37]" />
+              <Clapperboard className="w-3.5 h-3.5 text-zinc-400" />
               Directed by {extendedMeta.director}
             </span>
             <span>•</span>
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-[#d4af37]" />
-              {new Date(movie.releaseDate).getFullYear()} Premiere
+              <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+              {new Date(movie.releaseDate).getFullYear()}
             </span>
           </div>
 
           {/* Film Narrative Synopsis */}
-          <p className="text-base sm:text-lg text-zinc-200 font-light leading-relaxed max-w-2xl drop-shadow-md">
+          <p className="text-sm sm:text-base text-zinc-300 font-normal leading-relaxed max-w-2xl">
             {movie.description}
           </p>
 
           {/* Critics & Audience Reception Capsule */}
-          <div className="inline-flex flex-wrap items-center gap-6 p-3 px-5 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 shadow-xl">
-            <div className="flex items-center gap-2 text-[#d4af37]">
-              <Star className="w-4 h-4 fill-[#d4af37]" />
-              <span className="text-base font-bold font-sans">{extendedMeta.imdbRating}</span>
-              <span className="text-[10px] text-zinc-400 uppercase font-sans">IMDb Score</span>
+          <div className="inline-flex flex-wrap items-center gap-5 p-2.5 px-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10">
+            <div className="flex items-center gap-1.5 text-zinc-200">
+              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+              <span className="text-sm font-bold font-sans">{extendedMeta.imdbRating}</span>
+              <span className="text-[10px] text-zinc-400 uppercase font-sans">IMDb</span>
             </div>
 
-            <div className="w-[1px] h-5 bg-white/15 hidden sm:block" />
+            <div className="w-[1px] h-4 bg-white/15 hidden sm:block" />
 
-            <div className="flex items-center gap-2 text-zinc-100">
-              <Award className="w-4 h-4 text-[#d4af37]" />
-              <span className="text-base font-bold font-sans">{extendedMeta.rottenTomatoes}</span>
+            <div className="flex items-center gap-1.5 text-zinc-200">
+              <span className="text-sm font-bold font-sans">{extendedMeta.rottenTomatoes}</span>
               <span className="text-[10px] text-zinc-400 uppercase font-sans">Tomatometer</span>
             </div>
 
-            <div className="w-[1px] h-5 bg-white/15 hidden sm:block" />
+            <div className="w-[1px] h-4 bg-white/15 hidden sm:block" />
 
-            <div className="flex items-center gap-2 text-zinc-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span className="text-base font-bold font-sans">{extendedMeta.audienceScore}</span>
+            <div className="flex items-center gap-1.5 text-zinc-200">
+              <span className="text-sm font-bold font-sans">{extendedMeta.audienceScore}</span>
               <span className="text-[10px] text-zinc-400 uppercase font-sans">Audience</span>
             </div>
           </div>
 
-          {/* Action CTA: Smoothly Jump to Theatrical Booking */}
+          {/* Action CTA: Minimalist Clean Button */}
           <div className="pt-2 flex items-center gap-4">
             <button
               onClick={scrollToBooking}
-              className="luxury-gold-btn px-9 py-4 rounded-full flex items-center gap-3 font-sans text-xs tracking-[0.15em] uppercase font-bold shadow-2xl transition-all cursor-pointer group hover:scale-105 active:scale-95"
+              className="bg-white hover:bg-zinc-200 text-black font-semibold text-xs tracking-wider uppercase px-7 py-3.5 rounded-xl transition-colors flex items-center gap-2 cursor-pointer shadow-md"
             >
-              <Ticket className="w-4 h-4 fill-current" />
-              <span>Reserve Seats in VIP Auditorium</span>
-              <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+              <Ticket className="w-4 h-4" />
+              <span>Select Date & Seats</span>
+              <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
             </button>
           </div>
         </div>
 
         {/* Bottom Principal Cast Horizontal Reel */}
-        <div className="pt-6 border-t border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs uppercase tracking-[0.2em] font-sans font-bold text-[#d4af37]">
-              Principal Cast & Ensembles
-            </span>
-            <span className="text-[11px] font-sans text-zinc-400">
-              Scroll to explore cast &rarr;
+        <div className="pt-5 border-t border-white/10">
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-xs uppercase tracking-wider font-sans font-semibold text-zinc-400">
+              Cast
             </span>
           </div>
 
-          <div className="flex items-center gap-3.5 overflow-x-auto pb-2 scrollbar-none">
+          <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
             {extendedMeta.cast.map((actor, idx) => (
               <CastMemberCard key={idx} actor={actor} />
             ))}
@@ -533,53 +523,49 @@ export default function MovieDetailPage({
       </section>
 
       {/* ========================================================
-          SECOND FOLD: AMBIENT THEATRICAL AUDITORIUM & BOOKING
+          SECOND FOLD: MINIMALIST AUDITORIUM & BOOKING
           Seamlessly reveals when the user scrolls down
           ======================================================== */}
       <section
         id="booking-section"
         ref={bookingSectionRef}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-20 pb-28 space-y-10 scroll-mt-20"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-16 pb-28 space-y-8 scroll-mt-20"
       >
         {/* Section Heading */}
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/60 border border-[#d4af37]/40 text-[#d4af37] text-[10px] font-sans font-bold uppercase tracking-[0.25em] backdrop-blur-md">
-            <Sparkles className="w-3 h-3 text-[#d4af37]" />
-            <span>Live Interactive Seating Map</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
-            Select Screening & Seats
+        <div className="text-center max-w-xl mx-auto space-y-1.5">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Select Date & Seats
           </h2>
-          <p className="text-xs sm:text-sm text-zinc-400 font-light max-w-lg mx-auto">
-            Real-time atomic seat locks with 8-minute TTL reservation protection and instant single-use digital turnstile passes.
+          <p className="text-xs text-zinc-400 font-normal">
+            Real-time seat holds with 8-minute reservation timer.
           </p>
         </div>
 
-        {/* STEP 1: Interactive Date Ribbon */}
-        <div className="space-y-3">
-          <span className="text-xs font-sans tracking-widest uppercase text-zinc-400 block text-center sm:text-left font-semibold">
-            1. Choose Screening Date:
+        {/* STEP 1: Date Ribbon */}
+        <div className="space-y-2.5">
+          <span className="text-xs font-sans uppercase tracking-wider text-zinc-400 block text-center sm:text-left font-medium">
+            1. Date:
           </span>
-          <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none justify-start sm:justify-center">
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none justify-start sm:justify-center">
             {upcomingDates.map((item, idx) => {
               const isSelected = idx === selectedDateIndex;
               return (
                 <button
                   key={idx}
                   onClick={() => setSelectedDateIndex(idx)}
-                  className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-3.5 px-3 rounded-2xl border transition-all duration-300 backdrop-blur-md ${
+                  className={`flex flex-col items-center justify-center min-w-[76px] sm:min-w-[84px] py-3 px-3 rounded-xl border transition-all ${
                     isSelected
-                      ? 'bg-gradient-to-b from-[#f0d59e] via-[#d4af37] to-[#aa801a] text-zinc-950 border-[#d4af37] shadow-xl shadow-[#d4af37]/25 scale-105 font-bold'
-                      : 'bg-black/50 text-zinc-300 border-white/10 hover:border-white/30 hover:bg-black/70'
+                      ? 'bg-white text-black border-white shadow-md font-bold'
+                      : 'bg-black/40 text-zinc-300 border-white/10 hover:border-white/25 hover:bg-black/60'
                   }`}
                 >
-                  <span className={`text-[10px] font-sans uppercase tracking-wider ${isSelected ? 'text-zinc-950 font-bold' : 'text-zinc-400'}`}>
+                  <span className={`text-[10px] font-sans uppercase ${isSelected ? 'text-black' : 'text-zinc-400'}`}>
                     {item.dayName}
                   </span>
-                  <span className="text-xl sm:text-2xl font-black font-sans tracking-tight my-0.5">
+                  <span className="text-xl font-bold font-sans tracking-tight my-0.5">
                     {item.dayNumber}
                   </span>
-                  <span className={`text-[9px] font-sans uppercase tracking-widest ${isSelected ? 'text-zinc-900 font-bold' : 'text-zinc-500'}`}>
+                  <span className={`text-[9px] font-sans uppercase ${isSelected ? 'text-zinc-800' : 'text-zinc-500'}`}>
                     {item.monthName}
                   </span>
                 </button>
@@ -588,19 +574,16 @@ export default function MovieDetailPage({
           </div>
         </div>
 
-        {/* STEP 2: Time Slots & Screen Formats */}
-        <div className="space-y-3">
+        {/* STEP 2: Time Slots */}
+        <div className="space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-sans tracking-widest uppercase text-zinc-400 font-semibold">
-              2. Available Showtimes & Formats:
-            </span>
-            <span className="text-[11px] font-sans text-[#d4af37]">
-              Screenings for {upcomingDates[selectedDateIndex].dayName}, {upcomingDates[selectedDateIndex].dayNumber} {upcomingDates[selectedDateIndex].monthName}
+            <span className="text-xs font-sans uppercase tracking-wider text-zinc-400 font-medium">
+              2. Showtimes:
             </span>
           </div>
 
           {displayedShows.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
               {displayedShows.map((show) => {
                 const isSelected = show.id === selectedShowId;
                 return (
@@ -613,23 +596,23 @@ export default function MovieDetailPage({
                       setHoldExpiresAt(null);
                       setErrorMsg('');
                     }}
-                    className={`p-5 rounded-2xl border text-left transition-all duration-200 relative flex flex-col justify-between backdrop-blur-md ${
+                    className={`p-4 rounded-xl border text-left transition-all relative flex flex-col justify-between ${
                       isSelected
-                        ? 'bg-gradient-to-br from-[#241c10] via-black/80 to-[#10121b] border-[#d4af37] shadow-xl shadow-[#d4af37]/20 ring-1 ring-[#d4af37]/60'
-                        : 'bg-black/50 border-white/10 hover:border-white/25 hover:bg-black/70'
+                        ? 'bg-white/15 border-white text-white ring-1 ring-white/40'
+                        : 'bg-black/40 border-white/10 text-zinc-300 hover:border-white/20 hover:bg-black/60'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-sans font-bold text-white uppercase tracking-wider">
+                      <span className="text-xs font-sans font-semibold text-white">
                         {show.screen.name}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/35 text-[#d4af37] text-[10px] font-sans font-semibold">
+                      <span className="px-2 py-0.5 rounded bg-white/10 text-zinc-300 text-[10px] font-sans">
                         {show.format}
                       </span>
                     </div>
 
-                    <div className="my-3.5 flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-white font-sans tracking-tight">
+                    <div className="my-3 flex items-baseline gap-2">
+                      <span className="text-2xl font-bold text-white font-sans">
                         {formatTime(show.startTime)}
                       </span>
                       <span className="text-xs text-zinc-400 font-sans">
@@ -637,16 +620,16 @@ export default function MovieDetailPage({
                       </span>
                     </div>
 
-                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-sans">
-                      <span className="text-zinc-400 text-[11px]">From {formatCurrency(show.basePrice)}</span>
+                    <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs font-sans">
+                      <span className="text-zinc-400 text-[11px]">{formatCurrency(show.basePrice)}</span>
                       {isSelected ? (
-                        <span className="text-[#d4af37] font-semibold flex items-center gap-1 text-[11px]">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          Auditorium Selected
+                        <span className="text-white font-medium text-[11px] flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                          Selected
                         </span>
                       ) : (
                         <span className="text-zinc-400 text-[11px] group-hover:text-white">
-                          Select Auditorium →
+                          Select →
                         </span>
                       )}
                     </div>
@@ -655,38 +638,35 @@ export default function MovieDetailPage({
               })}
             </div>
           ) : (
-            <div className="p-8 text-center bg-black/50 rounded-2xl border border-white/10 backdrop-blur-md">
+            <div className="p-8 text-center bg-black/40 rounded-xl border border-white/10">
               <Calendar className="w-8 h-8 text-zinc-600 mx-auto mb-2" />
-              <p className="text-xs text-zinc-400 font-sans">No screenings available for this date. Please select another date.</p>
+              <p className="text-xs text-zinc-400 font-sans">No screenings available for this date.</p>
             </div>
           )}
         </div>
 
-        {/* STEP 3: Live Seating Map with Contained Screen Display */}
+        {/* STEP 3: Seating Map */}
         {selectedShowId && (
-          <div className="space-y-4 pt-4">
+          <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-sans tracking-widest uppercase text-zinc-400 block font-semibold">
-                  3. Select Your Seats:
+                <span className="text-xs font-sans uppercase tracking-wider text-zinc-400 font-medium">
+                  3. Select Seats:
                 </span>
-                <p className="text-[11px] text-zinc-400 font-sans mt-0.5">
-                  {currentShow ? `${currentShow.screen.name} • ${currentShow.format} Auditorium` : 'Auditorium'}
-                </p>
               </div>
 
               <button
                 onClick={() => loadSeats(false)}
-                className="flex items-center gap-1.5 text-[11px] font-sans text-zinc-400 hover:text-white px-3.5 py-1.5 rounded-full border border-white/15 bg-black/40 hover:bg-black/70 transition-colors backdrop-blur-md"
+                className="flex items-center gap-1.5 text-[11px] font-sans text-zinc-400 hover:text-white px-3 py-1 rounded-lg border border-white/15 bg-black/40 hover:bg-black/60 transition-colors"
               >
                 <RefreshCw className="w-3 h-3 text-zinc-400" />
-                <span>Refresh Grid</span>
+                <span>Refresh</span>
               </button>
             </div>
 
             {/* Error & Success Messages */}
             {errorMsg && (
-              <div className="p-4 rounded-2xl bg-rose-950/80 border border-rose-500/40 text-rose-200 text-xs flex items-center justify-between gap-3 shadow-lg backdrop-blur-md">
+              <div className="p-3.5 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-200 text-xs flex items-center justify-between gap-3 shadow-sm">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
                   <span>{errorMsg}</span>
@@ -698,18 +678,18 @@ export default function MovieDetailPage({
             )}
 
             {successMsg && (
-              <div className="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-2 shadow-lg backdrop-blur-md">
+              <div className="p-3.5 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-2 shadow-sm">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                 <span>{successMsg}</span>
               </div>
             )}
 
-            {/* STRICTLY CONTAINED AUDITORIUM CARD */}
-            <div className="rounded-3xl bg-[#0a0b12]/95 border border-white/10 p-5 sm:p-10 shadow-2xl overflow-hidden relative backdrop-blur-xl">
+            {/* SEAT MAP CANVAS */}
+            <div className="rounded-2xl bg-[#0c0d14]/95 border border-white/10 p-5 sm:p-8 shadow-xl overflow-hidden relative">
               {seatsLoading ? (
-                <div className="py-24 flex flex-col items-center justify-center gap-3">
-                  <div className="w-7 h-7 border-2 border-[#d4af37] border-t-transparent rounded-full animate-spin" />
-                  <p className="text-xs text-zinc-400 font-sans">Syncing luxury seating status...</p>
+                <div className="py-20 flex flex-col items-center justify-center gap-2.5">
+                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <p className="text-xs text-zinc-400 font-sans">Loading seats...</p>
                 </div>
               ) : (
                 <SeatMap
@@ -725,21 +705,21 @@ export default function MovieDetailPage({
       </section>
 
       {/* ========================================================
-          LUXURY FLOATING BOTTOM BAR
+          MINIMALIST FLOATING BOTTOM BAR
           ======================================================== */}
       {selectedSeatIds.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl px-4 z-40 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="floating-bottom-bar-luxury rounded-full p-3 pl-6 pr-3 flex items-center justify-between shadow-2xl border border-white/15 bg-[#0b0c13]/95 backdrop-blur-2xl">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-40 animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <div className="rounded-2xl p-3 px-5 flex items-center justify-between shadow-2xl border border-white/15 bg-[#0e1017]/95 backdrop-blur-xl">
             {/* Left: Total Price */}
             <div className="flex flex-col">
-              <span className="text-[9px] font-sans uppercase tracking-[0.2em] text-zinc-400 font-semibold">
-                Total Amount:
+              <span className="text-[10px] font-sans uppercase text-zinc-400">
+                Total
               </span>
-              <div className="text-xl sm:text-2xl font-black text-white font-sans tracking-tight leading-none mt-0.5">
+              <div className="text-lg font-bold text-white font-sans leading-tight">
                 {formatCurrency(totalPrice)}
               </div>
-              <span className="text-[10px] text-[#d4af37] font-sans mt-0.5">
-                {selectedSeatIds.length} seat(s) selected
+              <span className="text-[10px] text-zinc-400 font-sans">
+                {selectedSeatIds.length} seat(s)
               </span>
             </div>
 
@@ -752,21 +732,11 @@ export default function MovieDetailPage({
 
             {/* Right: Action Buttons */}
             <div className="flex items-center gap-2">
-              {!isHolding ? (
-                <button
-                  type="button"
-                  onClick={handleAcquireHold}
-                  className="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-xs font-semibold border border-white/15 transition-all"
-                >
-                  Hold Seats (8m)
-                </button>
-              ) : null}
-
               <button
                 type="button"
                 onClick={handleProceedToCheckout}
                 disabled={isBooking}
-                className="luxury-gold-btn px-7 py-3 rounded-full text-zinc-950 font-sans text-xs tracking-[0.14em] uppercase font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
+                className="bg-white hover:bg-zinc-200 text-black font-semibold text-xs tracking-wide uppercase px-5 py-2.5 rounded-xl transition-colors disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
               >
                 {isBooking ? (
                   <>
@@ -775,8 +745,8 @@ export default function MovieDetailPage({
                   </>
                 ) : (
                   <>
-                    <span>BUY</span>
-                    <span className="font-bold">→</span>
+                    <span>Book</span>
+                    <span>→</span>
                   </>
                 )}
               </button>

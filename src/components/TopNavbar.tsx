@@ -107,34 +107,29 @@ export function TopNavbar() {
       <div className="w-full px-6 sm:px-10 lg:px-16 h-20 flex items-center justify-between">
         {/* LEFT: Logo & All Movies Pill */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2a2315] via-[#161823] to-[#0b0c11] border border-[#d4af37]/50 flex items-center justify-center text-[#d4af37] shadow-lg shadow-[#d4af37]/10 group-hover:border-[#d4af37] transition-all">
-              <Film className="w-4 h-4 text-[#d4af37]" />
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-white transition-colors group-hover:bg-white/20">
+              <Film className="w-4 h-4 text-white" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-cinematic text-lg tracking-[0.2em] font-bold text-white uppercase leading-none">
-                CINE<span className="text-[#d4af37]">BOOK</span>
-              </span>
-              <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-zinc-400 mt-1">
-                Luxury Cinema
-              </span>
-            </div>
+            <span className="font-sans text-base font-bold text-white tracking-wider uppercase">
+              CINEBOOK
+            </span>
           </Link>
 
           {/* All Movies Pill (from reference image) */}
           <Link
             href="/"
-            className="hidden sm:inline-flex items-center px-4 py-1.5 rounded-full border border-white/15 hover:border-[#d4af37]/60 text-xs font-display tracking-wider text-zinc-300 hover:text-white transition-all bg-white/[0.03] hover:bg-white/[0.08]"
+            className="hidden sm:inline-flex items-center px-3.5 py-1 rounded-full border border-white/15 hover:border-white/40 text-xs font-sans tracking-wide text-zinc-300 hover:text-white transition-all bg-white/[0.04]"
           >
             All Movies
           </Link>
 
           {/* Quick Nav Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-display tracking-wider uppercase text-zinc-400">
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-sans tracking-wide text-zinc-400">
             <Link
               href="/my-bookings"
               className={`hover:text-white transition-colors ${
-                pathname === '/my-bookings' ? 'text-[#d4af37] font-bold' : ''
+                pathname === '/my-bookings' ? 'text-white font-semibold' : ''
               }`}
             >
               My Passes
@@ -142,7 +137,7 @@ export function TopNavbar() {
             <Link
               href="/admin/scan"
               className={`hover:text-white transition-colors ${
-                pathname === '/admin/scan' ? 'text-[#d4af37] font-bold' : ''
+                pathname === '/admin/scan' ? 'text-white font-semibold' : ''
               }`}
             >
               Gate Turnstile
@@ -150,7 +145,7 @@ export function TopNavbar() {
             <Link
               href="/admin"
               className={`hover:text-white transition-colors ${
-                pathname === '/admin' ? 'text-[#d4af37] font-bold' : ''
+                pathname === '/admin' ? 'text-white font-semibold' : ''
               }`}
             >
               Reconciliation
@@ -168,19 +163,19 @@ export function TopNavbar() {
         {/* RIGHT: Location, Fast-Track Switcher, User, & Menu */}
         <div className="flex items-center gap-4 sm:gap-6">
           {/* Location Pin */}
-          <div className="hidden xl:flex items-center gap-1.5 text-xs font-mono text-zinc-400">
-            <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
-            <span>Metropolis, Grand IMAX</span>
+          <div className="hidden xl:flex items-center gap-1.5 text-xs font-sans text-zinc-400">
+            <MapPin className="w-3.5 h-3.5 text-zinc-400" />
+            <span>Metropolis, Screen 1</span>
           </div>
 
           {/* Evaluator 1-Click Fast-Track Persona Dock */}
-          <div className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md">
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/[0.05] border border-white/10">
             <button
               onClick={() => handleQuickLogin('customer@cinema.com', 'password123', 'Customer')}
               title="Fast Switch: Customer Persona (Alex)"
-              className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-sans font-medium transition-all ${
                 user?.role === 'CUSTOMER'
-                  ? 'bg-gradient-to-r from-[#e6c280] to-[#d4af37] text-zinc-950 font-bold shadow-md'
+                  ? 'bg-white text-black font-semibold shadow-sm'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -189,9 +184,9 @@ export function TopNavbar() {
             <button
               onClick={() => handleQuickLogin('staff@cinema.com', 'staff123', 'Staff')}
               title="Fast Switch: Gate Staff (Turnstile Scanner)"
-              className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-sans font-medium transition-all ${
                 user?.role === 'STAFF'
-                  ? 'bg-gradient-to-r from-[#e6c280] to-[#d4af37] text-zinc-950 font-bold shadow-md'
+                  ? 'bg-white text-black font-semibold shadow-sm'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -200,9 +195,9 @@ export function TopNavbar() {
             <button
               onClick={() => handleQuickLogin('admin@cinema.com', 'admin123', 'Admin')}
               title="Fast Switch: Admin (Reconciliation)"
-              className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all ${
+              className={`px-3 py-1 rounded-full text-[11px] font-sans font-medium transition-all ${
                 user?.role === 'ADMIN'
-                  ? 'bg-gradient-to-r from-[#e6c280] to-[#d4af37] text-zinc-950 font-bold shadow-md'
+                  ? 'bg-white text-black font-semibold shadow-sm'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -214,14 +209,12 @@ export function TopNavbar() {
           {user ? (
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#d4af37] to-[#aa801a] p-[1.5px] shadow-md flex items-center justify-center">
-                  <div className="w-full h-full rounded-full bg-[#0a0b12] flex items-center justify-center text-white font-display font-bold text-xs">
-                    {user.fullName ? user.fullName[0].toUpperCase() : 'U'}
-                  </div>
+                <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white font-sans font-bold text-xs">
+                  {user.fullName ? user.fullName[0].toUpperCase() : 'U'}
                 </div>
                 <div className="hidden sm:block text-left">
                   <p className="text-xs font-semibold text-white leading-tight line-clamp-1">{user.fullName}</p>
-                  <span className="text-[10px] font-mono text-[#d4af37] uppercase font-medium tracking-wider">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase">
                     {user.role}
                   </span>
                 </div>
@@ -229,7 +222,7 @@ export function TopNavbar() {
               <button
                 onClick={handleLogout}
                 title="Logout"
-                className="p-2 rounded-xl text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -237,7 +230,7 @@ export function TopNavbar() {
           ) : (
             <Link
               href="/login"
-              className="px-5 py-2 rounded-full border border-white/20 hover:border-[#d4af37] text-white text-xs font-display tracking-wider font-semibold transition-all hover:bg-white/5"
+              className="px-4 py-1.5 rounded-full border border-white/20 hover:border-white/50 text-white text-xs font-sans font-medium transition-all hover:bg-white/10"
             >
               Sign In
             </Link>

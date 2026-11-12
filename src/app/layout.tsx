@@ -3,8 +3,8 @@ import './globals.css';
 import { TopNavbar } from '@/components/TopNavbar';
 
 export const metadata: Metadata = {
-  title: 'CineBook — Luxury VIP Cinema Booking',
-  description: 'Minimalist cinema ticketing platform with real-time atomic seat locks and single-use digital turnstile passes',
+  title: 'CineBook — Movie Ticket Booking',
+  description: 'Minimalist cinema ticket booking platform with real-time seat availability and digital passes',
 };
 
 export default function RootLayout({
