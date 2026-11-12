@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Lock, Check } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
 import { SeatWithStatus } from '@/server/services/seatHoldService';
 
@@ -10,6 +10,33 @@ interface SeatMapProps {
   selectedSeatIds: string[];
   onToggleSeat: (seat: SeatWithStatus) => void;
   disabled?: boolean;
+}
+
+// Custom Armchair Icon directly powered by the user's uploaded asset (/seat-icon.png)
+export function ArmchairSeat({
+  className,
+  status = 'AVAILABLE',
+  isSelected = false,
+}: {
+  className?: string;
+  status?: 'AVAILABLE' | 'HELD' | 'BOOKED';
+  isSelected?: boolean;
+}) {
+  return (
+    <span
+      className={cn(
+        'seat-armchair-icon pointer-events-none',
+        className,
+        isSelected
+          ? 'text-[#d4af37] filter drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]'
+          : status === 'BOOKED'
+          ? 'text-zinc-700 opacity-35'
+          : status === 'HELD'
+          ? 'text-amber-400 filter drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]'
+          : 'text-zinc-200 group-hover:text-white group-hover:filter group-hover:drop-shadow-[0_0_7px_rgba(255,255,255,0.6)]'
+      )}
+    />
+  );
 }
 
 export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: SeatMapProps) {
@@ -30,31 +57,39 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
   }, [seats]);
 
   return (
-    <div className="w-full flex flex-col items-center select-none py-2">
-      {/* 1. Minimalist Top Legend */}
+    <div className="w-full flex flex-col items-center select-none py-2 font-sans">
+      {/* 1. Minimalist Top Legend with Luxury Armchair Icons */}
       <div className="flex items-center justify-center gap-7 sm:gap-10 mb-8 pb-5 border-b border-white/10 w-full max-w-md">
         {/* Available */}
         <div className="flex flex-col items-center gap-1.5 group cursor-default">
-          <div className="w-6 h-5 rounded-[6px] bg-white border border-white/20 shadow-sm transition-transform group-hover:scale-105" />
-          <span className="text-[11px] font-medium text-slate-400">Available</span>
+          <div className="w-6 h-6">
+            <ArmchairSeat status="AVAILABLE" className="w-6 h-6" />
+          </div>
+          <span className="text-[11px] font-sans font-medium text-zinc-400">Available</span>
         </div>
 
         {/* Taken / Booked */}
         <div className="flex flex-col items-center gap-1.5 group cursor-default">
-          <div className="w-6 h-5 rounded-[6px] bg-[#1a1c2e] border border-white/5" />
-          <span className="text-[11px] font-medium text-slate-500">Taken</span>
+          <div className="w-6 h-6">
+            <ArmchairSeat status="BOOKED" className="w-6 h-6" />
+          </div>
+          <span className="text-[11px] font-sans font-medium text-zinc-500">Taken</span>
         </div>
 
         {/* Selected */}
         <div className="flex flex-col items-center gap-1.5 group cursor-default">
-          <div className="w-6 h-5 rounded-[6px] bg-violet-600 border border-violet-400 shadow-lg shadow-violet-600/40" />
-          <span className="text-[11px] font-semibold text-violet-400">Selected</span>
+          <div className="w-6 h-6">
+            <ArmchairSeat status="AVAILABLE" isSelected={true} className="w-6 h-6" />
+          </div>
+          <span className="text-[11px] font-sans font-bold text-[#d4af37]">Selected</span>
         </div>
 
         {/* Held (TTL) */}
         <div className="flex flex-col items-center gap-1.5 group cursor-default">
-          <div className="w-6 h-5 rounded-[6px] bg-amber-400 border border-amber-300" />
-          <span className="text-[11px] font-medium text-amber-400">Held (8m)</span>
+          <div className="w-6 h-6">
+            <ArmchairSeat status="HELD" className="w-6 h-6" />
+          </div>
+          <span className="text-[11px] font-sans font-medium text-amber-400">Held (8m)</span>
         </div>
       </div>
 
@@ -88,7 +123,7 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
       </div>
 
       {/* 3. Seating Grid with 3-Column Aisle Layout (Left Wing, Center Wing, Right Wing) */}
-      <div className="flex flex-col gap-3 items-center w-full max-w-3xl px-2 sm:px-4">
+      <div className="flex flex-col gap-3.5 sm:gap-4 items-center w-full max-w-3xl px-2 sm:px-4">
         {rows.map(([rowName, rowSeats]) => {
           const leftCluster = rowSeats.filter((s) => s.seatNumber <= 2);
           const centerCluster = rowSeats.filter((s) => s.seatNumber > 2 && s.seatNumber <= 8);
@@ -108,29 +143,44 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
                 onClick={() => onToggleSeat(seat)}
                 title={`Row ${seat.rowName} Seat ${seat.seatNumber} (${seat.category}) - ${formatCurrency(seat.price)}`}
                 className={cn(
-                  'relative group w-8 sm:w-9 h-7 sm:h-8 rounded-[7px] transition-all duration-200 flex items-center justify-center font-mono text-[9px] font-bold',
-                  isSelected
-                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-600/50 scale-105 z-10 border border-violet-400'
-                    : isBooked
-                    ? 'bg-[#1a1c2e] border border-white/5 text-slate-600 cursor-not-allowed opacity-60'
-                    : isHeldByOthers
-                    ? 'bg-amber-400 border border-amber-300 text-slate-950 cursor-not-allowed shadow-md shadow-amber-500/20'
-                    : 'bg-white text-slate-900 border border-white/20 hover:bg-violet-100 hover:border-violet-400 hover:scale-105 cursor-pointer shadow-sm'
+                  'relative group w-8 sm:w-10 h-8 sm:h-10 transition-all duration-200 flex items-center justify-center select-none',
+                  !isClickable ? 'cursor-not-allowed' : 'cursor-pointer',
+                  isSelected && 'scale-115 z-10',
+                  isClickable && 'hover:scale-110 active:scale-95'
                 )}
               >
-                {isBooked ? (
-                  <span className="opacity-0 group-hover:opacity-100 text-[8px] text-slate-500 font-sans">✕</span>
-                ) : isSelected ? (
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
-                ) : isHeldByOthers ? (
-                  <Lock className="w-2.5 h-2.5 text-slate-950" />
-                ) : (
-                  <span className="opacity-80 group-hover:opacity-100">{seat.seatNumber}</span>
-                )}
+                {/* The Custom Armchair Graphic */}
+                <ArmchairSeat
+                  status={seat.status}
+                  isSelected={isSelected}
+                  className="w-full h-full"
+                />
+
+                {/* Seat Number in the Cushion */}
+                <span
+                  className={cn(
+                    'absolute font-mono text-[8px] sm:text-[9px] font-bold pointer-events-none mt-1.5 transition-colors',
+                    isSelected
+                      ? 'text-zinc-950 font-black'
+                      : isBooked
+                      ? 'text-zinc-600 opacity-60'
+                      : isHeldByOthers
+                      ? 'text-zinc-950 font-black'
+                      : 'text-zinc-400 group-hover:text-white'
+                  )}
+                >
+                  {isBooked ? (
+                    '✕'
+                  ) : isHeldByOthers ? (
+                    <Lock className="w-2.5 h-2.5 text-zinc-950" />
+                  ) : (
+                    seat.seatNumber
+                  )}
+                </span>
 
                 {/* Minimalist Hover Tooltip */}
                 {isClickable && (
-                  <span className="absolute -top-8 px-2.5 py-1 bg-[#161828] text-white border border-white/10 text-[10px] rounded-lg shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-30 font-sans font-medium">
+                  <span className="absolute -top-8 px-2.5 py-1 bg-[#10121d] text-white border border-white/15 text-[10px] rounded-lg shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-30 font-sans font-medium">
                     {seat.rowName}{seat.seatNumber} • {formatCurrency(seat.price)}
                   </span>
                 )}
@@ -141,37 +191,37 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
           return (
             <div key={rowName} className="flex items-center gap-2 sm:gap-4 w-full justify-center">
               {/* Row Label Left */}
-              <span className="w-4 text-center font-mono text-xs font-bold text-slate-500">
+              <span className="w-4 text-center font-mono text-xs font-bold text-zinc-500">
                 {rowName}
               </span>
 
               {/* Left Wing (Seats 1-2) */}
-              <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 {leftCluster.map(renderSeat)}
               </div>
 
               {/* Aisle Spacer */}
               <div className="w-2 sm:w-4 flex items-center justify-center">
-                <span className="w-1 h-1 rounded-full bg-white/10" />
+                <span className="w-1 h-1 rounded-full bg-white/15" />
               </div>
 
               {/* Center Wing (Seats 3-8) */}
-              <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 {centerCluster.map(renderSeat)}
               </div>
 
               {/* Aisle Spacer */}
               <div className="w-2 sm:w-4 flex items-center justify-center">
-                <span className="w-1 h-1 rounded-full bg-white/10" />
+                <span className="w-1 h-1 rounded-full bg-white/15" />
               </div>
 
               {/* Right Wing (Seats 9-10) */}
-              <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 {rightCluster.map(renderSeat)}
               </div>
 
               {/* Row Label Right */}
-              <span className="w-4 text-center font-mono text-xs font-bold text-slate-500">
+              <span className="w-4 text-center font-mono text-xs font-bold text-zinc-500">
                 {rowName}
               </span>
             </div>
@@ -179,18 +229,24 @@ export function SeatMap({ seats, selectedSeatIds, onToggleSeat, disabled }: Seat
         })}
       </div>
 
-      {/* 4. Pricing Tiers Pill Legend */}
-      <div className="mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-mono text-slate-400">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+      {/* 4. Pricing Tiers Pill Legend with Armchair Icons */}
+      <div className="mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-sans text-zinc-400">
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <span className="w-4 h-4">
+            <ArmchairSeat status="AVAILABLE" className="w-4 h-4" />
+          </span>
           <span>Silver: Base</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-          <span className="text-amber-400 font-semibold">Gold: +30%</span>
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <span className="w-4 h-4">
+            <ArmchairSeat status="AVAILABLE" isSelected={true} className="w-4 h-4" />
+          </span>
+          <span className="text-[#d4af37] font-semibold">Gold: +30%</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
-          <span className="w-2.5 h-2.5 rounded-full bg-violet-500" />
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <span className="w-4 h-4">
+            <span className="seat-armchair-icon text-violet-400 w-4 h-4" />
+          </span>
           <span className="text-violet-400 font-semibold">VIP Recliner: +80%</span>
         </div>
       </div>
