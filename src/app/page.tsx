@@ -15,7 +15,7 @@ import { formatTime, formatCurrency } from '@/lib/utils';
 
 const MOVIE_BACKDROPS: Record<string, string> = {
   'Interstellar': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&auto=format&fit=crop&q=85',
-  'Dune: Part Two': 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1920&auto=format&fit=crop&q=85',
+  'Dune: Part Two': 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1920&auto=format&fit=crop&q=85',
   'Oppenheimer': 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1920&auto=format&fit=crop&q=85',
   'Inception': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&auto=format&fit=crop&q=85',
 };
@@ -127,17 +127,15 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative w-full h-screen min-h-[700px] overflow-hidden flex flex-col justify-end pb-12 sm:pb-16 px-6 sm:px-12 lg:px-16 select-none bg-[#090b14]">
-      {/* 1. Full-Bleed Edge-to-Edge Cinematic Backdrop */}
+    <div className="relative w-full h-screen min-h-[700px] overflow-hidden flex flex-col justify-end pb-12 sm:pb-16 px-6 sm:px-12 lg:px-16 select-none bg-black">
+      {/* 1. Full-Bleed Cinematic Backdrop: Vivid & Bright, No Zoom Jitter */}
       <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-out scale-105 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center pointer-events-none transition-opacity duration-200"
         style={{ backgroundImage: `url(${backdropUrl})` }}
       />
 
-      {/* 2. Deep Theatrical Gradient Vignettes for High-Contrast Text Legibility */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-transparent z-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent z-0 pointer-events-none" />
+      {/* 2. Localized Bottom-Left Corner Fade ONLY: Keeps text readable while the rest of the background is 100% visible and bright */}
+      <div className="absolute bottom-0 left-0 w-full max-w-2xl h-[70%] bg-gradient-to-tr from-black/95 via-black/50 to-transparent pointer-events-none z-0" />
 
       {/* Staff / Admin Fast-Link Banner if logged in */}
       {currentUser?.role === 'STAFF' && (
@@ -174,7 +172,7 @@ export default function HomePage() {
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end w-full">
         {/* LEFT COLUMN: Date Pin, Giant Number, Title, Rating, Session Schedule, & Actions */}
         <div className="lg:col-span-6 xl:col-span-5 space-y-5">
-          {/* Vertical Timing Line & Pin (matching reference image) */}
+          {/* Vertical Timing Line & Pin */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
@@ -187,7 +185,7 @@ export default function HomePage() {
 
           {/* Giant Slide Number + Movie Title */}
           <div className="flex items-baseline gap-4 sm:gap-6">
-            <span className="font-cinematic text-6xl sm:text-7xl lg:text-8xl font-light text-white/80 tracking-tight select-none">
+            <span className="font-cinematic text-6xl sm:text-7xl lg:text-8xl font-light text-white/90 tracking-tight select-none">
               0{activeHeroIndex + 1}
             </span>
             <div className="space-y-1.5">
@@ -196,7 +194,7 @@ export default function HomePage() {
               </h1>
               {/* Star Ratings + Genre + Screen Format */}
               <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                <div className="flex items-center text-[#d4af37] text-sm leading-none">
+                <div className="flex items-center text-zinc-300 text-sm leading-none">
                   ★ ★ ★ ★ ★
                 </div>
                 <span className="text-zinc-400 font-mono">
@@ -225,10 +223,10 @@ export default function HomePage() {
                     <button
                       key={show.id}
                       onClick={() => setSelectedShowId(show.id)}
-                      className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all border ${
+                      className={`px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors border ${
                         isSelected
-                          ? 'bg-gradient-to-r from-[#e8c582] to-[#d4af37] text-zinc-950 border-[#d4af37] shadow-lg shadow-[#d4af37]/25 scale-105'
-                          : 'bg-white/10 hover:bg-white/20 text-zinc-200 border-white/15'
+                          ? 'bg-white text-black font-semibold border-white shadow-sm'
+                          : 'bg-black/50 hover:bg-white/10 text-zinc-300 border-white/20'
                       }`}
                     >
                       {formatTime(show.startTime)}
@@ -264,14 +262,14 @@ export default function HomePage() {
             <div className="flex items-center gap-2 sm:ml-2">
               <button
                 onClick={handlePrevHero}
-                className="w-10 h-10 rounded-full border border-white/20 hover:border-white/70 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg"
+                className="w-10 h-10 rounded-full border border-white/20 hover:border-white/70 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-colors shadow-lg"
                 title="Previous film"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNextHero}
-                className="w-10 h-10 rounded-full border border-white/20 hover:border-white/70 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg"
+                className="w-10 h-10 rounded-full border border-white/20 hover:border-white/70 bg-black/40 hover:bg-white/15 text-white flex items-center justify-center transition-colors shadow-lg"
                 title="Next film"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -280,9 +278,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Overlapping Horizontal Movie Poster Card Reel */}
-        <div className="lg:col-span-6 xl:col-span-7 flex justify-start lg:justify-end items-end overflow-x-auto scrollbar-none pb-2 pt-4 w-full">
-          <div className="flex items-end gap-4 overflow-visible">
+        {/* RIGHT COLUMN: Minimalist Horizontal Movie Poster Reel with Zero Visible Scrollbar */}
+        <div className="lg:col-span-6 xl:col-span-7 flex justify-start lg:justify-end items-end overflow-x-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pt-4 pb-6 w-full">
+          <div className="flex items-end gap-3.5 overflow-visible px-1">
             {movies.map((movie, idx) => {
               const isCurrent = idx === activeHeroIndex;
               const displayNum = `0${idx + 1}`;
@@ -295,28 +293,28 @@ export default function HomePage() {
                   {/* Number tag above each card (e.g. 01, 02, 03, 04) */}
                   <span
                     className={`text-xs font-mono tracking-widest pl-1 transition-colors ${
-                      isCurrent ? 'text-[#d4af37] font-black' : 'text-zinc-500 group-hover:text-white'
+                      isCurrent ? 'text-white font-bold' : 'text-zinc-500 group-hover:text-zinc-300'
                     }`}
                   >
                     {displayNum}
                   </span>
 
-                  {/* Vertical Poster Card */}
+                  {/* Vertical Poster Card: Clean Minimalist Frame, No Jumping Animation */}
                   <div
-                    className={`relative w-36 sm:w-40 lg:w-44 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 border ${
+                    className={`relative w-32 sm:w-36 lg:w-40 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl transition-colors duration-150 border ${
                       isCurrent
-                        ? 'border-[#d4af37] ring-2 ring-[#d4af37]/60 scale-105 z-10'
-                        : 'border-white/15 opacity-75 group-hover:opacity-100 group-hover:scale-105 group-hover:border-white/40'
+                        ? 'border-2 border-white ring-2 ring-white/30 z-10'
+                        : 'border border-white/15 opacity-70 hover:opacity-100 hover:border-white/40'
                     }`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={movie.posterUrl}
                       alt={movie.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-3">
-                      <p className="font-cinematic text-xs font-bold text-white uppercase tracking-wider line-clamp-1 leading-tight">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent flex items-end p-3">
+                      <p className="font-sans text-xs font-semibold text-white uppercase tracking-wider line-clamp-1 leading-tight">
                         {movie.title}
                       </p>
                     </div>
