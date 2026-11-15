@@ -139,27 +139,27 @@ export default function MyBookingsPage() {
               return (
                 <div
                   key={b.id}
-                  className="relative p-6 sm:p-7 rounded-3xl border border-white/10 bg-[#0d0f17]/90 hover:border-white/25 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl backdrop-blur-xl overflow-hidden group"
+                  className="relative p-6 sm:p-7 rounded-3xl border border-white/10 bg-[#0d0f17]/90 hover:border-white/20 transition-all flex flex-col md:flex-row items-start justify-between gap-6 shadow-2xl backdrop-blur-xl overflow-hidden group"
                 >
-                  {/* Horizontal Movie Poster / Backdrop Glimpse in Top Right Corner (Exposed Rich Preview) */}
-                  <div className="absolute top-0 right-0 w-1/2 sm:w-5/12 md:w-2/5 h-full pointer-events-none overflow-hidden rounded-tr-3xl rounded-br-3xl z-0">
+                  {/* Horizontal Movie Poster / Backdrop Glimpse in Right Section (Completely clean of buttons!) */}
+                  <div className="absolute top-0 right-0 w-full sm:w-1/2 md:w-5/12 h-full pointer-events-none overflow-hidden rounded-tr-3xl rounded-br-3xl z-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={movieBackdrop}
                       alt={b.show.movie.title}
-                      className="w-full h-full object-cover object-top opacity-65 group-hover:opacity-85 transition-opacity duration-300 filter brightness-110 contrast-105"
+                      className="w-full h-full object-cover object-center opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500 filter brightness-105 contrast-105"
                     />
                     <div
                       className="absolute inset-0 pointer-events-none"
                       style={{
                         background:
-                          'linear-gradient(to right, #0d0f17 0%, rgba(13,15,23,0.7) 25%, transparent 75%), linear-gradient(to left, rgba(13,15,23,0.45) 0%, transparent 40%), linear-gradient(to top, #0d0f17 0%, transparent 35%)',
+                          'linear-gradient(to right, #0d0f17 0%, rgba(13,15,23,0.85) 15%, rgba(13,15,23,0.2) 65%, transparent 100%), linear-gradient(to top, #0d0f17 0%, transparent 40%), linear-gradient(to bottom, #0d0f17 0%, transparent 20%)',
                       }}
                     />
                   </div>
 
-                  {/* Left Details */}
-                  <div className="space-y-2.5 flex-1 relative z-10">
+                  {/* Left Details & Actions (Clean, high-contrast, zero collision) */}
+                  <div className="space-y-3.5 flex-1 relative z-10 max-w-xl">
                     <div className="flex flex-wrap items-center gap-2.5">
                       <span className="font-mono text-xs font-semibold text-white bg-white/10 px-2.5 py-0.5 rounded-full border border-white/15">
                         #{b.bookingReference}
@@ -172,58 +172,60 @@ export default function MyBookingsPage() {
                       )}
                     </div>
 
-                    <h3 className="text-xl font-bold text-white uppercase tracking-tight">
-                      {b.show.movie.title}
-                    </h3>
-
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-zinc-400" />
-                        <span className="font-mono text-zinc-300">{formatDateTime(b.show.startTime)}</span>
-                      </span>
-                      <span>
-                        {b.show.screen.theatre.name} • {b.show.screen.name} ({b.show.format})
-                      </span>
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-tight">
+                        {b.show.movie.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-zinc-400 mt-1">
+                        <span className="flex items-center gap-1.5 text-zinc-300">
+                          <Calendar className="w-3.5 h-3.5 text-[#cca255]" />
+                          <span className="font-mono">{formatDateTime(b.show.startTime)}</span>
+                        </span>
+                        <span className="text-zinc-600">•</span>
+                        <span>
+                          {b.show.screen.theatre.name} • {b.show.screen.name} ({b.show.format})
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-2 text-xs pt-1">
-                      <span className="text-zinc-500 font-mono text-[11px]">Seats:</span>
+                    <div className="flex flex-wrap items-center gap-2 text-xs pt-0.5">
+                      <span className="text-zinc-400 font-mono text-[11px] uppercase tracking-wider font-semibold">Seats:</span>
                       <div className="flex flex-wrap gap-1.5">
                         {b.bookingSeats.map((bs: any) => (
                           <span
                             key={bs.id}
-                            className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white font-mono text-[11px] font-semibold"
+                            className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-white font-mono text-[11px] font-bold"
                           >
                             {bs.seat.rowName}{bs.seat.seatNumber}
                           </span>
                         ))}
                       </div>
                       <span className="text-zinc-600 ml-1">•</span>
-                      <span className="font-bold text-white font-mono text-sm">
+                      <span className="font-bold text-[#f5d99b] font-mono text-sm tracking-tight">
                         {formatCurrency(b.totalAmount)}
                       </span>
                     </div>
-                  </div>
 
-                  {/* Right Actions */}
-                  <div className="flex items-center gap-3 w-full md:w-auto relative z-10">
-                    <Link
-                      href={`/tickets/${b.bookingReference}`}
-                      className="flex-1 md:flex-none px-5 py-3 rounded-full bg-white hover:bg-zinc-200 text-black text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg cursor-pointer"
-                    >
-                      <QrCode className="w-3.5 h-3.5" />
-                      <span>View Pass &amp; QR</span>
-                    </Link>
-
-                    {b.status === 'CONFIRMED' && (
-                      <button
-                        onClick={() => setCancellingBookingId(b.id)}
-                        className="flex-1 md:flex-none px-4.5 py-3 rounded-full bg-[#0d0f17]/95 hover:bg-rose-950/90 text-rose-300 hover:text-white text-xs font-bold border border-rose-500/60 hover:border-rose-400 flex items-center justify-center gap-2 transition-all shadow-[0_4px_16px_rgba(0,0,0,0.6)] backdrop-blur-md cursor-pointer"
+                    {/* Actions cleanly anchored on the left */}
+                    <div className="flex flex-wrap items-center gap-3 pt-1">
+                      <Link
+                        href={`/tickets/${b.bookingReference}`}
+                        className="px-5 py-2.5 rounded-full bg-white hover:bg-zinc-200 text-black text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] cursor-pointer"
                       >
-                        <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                        <span className="tracking-wide">Cancel</span>
-                      </button>
-                    )}
+                        <QrCode className="w-3.5 h-3.5" />
+                        <span>View Pass &amp; QR</span>
+                      </Link>
+
+                      {b.status === 'CONFIRMED' && (
+                        <button
+                          onClick={() => setCancellingBookingId(b.id)}
+                          className="px-4 py-2.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 text-xs font-semibold border border-rose-500/30 hover:border-rose-500/50 flex items-center gap-1.5 transition-all cursor-pointer"
+                        >
+                          <XCircle className="w-3.5 h-3.5 text-rose-400" />
+                          <span>Cancel Booking</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
