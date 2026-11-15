@@ -41,12 +41,15 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    const knownIds = new Set<string>();
     const knownTokens = new Set<string>();
+    const knownRefs = new Set<string>();
 
     const verifications = redeemedTickets.map((t: any) => {
+      knownIds.add(t.id);
       knownTokens.add(t.qrValidationToken.toUpperCase());
       if (t.booking?.bookingReference) {
-        knownTokens.add(t.booking.bookingReference.toUpperCase());
+        knownRefs.add(t.booking.bookingReference.toUpperCase());
       }
 
       return {
@@ -68,7 +71,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // 2. Also retrieve TICKET_REDEEMED audit logs to capture all historical checks
+    // 2. Retrieve TICKET_REDEEMED audit logs only for historical/orphaned logs not in Ticket table
     const auditLogs = await prisma.auditLog.findMany({
       where: { action: 'TICKET_REDEEMED' },
       orderBy: { createdAt: 'desc' },
@@ -76,24 +79,41 @@ export async function GET(request: NextRequest) {
     });
 
     for (const log of auditLogs) {
-      const details: any = log.details || {};
-      const token = (details.qrToken || log.targetId || '').toUpperCase();
+      let details: any = {};
+      try {
+        details = typeof log.details === 'string' ? JSON.parse(log.details) : (log.details || {});
+      } catch {
+        details = {};
+      }
+
+      const targetId = log.targetId || '';
+      const token = (details.qrToken || '').toUpperCase();
       const bookingRef = (details.bookingReference || '').toUpperCase();
 
-      if (token && !knownTokens.has(token) && !knownTokens.has(bookingRef)) {
-        knownTokens.add(token);
-        if (bookingRef) knownTokens.add(bookingRef);
+      // If this redemption is already captured by a real ticket record, skip duplicate
+      if (
+        (targetId && knownIds.has(targetId)) ||
+        (token && knownTokens.has(token)) ||
+        (bookingRef && knownRefs.has(bookingRef))
+      ) {
+        continue;
+      }
+
+      if (token || targetId) {
+        knownIds.add(targetId);
+        if (token) knownTokens.add(token);
+        if (bookingRef) knownRefs.add(bookingRef);
 
         verifications.push({
           id: log.id,
           token: details.qrToken || log.targetId,
           bookingReference: details.bookingReference || 'N/A',
-          attendee: 'Verified Patron',
-          movieTitle: 'Cinema Screening',
-          screenName: 'Auditorium Gate 1',
+          attendee: details.attendee || 'Verified Patron',
+          movieTitle: details.movieTitle || 'Cinema Screening',
+          screenName: details.screenName || 'Auditorium Gate 1',
           showTime: details.showTime || log.createdAt,
-          seats: Array.isArray(details.seats) ? details.seats : ['A3'],
-          seatsCount: Array.isArray(details.seats) ? details.seats.length : 1,
+          seats: Array.isArray(details.seats) ? details.seats : [],
+          seatsCount: Array.isArray(details.seats) ? details.seats.length : 0,
           status: 'VERIFIED',
           valid: true,
           redeemedAt: log.createdAt,
