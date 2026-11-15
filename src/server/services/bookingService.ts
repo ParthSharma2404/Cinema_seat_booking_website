@@ -178,7 +178,7 @@ export class BookingService {
         ...newBooking,
         ticket,
       };
-    });
+    }, { maxWait: 15000, timeout: 30000 });
 
     // Step I: Audit trail log
     await logAuditEvent({
@@ -293,7 +293,7 @@ export class BookingService {
       });
 
       return updated;
-    });
+    }, { maxWait: 15000, timeout: 30000 });
 
     // Audit log
     await logAuditEvent({

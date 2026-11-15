@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { BookingService } from '@/server/services/bookingService';
 import { cancelBookingSchema } from '@/server/validations/schemas';
+import { broadcastSeatEvent } from '@/lib/ws-bus';
 
 export async function POST(
   request: NextRequest,
@@ -32,6 +33,14 @@ export async function POST(
       userRole: auth.user.role,
       reason,
     });
+
+    if (cancelledBooking && cancelledBooking.showId) {
+      broadcastSeatEvent({
+        showId: cancelledBooking.showId,
+        type: 'SEAT_RELEASED',
+        seatIds: cancelledBooking.bookingSeats?.map((bs: any) => bs.seatId) || [],
+      });
+    }
 
     return NextResponse.json({
       message: 'Booking cancelled successfully. Simulated refund completed.',

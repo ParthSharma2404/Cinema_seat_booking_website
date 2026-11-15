@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
         ],
       },
       include: {
+        cast: {
+          orderBy: { order: 'asc' },
+        },
         shows: {
           where: {
             startTime: { gte: new Date(Date.now() - 6 * 60 * 60 * 1000) },
@@ -66,10 +69,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const { cast, releaseDate, ...movieFields } = validated.data;
+
     const movie = await prisma.movie.create({
       data: {
-        ...validated.data,
-        releaseDate: validated.data.releaseDate ? new Date(validated.data.releaseDate) : new Date(),
+        ...movieFields,
+        releaseDate: releaseDate ? new Date(releaseDate) : new Date(),
+        ...(cast && cast.length > 0
+          ? {
+              cast: {
+                create: cast.map((c, idx) => ({
+                  name: c.name,
+                  character: c.character,
+                  photoUrl: c.photoUrl || null,
+                  order: c.order ?? idx,
+                })),
+              },
+            }
+          : {}),
+      },
+      include: {
+        cast: {
+          orderBy: { order: 'asc' },
+        },
       },
     });
 

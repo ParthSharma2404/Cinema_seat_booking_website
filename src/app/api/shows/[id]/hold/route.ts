@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { SeatHoldService } from '@/server/services/seatHoldService';
 import { holdSeatsSchema, releaseHoldSchema } from '@/server/validations/schemas';
+import { broadcastSeatEvent } from '@/lib/ws-bus';
 
 export async function POST(
   request: NextRequest,
@@ -37,6 +38,15 @@ export async function POST(
       holdToken,
     });
 
+    // Broadcast instant real-time update via WebSocket
+    broadcastSeatEvent({
+      showId,
+      type: 'SEAT_HELD',
+      seatIds,
+      userId: auth.user.userId,
+      expiresAt: result.expiresAt.toISOString(),
+    });
+
     return NextResponse.json({
       message: 'Seats held successfully',
       heldCount: result.holds.length,
@@ -44,8 +54,19 @@ export async function POST(
     });
   } catch (error: any) {
     console.error('Hold seats error:', error);
+    let friendlyMessage = error.message || 'Failed to hold seats';
+    if (
+      error.code === 'P2002' ||
+      friendlyMessage.includes('Unique constraint') ||
+      friendlyMessage.includes('prisma.') ||
+      friendlyMessage.includes('foreign key') ||
+      friendlyMessage.includes('invocation:')
+    ) {
+      friendlyMessage =
+        'One or more of your selected seats were just claimed by another cinema guest. Please choose different seats.';
+    }
     return NextResponse.json(
-      { error: error.message || 'Failed to hold seats' },
+      { error: friendlyMessage },
       { status: 409 } // Conflict
     );
   }
@@ -80,6 +101,14 @@ export async function DELETE(
 
     const result = await SeatHoldService.releaseSeats({
       showId,
+      seatIds,
+      userId: auth.user.userId,
+    });
+
+    // Broadcast instant real-time update via WebSocket
+    broadcastSeatEvent({
+      showId,
+      type: 'SEAT_RELEASED',
       seatIds,
       userId: auth.user.userId,
     });

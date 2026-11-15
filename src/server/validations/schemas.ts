@@ -1,26 +1,48 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.preprocess(
+    (val) => (typeof val === 'string' ? val.trim().toLowerCase() : val),
+    z.string().email('Please enter a valid email address')
+  ),
   password: z.string().min(6, 'Password must be at least 6 characters long'),
-  fullName: z.string().min(2, 'Full name must be at least 2 characters long'),
+  fullName: z.preprocess(
+    (val) => (typeof val === 'string' ? val.trim() : val),
+    z.string().min(2, 'Full name must be at least 2 characters long')
+  ),
   role: z.enum(['CUSTOMER', 'STAFF', 'ADMIN']).optional().default('CUSTOMER'),
 });
 
 export const loginSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.preprocess(
+    (val) => (typeof val === 'string' ? val.trim().toLowerCase() : val),
+    z.string().email('Please enter a valid email address')
+  ),
   password: z.string().min(1, 'Password is required'),
 });
 
 export const holdSeatsSchema = z.object({
   showId: z.string().min(1, 'Show ID is required'),
-  seatIds: z.array(z.string()).min(1, 'At least one seat must be selected').max(10, 'Maximum 10 seats per booking'),
+  seatIds: z
+    .array(
+      z.string().refine((id) => !id.startsWith('temp-') && !id.startsWith('skeleton-'), {
+        message: 'Invalid seat ID provided',
+      })
+    )
+    .min(1, 'At least one seat must be selected')
+    .max(10, 'Maximum 10 seats per booking'),
   holdToken: z.string().optional(),
 });
 
 export const releaseHoldSchema = z.object({
   showId: z.string().min(1, 'Show ID is required'),
-  seatIds: z.array(z.string()).min(1, 'At least one seat must be specified'),
+  seatIds: z
+    .array(
+      z.string().refine((id) => !id.startsWith('temp-') && !id.startsWith('skeleton-'), {
+        message: 'Invalid seat ID provided',
+      })
+    )
+    .min(1, 'At least one seat must be specified'),
   holdToken: z.string().optional(),
 });
 
@@ -47,15 +69,24 @@ export const cancelBookingSchema = z.object({
   reason: z.string().min(3, 'Cancellation reason must be provided').max(200),
 });
 
+export const castMemberSchema = z.object({
+  name: z.string().min(1, 'Actor name is required'),
+  character: z.string().min(1, 'Character name is required'),
+  photoUrl: z.string().optional().nullable(),
+  order: z.number().optional().default(0),
+});
+
 export const createMovieSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   durationMins: z.number().int().positive('Duration must be positive'),
   language: z.string().min(1, 'Language is required'),
   genre: z.string().min(1, 'Genre is required'),
-  posterUrl: z.string().url('Must be a valid URL'),
+  posterUrl: z.string().min(1, 'Poster is required'),
+  backdropUrl: z.string().optional().nullable(),
   rating: z.string().default('PG-13'),
   releaseDate: z.string().or(z.date()).optional(),
+  cast: z.array(castMemberSchema).optional(),
 });
 
 export const createShowSchema = z.object({

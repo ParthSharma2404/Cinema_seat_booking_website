@@ -11,9 +11,9 @@ export class ReportingService {
     // 1. Purge expired holds so occupancy is 100% accurate
     await SeatHoldService.cleanupExpiredHolds();
 
-    // 2. Fetch all shows with details
+    // 2. Fetch all shows with details, ordered chronologically (upcoming first)
     const shows = await prisma.show.findMany({
-      orderBy: { startTime: 'desc' },
+      orderBy: { startTime: 'asc' },
       include: {
         movie: true,
         screen: {
@@ -38,6 +38,9 @@ export class ReportingService {
     let overallHeldSeats = 0;
     let overallGrossRevenue = 0;
     let overallRefunds = 0;
+
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
 
     const showReports = shows.map((show) => {
       const totalCapacity = show.screen.seats.length;
@@ -95,8 +98,30 @@ export class ReportingService {
     });
 
     const overallNetRevenue = overallGrossRevenue;
+
+    // Calculate Today's Screenings Metrics
+    const todayShows = showReports.filter(
+      (s) => new Date(s.startTime) >= startOfToday && new Date(s.startTime) <= endOfToday
+    );
+    const todayCapacity = todayShows.reduce((acc, s) => acc + s.totalCapacity, 0);
+    const todayBookedSeats = todayShows.reduce((acc, s) => acc + s.bookedSeatsCount, 0);
+    const todayHeldSeats = todayShows.reduce((acc, s) => acc + s.heldSeatsCount, 0);
+    const todayOccupancyRate =
+      todayCapacity > 0 ? Number(((todayBookedSeats / todayCapacity) * 100).toFixed(1)) : 0;
+
+    // Calculate Active Shows (screenings with at least 1 booking or hold)
+    const activeShows = showReports.filter((s) => s.bookedSeatsCount > 0 || s.heldSeatsCount > 0);
+    const activeShowsCapacity = activeShows.reduce((acc, s) => acc + s.totalCapacity, 0);
+    const activeShowsBooked = activeShows.reduce((acc, s) => acc + s.bookedSeatsCount, 0);
+    const activeShowsOccupancyRate =
+      activeShowsCapacity > 0 ? Number(((activeShowsBooked / activeShowsCapacity) * 100).toFixed(1)) : 0;
+
+    // Calculate Catalog-wide 7-day Occupancy Rate (never round to 0 when bookedSeats > 0)
+    const rawRate = overallTotalSeats > 0 ? (overallBookedSeats / overallTotalSeats) * 100 : 0;
     const overallOccupancyRate =
-      overallTotalSeats > 0 ? Math.round((overallBookedSeats / overallTotalSeats) * 1000) / 10 : 0;
+      rawRate > 0 && rawRate < 0.1
+        ? Number(rawRate.toFixed(2))
+        : Number(rawRate.toFixed(1));
 
     return {
       summary: {
@@ -106,6 +131,15 @@ export class ReportingService {
         totalHeldSeats: overallHeldSeats,
         totalAvailableSeats: Math.max(0, overallTotalSeats - overallBookedSeats - overallHeldSeats),
         occupancyRate: overallOccupancyRate,
+        todayShowsCount: todayShows.length,
+        todayCapacity,
+        todayBookedSeats,
+        todayHeldSeats,
+        todayOccupancyRate,
+        activeShowsCount: activeShows.length,
+        activeShowsCapacity,
+        activeShowsBooked,
+        activeShowsOccupancyRate,
         grossRevenue: overallGrossRevenue,
         totalRefunds: overallRefunds,
         netRevenue: overallNetRevenue,
@@ -115,4 +149,3 @@ export class ReportingService {
     };
   }
 }
-

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { BookingService } from '@/server/services/bookingService';
 import { createBookingSchema } from '@/server/validations/schemas';
+import { broadcastSeatEvent } from '@/lib/ws-bus';
 
 export async function POST(request: NextRequest) {
   const auth = await requireAuth(request);
@@ -30,6 +31,14 @@ export async function POST(request: NextRequest) {
       paymentMethod,
     });
 
+    // Broadcast instant real-time update via WebSocket
+    broadcastSeatEvent({
+      showId,
+      type: 'SEAT_BOOKED',
+      seatIds,
+      userId: auth.user.userId,
+    });
+
     return NextResponse.json(
       {
         message: 'Booking confirmed successfully',
@@ -39,9 +48,18 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     console.error('Confirm booking error:', error);
-    // Double booking or conflict
+    let friendlyMessage = error.message || 'Failed to confirm booking';
+    if (
+      error.code === 'P2002' ||
+      friendlyMessage.includes('Unique constraint') ||
+      friendlyMessage.includes('activeShowSeatKey') ||
+      friendlyMessage.includes('prisma.')
+    ) {
+      friendlyMessage =
+        'One or more of the selected seats were already booked by another guest. Please choose different seats.';
+    }
     return NextResponse.json(
-      { error: error.message || 'Failed to confirm booking' },
+      { error: friendlyMessage },
       { status: 409 }
     );
   }

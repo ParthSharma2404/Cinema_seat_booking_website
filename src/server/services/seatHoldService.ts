@@ -38,49 +38,52 @@ export class SeatHoldService {
     show: any;
     seats: SeatWithStatus[];
   }> {
-    // 1. Clean up expired holds for this show first
-    await this.cleanupExpiredHolds(showId);
+    const now = new Date();
 
-    // 2. Fetch show with screen and seats
-    const show = await prisma.show.findUnique({
-      where: { id: showId },
-      include: {
-        movie: true,
-        screen: {
-          include: {
-            theatre: true,
-            seats: {
-              orderBy: [{ rowName: 'asc' }, { seatNumber: 'asc' }],
+    // 1. Fetch show, active holds, confirmed bookings, and sweep expired in parallel
+    const [show, activeHolds, confirmedBookings] = await Promise.all([
+      prisma.show.findUnique({
+        where: { id: showId },
+        include: {
+          movie: true,
+          screen: {
+            include: {
+              theatre: true,
+              seats: {
+                orderBy: [{ rowName: 'asc' }, { seatNumber: 'asc' }],
+              },
             },
           },
         },
-      },
-    });
+      }),
+      prisma.seatHold.findMany({
+        where: {
+          showId,
+          expiresAt: { gt: now },
+        },
+      }),
+      prisma.booking.findMany({
+        where: {
+          showId,
+          status: 'CONFIRMED',
+        },
+        include: {
+          bookingSeats: true,
+        },
+      }),
+      prisma.seatHold
+        .deleteMany({
+          where: {
+            showId,
+            expiresAt: { lt: now },
+          },
+        })
+        .catch(() => null),
+    ]);
 
     if (!show) {
       throw new Error('Show not found');
     }
-
-    const now = new Date();
-
-    // 3. Fetch active holds for this show
-    const activeHolds = await prisma.seatHold.findMany({
-      where: {
-        showId,
-        expiresAt: { gt: now },
-      },
-    });
-
-    // 4. Fetch confirmed bookings for this show
-    const confirmedBookings = await prisma.booking.findMany({
-      where: {
-        showId,
-        status: 'CONFIRMED',
-      },
-      include: {
-        bookingSeats: true,
-      },
-    });
 
     const bookedSeatIds = new Set<string>();
     for (const b of confirmedBookings) {
@@ -146,6 +149,25 @@ export class SeatHoldService {
 
     // Execute in an interactive transaction with serializable isolation / ACID safety
     const holds = await prisma.$transaction(async (tx) => {
+      // Step A0: Verify show existence and ensure show has not already started or ended
+      const show = await tx.show.findUnique({
+        where: { id: showId },
+        include: { screen: { include: { seats: true } } },
+      });
+      if (!show) {
+        throw new Error('Show not found');
+      }
+      if (show.startTime <= now) {
+        throw new Error('Cannot reserve seats for a screening that has already started or ended');
+      }
+
+      // Step A0.1: Validate that all seat IDs actually belong to this auditorium
+      const screenSeatIds = new Set(show.screen.seats.map((s) => s.id));
+      const invalidSeats = seatIds.filter((id) => !screenSeatIds.has(id));
+      if (invalidSeats.length > 0) {
+        throw new Error('One or more selected seats are invalid or still loading. Please re-select your seats.');
+      }
+
       // Step A: Purge expired holds
       await tx.seatHold.deleteMany({
         where: {
@@ -209,20 +231,35 @@ export class SeatHoldService {
       // Step E: Create fresh seat holds
       const createdHolds = [];
       for (const seatId of seatIds) {
-        const hold = await tx.seatHold.create({
-          data: {
-            showId,
-            seatId,
-            userId,
-            holdToken,
-            expiresAt,
-          },
-        });
-        createdHolds.push(hold);
+        try {
+          const hold = await tx.seatHold.create({
+            data: {
+              showId,
+              seatId,
+              userId,
+              holdToken,
+              expiresAt,
+            },
+          });
+          createdHolds.push(hold);
+        } catch (err: any) {
+          if (
+            err.code === 'P2002' ||
+            err.message?.includes('Unique constraint') ||
+            err.message?.includes('seatHold')
+          ) {
+            const seat = show.screen.seats.find((s) => s.id === seatId);
+            const seatName = seat ? `${seat.rowName}${seat.seatNumber}` : 'One of your selected seats';
+            throw new Error(
+              `Seat ${seatName} was just reserved by another customer. Please choose different seats.`
+            );
+          }
+          throw err;
+        }
       }
 
       return createdHolds;
-    });
+    }, { maxWait: 15000, timeout: 30000 });
 
     return { holds, expiresAt };
   }

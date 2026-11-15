@@ -10,8 +10,9 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['"Fira Sans"', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Fira Sans"', 'sans-serif'],
-        cinematic: ['"Fira Sans"', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        cinematic: ['"Cinzel"', 'serif'],
         mono: ['"Fira Code"', '"JetBrains Mono"', 'ui-monospace', 'Menlo', 'monospace'],
       },
       colors: {

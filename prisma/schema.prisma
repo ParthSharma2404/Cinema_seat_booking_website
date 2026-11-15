@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -60,18 +61,33 @@ model Seat {
 }
 
 model Movie {
-  id           String   @id @default(cuid())
+  id           String       @id @default(cuid())
   title        String
   description  String
   durationMins Int
   language     String
   genre        String
   posterUrl    String
-  rating       String   @default("PG-13")
-  releaseDate  DateTime @default(now())
-  createdAt    DateTime @default(now())
+  backdropUrl  String?
+  rating       String       @default("PG-13")
+  releaseDate  DateTime     @default(now())
+  createdAt    DateTime     @default(now())
 
   shows        Show[]
+  cast         CastMember[]
+}
+
+model CastMember {
+  id        String   @id @default(cuid())
+  movieId   String
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  name      String
+  character String
+  photoUrl  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([movieId])
 }
 
 model Show {

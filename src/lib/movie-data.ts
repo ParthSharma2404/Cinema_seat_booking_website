@@ -64,27 +64,27 @@ export const MOVIE_EXTENDED_DATA: Record<string, MovieExtendedMeta> = {
       {
         name: 'Timothée Chalamet',
         character: 'Paul Atreides',
-        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Timoth%C3%A9e_Chalamet-62520_%28cropped%29.jpg/440px-Timoth%C3%A9e_Chalamet-62520_%28cropped%29.jpg',
+        photoUrl: '/cast/timothee.jpg',
       },
       {
         name: 'Zendaya',
         character: 'Chani',
-        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Zendaya_-_2019_by_Glenn_Francis.jpg/440px-Zendaya_-_2019_by_Glenn_Francis.jpg',
+        photoUrl: '/cast/zendaya.jpg',
       },
       {
         name: 'Rebecca Ferguson',
         character: 'Lady Jessica',
-        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Rebecca_Ferguson_in_2018.jpg/440px-Rebecca_Ferguson_in_2018.jpg',
+        photoUrl: '/cast/rebecca.jpg',
       },
       {
         name: 'Austin Butler',
         character: 'Feyd-Rautha Harkonnen',
-        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Austin_Butler_by_Gage_Skidmore.jpg/440px-Austin_Butler_by_Gage_Skidmore.jpg',
+        photoUrl: '/cast/austin.jpg',
       },
       {
         name: 'Florence Pugh',
         character: 'Princess Irulan',
-        photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Florence_Pugh_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg/440px-Florence_Pugh_at_the_2024_Toronto_International_Film_Festival_%28cropped%29.jpg',
+        photoUrl: '/cast/florence.jpg',
       },
     ],
   },

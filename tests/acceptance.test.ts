@@ -5,7 +5,7 @@ import { BookingService } from '../src/server/services/bookingService';
 import { TicketService } from '../src/server/services/ticketService';
 import { ReportingService } from '../src/server/services/reportingService';
 
-describe('Cinema Hall Ticket Booking System - Acceptance Tests (SRS Suite)', () => {
+describe('Cinema Hall Ticket Booking System - Acceptance Tests (SRS Suite)', { timeout: 30000 }, () => {
   let testUserId1: string;
   let testUserId2: string;
   let staffUserId: string;
@@ -150,11 +150,11 @@ describe('Cinema Hall Ticket Booking System - Acceptance Tests (SRS Suite)', () 
       await prisma.bookingSeat.deleteMany({ where: { bookingId: tb.id } });
       await prisma.booking.delete({ where: { id: tb.id } });
     }
-  });
+  }, 45000);
 
   afterAll(async () => {
     await prisma.$disconnect();
-  });
+  }, 15000);
 
   // ==========================================
   // Acceptance Test 1: An available seat can be held and booked for a show
@@ -198,7 +198,7 @@ describe('Cinema Hall Ticket Booking System - Acceptance Tests (SRS Suite)', () 
       });
     } catch (err: any) {
       conflictOccurred = true;
-      expect(err.message).toMatch(/Double-booking prevented|already booked|already confirmed/i);
+      expect(err.message).toMatch(/Double-booking prevented|already booked|already confirmed|reserved by another/i);
     }
 
     expect(conflictOccurred).toBe(true);

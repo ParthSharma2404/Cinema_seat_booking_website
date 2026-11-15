@@ -9,10 +9,13 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const movieId = searchParams.get('movieId');
     const date = searchParams.get('date');
+    const all = searchParams.get('all') === 'true';
 
-    const whereClause: any = {
-      startTime: { gt: new Date() },
-    };
+    const whereClause: any = {};
+
+    if (!all && !date) {
+      whereClause.startTime = { gte: new Date(Date.now() - 4 * 60 * 60 * 1000) };
+    }
 
     if (movieId) {
       whereClause.movieId = movieId;
@@ -130,6 +133,48 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('Create show error:', error);
     return NextResponse.json({ error: 'Failed to schedule show' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const auth = await requireAuth(request, ['ADMIN', 'STAFF']);
+  if ('errorResponse' in auth) {
+    return auth.errorResponse;
+  }
+
+  try {
+    const body = await request.json();
+    const ids: string[] = body.showIds || body.ids || [];
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ error: 'No screening IDs provided' }, { status: 400 });
+    }
+
+    const deleteResult = await prisma.show.deleteMany({
+      where: { id: { in: ids } },
+    });
+
+    await logAuditEvent({
+      actorId: auth.user.userId,
+      actorEmail: auth.user.email,
+      actorRole: auth.user.role,
+      action: 'SHOWS_BATCH_DELETED',
+      targetEntity: 'Show',
+      details: {
+        deletedCount: deleteResult.count,
+        showIds: ids,
+      },
+    });
+
+    return NextResponse.json({
+      message: `Successfully removed ${deleteResult.count} screening(s)`,
+      count: deleteResult.count,
+    });
+  } catch (error: any) {
+    console.error('Batch delete shows error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to delete selected screenings' },
+      { status: 500 }
+    );
   }
 }
 

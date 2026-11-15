@@ -10,8 +10,14 @@ export async function POST(request: NextRequest) {
     const validated = registerSchema.safeParse(body);
 
     if (!validated.success) {
+      const flatErrors = validated.error.flatten().fieldErrors;
+      const firstErrorMessage =
+        flatErrors.email?.[0] ||
+        flatErrors.password?.[0] ||
+        flatErrors.fullName?.[0] ||
+        'Please provide valid registration details';
       return NextResponse.json(
-        { error: 'Validation failed', details: validated.error.flatten().fieldErrors },
+        { error: firstErrorMessage, details: flatErrors },
         { status: 400 }
       );
     }

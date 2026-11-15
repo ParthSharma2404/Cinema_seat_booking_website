@@ -8,9 +8,10 @@ interface HoldTimerProps {
   expiresAt: string | Date;
   onExpire?: () => void;
   className?: string;
+  minimal?: boolean;
 }
 
-export function HoldTimer({ expiresAt, onExpire, className }: HoldTimerProps) {
+export function HoldTimer({ expiresAt, onExpire, className, minimal }: HoldTimerProps) {
   const [secondsRemaining, setSecondsRemaining] = useState<number>(0);
 
   useEffect(() => {
@@ -37,6 +38,14 @@ export function HoldTimer({ expiresAt, onExpire, className }: HoldTimerProps) {
   const isExpiringSoon = secondsRemaining > 0 && secondsRemaining <= 120; // 2 mins
   const isExpired = secondsRemaining === 0;
 
+  if (minimal) {
+    return (
+      <span className={cn('font-mono font-bold', className)}>
+        {isExpired ? '00:00' : formattedTime}
+      </span>
+    );
+  }
+
   return (
     <div
       className={cn(
@@ -45,14 +54,14 @@ export function HoldTimer({ expiresAt, onExpire, className }: HoldTimerProps) {
           ? 'bg-rose-950/60 border-rose-500/50 text-rose-300'
           : isExpiringSoon
           ? 'bg-amber-950/60 border-amber-400/50 text-amber-300 animate-pulse'
-          : 'bg-white/10 border-white/15 text-violet-300',
+          : 'bg-white/10 border-white/15 text-[#f5d99b]',
         className
       )}
     >
       {isExpiringSoon || isExpired ? (
         <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
       ) : (
-        <Timer className="w-3.5 h-3.5 text-violet-400" />
+        <Timer className="w-3.5 h-3.5 text-[#cca255]" />
       )}
       <span>
         {isExpired ? 'Hold Expired' : `Locked: ${formattedTime}`}

@@ -10,8 +10,11 @@ export async function POST(request: NextRequest) {
     const validated = loginSchema.safeParse(body);
 
     if (!validated.success) {
+      const flatErrors = validated.error.flatten().fieldErrors;
+      const firstErrorMessage =
+        flatErrors.email?.[0] || flatErrors.password?.[0] || 'Please provide a valid email address and password';
       return NextResponse.json(
-        { error: 'Validation failed', details: validated.error.flatten().fieldErrors },
+        { error: firstErrorMessage, details: flatErrors },
         { status: 400 }
       );
     }
