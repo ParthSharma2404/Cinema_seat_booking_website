@@ -153,7 +153,7 @@ export default function MyBookingsPage() {
                       className="absolute inset-0 pointer-events-none"
                       style={{
                         background:
-                          'linear-gradient(to right, #0d0f17 0%, rgba(13,15,23,0.7) 25%, transparent 75%), linear-gradient(to top, #0d0f17 0%, transparent 35%)',
+                          'linear-gradient(to right, #0d0f17 0%, rgba(13,15,23,0.7) 25%, transparent 75%), linear-gradient(to left, rgba(13,15,23,0.45) 0%, transparent 40%), linear-gradient(to top, #0d0f17 0%, transparent 35%)',
                       }}
                     />
                   </div>
@@ -218,10 +218,10 @@ export default function MyBookingsPage() {
                     {b.status === 'CONFIRMED' && (
                       <button
                         onClick={() => setCancellingBookingId(b.id)}
-                        className="flex-1 md:flex-none px-4 py-3 rounded-full bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs font-semibold border border-rose-500/30 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        className="flex-1 md:flex-none px-4.5 py-3 rounded-full bg-[#0d0f17]/95 hover:bg-rose-950/90 text-rose-300 hover:text-white text-xs font-bold border border-rose-500/60 hover:border-rose-400 flex items-center justify-center gap-2 transition-all shadow-[0_4px_16px_rgba(0,0,0,0.6)] backdrop-blur-md cursor-pointer"
                       >
-                        <XCircle className="w-3.5 h-3.5" />
-                        <span>Cancel</span>
+                        <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span className="tracking-wide">Cancel</span>
                       </button>
                     )}
                   </div>
