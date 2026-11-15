@@ -2,6 +2,9 @@
   "name": "cinema-ticket-booking-system",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0 <23.0.0"
+  },
   "scripts": {
     "dev": "node server.js",
     "build": "prisma generate && next build",
